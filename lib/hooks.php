@@ -65,7 +65,5 @@ function extract_qualifiers($hook, $type, $return, $params) {
 function link_qualifiers($hook, $type, $return, $params) {
 
 	$source = elgg_extract('source', $params);
-
-	var_dump($source);
 	return Extractor::render($source);
 }
