@@ -16,7 +16,7 @@ function init() {
 
 	elgg_register_page_handler(PAGEHANDLER, __NAMESPACE__ . '\\page_handler');
 
-	elgg_register_plugin_hook_handler('prepare:src', 'embed', __NAMESPACE__ . '\\get_embed_view');
+	elgg_register_plugin_hook_handler('format:src', 'embed', __NAMESPACE__ . '\\format_embed_view');
 
 	elgg_register_plugin_hook_handler('extract:meta', 'all', __NAMESPACE__ . '\\get_embed_metatags');
 	elgg_register_plugin_hook_handler('extract:qualifiers', 'all', __NAMESPACE__ . '\\extract_qualifiers');

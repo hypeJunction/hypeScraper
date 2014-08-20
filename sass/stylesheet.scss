@@ -1,0 +1,45 @@
+
+.elgg-module.elgg-module-embed {
+	font-family: "Open Sans", 'sans-serif';
+	background: lighten($border-color, 15%);
+	border: 1px solid $border-color;
+	margin: 10px 0;
+	& > .elgg-head {
+		padding: 10px;
+		border-bottom: 1px solid $border-color;
+		h3 {
+			margin: 0;
+		}
+	}
+	& > .elgg-body {
+		background: white;
+		padding: 0;
+		.elgg-image-block {
+			padding: 10px;
+		}
+	}
+	& > .elgg-foot {
+		border-top: 1px solid $border-color;
+		padding: 10px;
+		a {
+			word-break: break-all;
+		}
+	}
+}
+
+.extractor-link {
+	line-height: 110%;
+	background: #f4f4f4;
+	vertical-align: middle;
+	.favicon {
+		background-size: 16px;
+		width: 16px;
+		height: 16px;
+		background-repeat: no-repeat;
+		display: inline-block;
+		margin: 0 5px;
+	}
+	.link {
+		margin: 0 5px;
+	}
+}

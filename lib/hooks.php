@@ -4,13 +4,13 @@ namespace hypeJunction\Scraper;
 
 /**
  * Output an embedded view of a URL
- * @param string $hook		'prepare:src'
+ * @param string $hook		'output:src'
  * @param string $type		'embed'
  * @param string $return
  * @param array $params
  * @return string
  */
-function get_embed_view($hook, $type, $return, $params) {
+function format_embed_view($hook, $type, $return, $params) {
 
 	$src = elgg_extract('src', $params);
 	unset($params['src']);

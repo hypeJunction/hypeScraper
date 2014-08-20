@@ -1,6 +1,6 @@
 relative_assets = true
 
-css_dir = "views/default/embed"
+css_dir = "views/default/framework/scraper"
 sass_dir = "sass"
 
 output_style = :expanded

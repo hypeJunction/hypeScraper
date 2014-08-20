@@ -107,15 +107,17 @@ class Embedder {
 	 * Render a uniform view for embedded links
 	 * Use 'output:src', 'embed' hook to override the output
 	 * @param array $params		Additional params to pass to the hook
-	 * @uses boolean $params['module']	Wrap the output into an elgg-module-embed
+	 * @uses mixed $params['module']	Name of the module to wrap the output in, or false
 	 * @return string
 	 */
 	private function getSrcView($params = array()) {
 
 		$meta = $this->extractMeta();
+
+		$class = array();
 		
 		if ($meta->provider_name) {
-			$class = 'embed-' . preg_replace('/[^a-z0-9\-]/i', '-', strtolower($meta->provider_name));
+			$class[] = 'embed-' . preg_replace('/[^a-z0-9\-]/i', '-', strtolower($meta->provider_name));
 		}
 
 		if ($meta->html) {
@@ -165,8 +167,9 @@ class Embedder {
 		}
 
 		if ($module = elgg_extract('module', $params, 'embed')) {
+			$class[] = ($meta->type) ? "elgg-module-embed-$meta->type" : '';
 			$output = elgg_view_module($module, $meta->title, $body, array(
-				'class' => $class,
+				'class' => implode(' ', array_filter($class)),
 				'footer' => $footer,
 			));
 		} else {
