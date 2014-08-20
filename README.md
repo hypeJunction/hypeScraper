@@ -1,13 +1,13 @@
-hypeExtractor
-=============
+hypeScraper
+===========
 
 A tool for extracting, interpreting, caching and embedding remote resources.
 
 ## Features
 
 * Convert URLs to embeddable content using native parser, iframe.ly or embed.ly
-* URL shortening API
 * Parse #hashtags, @usernames, links and emails
+* API for hashing and shortening URLs
 
 ## Notes
 
