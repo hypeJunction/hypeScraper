@@ -1,0 +1,33 @@
+{
+	"name": "hypejunction/hypeextractor",
+	"type": "elgg-plugin",
+	"repository": "hypeJunction/hypeExtractor",
+	"description": "Extraction and embedding service",
+	"homepage": "http://hypejunction.com",
+	"keywords": [
+		"elgg", "plugin", "extract", "embed", "shortener"
+	],
+	"license": "GPL-2.0",
+	"authors": [
+		{
+			"name": "Ismayil Khayredinov",
+			"email": "info@hypejunction.com"
+		}
+	],
+	"config": {
+		"vendor-dir": "vendors",
+		"preferred-install": "dist"
+	},
+	"require": {
+		"php": ">=5.3.3",
+		"composer/installers": ">=1.0.8",
+		"hashids/hashids": "dev-master",
+		"guzzlehttp/guzzle": "@stable"
+	},
+	"autoload": {
+		"psr-4": {
+			"hypeJunction\\": "classes/hypeJunction/",
+			"UFCOE\\": "classes/UFCOE/"
+		}
+	}
+}

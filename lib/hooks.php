@@ -1,0 +1,71 @@
+<?php
+
+namespace hypeJunction\Scraper;
+
+/**
+ * Output an embedded view of a URL
+ * @param string $hook		'prepare:src'
+ * @param string $type		'embed'
+ * @param string $return
+ * @param array $params
+ * @return string
+ */
+function get_embed_view($hook, $type, $return, $params) {
+
+	$src = elgg_extract('src', $params);
+	unset($params['src']);
+
+	return Embedder::getEmbedView($src, $params);
+}
+
+/**
+ * Output metatags for a URL
+ * @param string $hook		'extract:meta'
+ * @param string $type		'embed'
+ * @param array $return
+ * @param array $params
+ * @return array
+ */
+function get_embed_metatags($hook, $type, $return, $params) {
+
+	$src = elgg_extract('src', $params);
+	unset($params['src']);
+
+	return Parser::getMeta($src);
+}
+
+/**
+ * Extract qualifiers such as hashtags, usernames, urls, and emails
+ * @param string $hook		Equals 'extract:qualifiers'
+ * @param string $type		Equals 'scraper'
+ * @param array $return
+ * @param array $params
+ * @return array
+ */
+function extract_qualifiers($hook, $type, $return, $params) {
+
+	$source = elgg_extract('source', $params);
+
+	$return['hashtags'] = Extractor::extractHashtags($source);
+	$return['emails'] = Extractor::extractEmails($source);
+	$return['usernames'] = Extractor::extractUsernames($source);
+	$return['urls'] = Extractor::extractURLs($source);
+
+	return $return;
+}
+
+/**
+ * Link qualifiers to their entities
+ * @param string $hook		Equals 'link:qualifiers'
+ * @param string $type		Equals 'scraper'
+ * @param string $return
+ * @param array $params
+ * @return string
+ */
+function link_qualifiers($hook, $type, $return, $params) {
+
+	$source = elgg_extract('source', $params);
+
+	var_dump($source);
+	return Extractor::render($source);
+}
