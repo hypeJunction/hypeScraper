@@ -1,5 +1,5 @@
 <?php
 
-namespace hypeJunction\Wall;
+namespace hypeJunction\Scraper;
 
 readfile(__DIR__ . '/stylesheet.css');

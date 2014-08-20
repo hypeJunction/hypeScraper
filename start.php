@@ -21,4 +21,6 @@ function init() {
 	elgg_register_plugin_hook_handler('extract:meta', 'all', __NAMESPACE__ . '\\get_embed_metatags');
 	elgg_register_plugin_hook_handler('extract:qualifiers', 'all', __NAMESPACE__ . '\\extract_qualifiers');
 	elgg_register_plugin_hook_handler('link:qualifiers', 'all', __NAMESPACE__ . '\\link_qualifiers');
+
+	elgg_extend_view('css/elgg', 'css/framework/scraper/css');
 }

@@ -1,6 +1,6 @@
 relative_assets = true
 
-css_dir = "views/default/framework/scraper"
+css_dir = "views/default/css/framework/scraper"
 sass_dir = "sass"
 
 output_style = :expanded
