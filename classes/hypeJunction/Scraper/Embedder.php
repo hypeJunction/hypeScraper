@@ -8,7 +8,6 @@ namespace hypeJunction\Scraper;
 
 use ElggEntity;
 use ElggFile;
-use Exception;
 use UFCOE\Elgg\Url;
 
 class Embedder {
@@ -21,10 +20,6 @@ class Embedder {
 	static $cache;
 
 	function __construct($url = '') {
-
-		if (!Validator::isValidURL($url)) {
-			throw new Exception(get_class()  . " expects a valid URL ($url)");
-		}
 
 		$this->url = $url;
 
@@ -44,20 +39,22 @@ class Embedder {
 	 */
 	public static function getEmbedView($url = '', $params = array()) {
 
-		try {
-			if ($url instanceof ElggEntity) {
-				$url = $url->getURL();
-			}
-			$embedder = new Embedder($url);
-			return $embedder->getView($params);
-		} catch (Exception $ex) {
-			elgg_log($ex->getMessage(), 'ERROR');
+		if ($url instanceof ElggEntity) {
+			$url = $url->getURL();
+		}
+
+		if (!Validator::isValidURL($url)) {
 			return elgg_view('output/longtext', array(
 				'value' => $url,
 				'class' => 'embedder-invalid-url',
 			));
 		}
+
+		$embedder = new Embedder($url);
+		return $embedder->getView($params);
+
 	}
+
 
 	/**
 	 * Determine what view to return
@@ -115,7 +112,7 @@ class Embedder {
 		$meta = $this->extractMeta();
 
 		$class = array();
-		
+
 		if ($meta->provider_name) {
 			$class[] = 'embed-' . preg_replace('/[^a-z0-9\-]/i', '-', strtolower($meta->provider_name));
 		}
@@ -186,7 +183,7 @@ class Embedder {
 	 * Wrap an image url into a params tag
 	 * @param type $params
 	 */
-	public function getImageView($params = array()) {
+	private function getImageView($params = array()) {
 
 		$body = elgg_view('output/img', array(
 			'src' => $this->url,

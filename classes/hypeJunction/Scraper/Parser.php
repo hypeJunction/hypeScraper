@@ -18,34 +18,34 @@ class Parser {
 	protected $meta;
 
 	function __construct($url = '') {
-		
-		if (!Validator::isValidURL($url)) {
-			throw new Exception(get_class() . " expects a valid URL ($url)");
-		}
+
 		$this->url = $url;
-		$meta = Hasher::getMetaFromURL($url);
 
-		if ($meta) {
-			$this->meta = $meta;
-		} else {
-			$service = elgg_get_plugin_setting('service', PLUGIN_ID);
-			switch ($service) {
-				default :
-					$this->service = self::SERVICE_DOM;
-					$this->dom();
-					break;
+		if (Validator::isValidURL($this->url)) {
 
-				case self::SERVICE_IFRAMELY :
-					$this->service = self::SERVICE_IFRAMELY;
-					$this->iframely();
-					break;
+			$meta = Hasher::getMetaFromURL($url);
+			if ($meta) {
+				$this->meta = $meta;
+			} else {
+				$service = elgg_get_plugin_setting('service', PLUGIN_ID);
+				switch ($service) {
+					default :
+						$this->service = self::SERVICE_DOM;
+						$this->dom();
+						break;
 
-				case self::SERVICE_EMBEDLY :
-					$this->service = self::SERVICE_EMBEDLY;
-					$this->embedly();
-					break;
+					case self::SERVICE_IFRAMELY :
+						$this->service = self::SERVICE_IFRAMELY;
+						$this->iframely();
+						break;
+
+					case self::SERVICE_EMBEDLY :
+						$this->service = self::SERVICE_EMBEDLY;
+						$this->embedly();
+						break;
+				}
+				Hasher::hash($this->url, $this->meta);
 			}
-			Hasher::hash($this->url, $this->meta);
 		}
 	}
 
@@ -280,6 +280,6 @@ class Parser {
 		if ($json) {
 			$this->meta = json_decode($json);
 		}
-
 	}
+
 }
