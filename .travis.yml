@@ -13,19 +13,18 @@ matrix:
     - php: 5.6
       env: VARIA=true
       before_script:
-       - phpenv rehash
        - cd ../../
+       - node -v
+       - pear install pear/PHP_CodeSniffer
        - wget https://scrutinizer-ci.com/ocular.phar
+       - phpenv rehash
        - git clone -b 1.9 https://github.com/Elgg/Elgg.git Elgg
        - mv hypeJunction/hypeScraper Elgg/mod/hypeScraper
-       - cd Elgg/mod/hypeScraper
-       - composer update
+       - cd Elgg/mod/hypeScraper && composer update && ../../..
       script:
-       - cd vendors/bin
-       - phpcs --standard=../vendors/elgg/sniffs/elgg.xml --warning-severity=0 --ignore=*../../tests/*,*../..vendors/* ../../
-       - cd ../..
-       - phpunit --coverage-clover=coverage.clover
-       - php composer.phar validate --verbose composer.json
+       - phpcs --standard=Elgg/mod/hypeScraper/vendors/elgg/sniffs/elgg.xml --warning-severity=0 --ignore=*Elgg/mod/hypeScraper/tests/*,*Elgg/mod/hypeScraper/vendors/* Elgg/mod/hypeScraper/
+       - phpunit --configuration=Elgg/mod/hypeScraper/phpunit.xml --coverage-clover=coverage.clover
+       - php composer.phar validate --verbose Elgg/mod/hypeScraper/composer.json
       after_script:
        - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
 
@@ -44,8 +43,7 @@ before_script:
 
 script:
  - php -f Elgg/engine/tests/suite.php
- - cd Elgg/mod/hypeScraper
- - phpunit
+ - phpunit --configuration=Elgg/mod/hypeScraper/phpunit.xml
 
 notifications:
   email: false
