@@ -2,6 +2,12 @@
 
 namespace UFCOE\Elgg;
 
+/**
+ * URL Analysis
+ * 
+ * @package    UFCOE
+ * @subpackage Elgg
+ */
 class Url {
 
 	protected $host;
@@ -9,6 +15,8 @@ class Url {
 	protected $scheme;
 
 	/**
+	 * Construct
+	 * 
 	 * @param string $siteUrl if not given, will retrieve from elgg_get_site_url()
 	 * @throws \InvalidArgumentException
 	 */
@@ -25,7 +33,9 @@ class Url {
 	}
 
 	/**
-	 * @param string $url
+	 * Get guid
+	 * 
+	 * @param string $url URL
 	 * @return int 0 if no GUID found
 	 */
 	public function getGuid($url) {
@@ -34,7 +44,9 @@ class Url {
 	}
 
 	/**
-	 * @param string $url
+	 * Analyze URL
+	 * 
+	 * @param string $url URL
 	 * @return array|bool
 	 */
 	public function analyze($url) {

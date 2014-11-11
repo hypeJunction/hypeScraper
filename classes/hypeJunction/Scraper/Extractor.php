@@ -1,13 +1,5 @@
 <?php
 
-/**
- * Extracts qualifier (hashtags, urls, emails and usernames) from text
- * Renders an HTML with linkified qualifiers
- * 
- * @package    HypeJunction
- * @subpackage Scraper
- */
-
 namespace hypeJunction\Scraper;
 
 use hypeJunction\Scraper\Qualifiers\EmailAddress;
@@ -15,6 +7,13 @@ use hypeJunction\Scraper\Qualifiers\Hashtag;
 use hypeJunction\Scraper\Qualifiers\Url;
 use hypeJunction\Scraper\Qualifiers\Username;
 
+/**
+ * Extracts qualifier (hashtags, urls, emails and usernames) from text
+ * Renders an HTML with linkified qualifiers
+ * 
+ * @package    HypeJunction
+ * @subpackage Scraper
+ */
 class Extractor {
 
 	/**
@@ -89,6 +88,7 @@ class Extractor {
 
 	/**
 	 * Change text
+	 * 
 	 * @param string $text Source text
 	 * @return Extractor
 	 */
@@ -324,7 +324,7 @@ class Extractor {
 	/**
 	 * Render a view wrapped in <a> tag
 	 * 
-	 * @param mixed $username  Username or an array of preg matches
+	 * @param mixed  $username Username or an array of preg matches
 	 * @param string $url_base Base URI
 	 * @param array  $vars     View params
 	 * @return string HTML
@@ -337,7 +337,7 @@ class Extractor {
 	/**
 	 * Render a view wrapped in <a> tag
 	 * 
-	 * @param mixed $email     Email or an array of preg matches
+	 * @param mixed  $email    Email or an array of preg matches
 	 * @param string $url_base Base URI
 	 * @param array  $vars     View params
 	 * @return string HTML

@@ -2,6 +2,12 @@
 
 namespace hypeJunction\Scraper;
 
+/**
+ * Shortens URLs
+ * 
+ * @package    HypeJunction
+ * @subpackage Scraper
+ */
 class Shortener {
 
 	protected $input;
@@ -10,6 +16,8 @@ class Shortener {
 	const REGEX_URL = '@((https?://)?([-\w]+\.[-\w\.]+)+\w(:\d+)?(/([-\w/_\.]*(\?\S+)?)?)*)@';
 
 	/**
+	 * Construct a new shortener
+	 * 
 	 * @param string $input		HTML string
 	 * @param boolean $shorten	Enforce shortening of unknown URLs
 	 */
@@ -20,9 +28,10 @@ class Shortener {
 
 	/**
 	 * Rewrite URLs
-	 * @param string $input		HTML string
-	 * @param boolean $shorten	Shorten all URLs
-	 * @return string	HTML string
+	 * 
+	 * @param string  $input   HTML string
+	 * @param boolean $shorten Shorten all URLs
+	 * @return string HTML string
 	 */
 	public static function shorten($input = '', $shorten = false) {
 		$rw = new Shortener($input);
@@ -31,7 +40,7 @@ class Shortener {
 
 	/**
 	 * Rewrite URLs attributes within <img>,<iframe> tags
-	 * @return string	Filtered HTML
+	 * @return string Filtered HTML
 	 */
 	protected function shortenURLs() {
 		return preg_replace_callback(self::REGEX_URL, array($this, 'rewriteURL'), $this->input);
@@ -39,7 +48,8 @@ class Shortener {
 
 	/**
 	 * Rewrite URLs with shorter/secure alternative
-	 * @param array $matches
+	 * 
+	 * @param array $matches Array of matches
 	 * @return string
 	 */
 	protected function rewriteURL($matches) {
@@ -65,7 +75,8 @@ class Shortener {
 
 	/**
 	 * Get a shortened URL
-	 * @param string $url
+	 * 
+	 * @param string $url URL
 	 * @return string
 	 */
 	public static function getShortURL($url) {

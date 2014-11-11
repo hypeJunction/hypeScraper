@@ -1,5 +1,7 @@
 <?php
 
+namespace hypeJunction\Scraper\Qualifiers;
+
 /**
  * Abstract Qualifier
  * 
@@ -7,9 +9,6 @@
  * @package    HypeJunction
  * @subpackage Scraper
  */
-
-namespace hypeJunction\Scraper\Qualifiers;
-
 abstract class Qualifier {
 
 	const BASE_URI = "%s";
@@ -42,8 +41,8 @@ abstract class Qualifier {
 	 * Shortcut method for linkifying qualifiers
 	 * 
 	 * @param string $qualifier Qualifier
-	 * @param string $baseUri  Base URI
-	 * @param array $vars
+	 * @param string $baseUri   Base URI
+	 * @param array  $vars      Vars to pass to the view
 	 * @return string
 	 */
 	public static function linkify($qualifier = '', $baseUri = '', $vars = array()) {

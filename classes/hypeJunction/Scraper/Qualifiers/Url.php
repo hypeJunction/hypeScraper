@@ -4,6 +4,12 @@ namespace hypeJunction\Scraper\Qualifiers;
 
 use hypeJunction\Scraper\UrlHandler;
 
+/**
+ * Helper class for linkifying URLs
+ * 
+ * @package    HypeJunction
+ * @subpackage Scraper
+ */
 class Url extends Qualifier {
 
 	const CONCRETE_CLASS = __CLASS__;
@@ -14,15 +20,29 @@ class Url extends Qualifier {
 	 */
 	protected $url;
 
+	/**
+	 * Construct a new helper
+	 * 
+	 * @param string $qualifier URL string
+	 * @param string $baseUri   Base URL for replacement
+	 */
 	function __construct($qualifier = '', $baseUri = '') {
 		parent::__construct($qualifier, $baseUri);
 		$this->url = new UrlHandler($qualifier);
 	}
 
+	/**
+	 * Get normalized URL
+	 * @return string
+	 */
 	public function getAttribute() {
 		return $this->url->getUrl();
 	}
 
+	/**
+	 * Get URL page title
+	 * @return string
+	 */
 	public function getQualifier() {
 		$meta = $this->url->getMeta();
 		return ($meta->title) ? $meta->title : $this->url->getUrl();
@@ -36,6 +56,12 @@ class Url extends Qualifier {
 		return "http://g.etfv.co/{$this->getHref()}";
 	}
 
+	/**
+	 * Get an <a> tag
+	 * 
+	 * @param array $vars Vars to pass to the view
+	 * @return string HTML
+	 */
 	public function output(array $vars = array()) {
 		$params = array(
 			'text' => $this->getQualifier(),

@@ -2,6 +2,12 @@
 
 namespace hypeJunction\Scraper;
 
+/**
+ * Handles URL metatags
+ * 
+ * @package    HypeJunction
+ * @subpackage Scraper
+ */
 class MetaHandler {
 
 	public $type;

@@ -2,6 +2,12 @@
 
 namespace hypeJunction\Scraper;
 
+/**
+ * Handles embedded URLs
+ * 
+ * @param array $page URL segments
+ * @return boolean
+ */
 function page_handler($page) {
 
 	$hash = elgg_extract(0, $page, '');

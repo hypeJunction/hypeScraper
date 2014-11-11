@@ -4,11 +4,24 @@ namespace hypeJunction\Scraper;
 
 use Hashids\Hashids;
 
+/**
+ * Assigns unique hashes to URLs
+ * 
+ * @package    HypeJunction
+ * @subpackage Scraper
+ */
 class Hasher {
 
 	static $hashes;
 	static $metas;
 
+	/**
+	 * Hash a URL
+	 * 
+	 * @param string $url      URL
+	 * @param array  $metadata Metadata describing URL to store in the DB
+	 * @return string Hash
+	 */
 	public static function hash($url, $metadata = null) {
 
 		$dbprefix = elgg_get_config('dbprefix');
@@ -45,8 +58,9 @@ class Hasher {
 	}
 
 	/**
-	 * Get a unique hash that are associated with this URL
-	 * @param string $url
+	 * Get a unique hash that is associated with this URL
+	 * 
+	 * @param string $url URL
 	 * @return string
 	 */
 	public static function getHashFromURL($url) {
@@ -73,6 +87,12 @@ class Hasher {
 		return self::$hashes[$url];
 	}
 
+	/**
+	 * Get URL from its hash
+	 * 
+	 * @param string $hash Hash
+	 * @return string|boolean
+	 */
 	public static function getURLFromHash($hash) {
 
 		if (empty($hash)) {
@@ -102,6 +122,12 @@ class Hasher {
 		}
 	}
 
+	/**
+	 * Get cached URL metadata
+	 * 
+	 * @param string $url URL
+	 * @return array|boolean
+	 */
 	public static function getMetaFromURL($url) {
 
 		if (empty($url)) {

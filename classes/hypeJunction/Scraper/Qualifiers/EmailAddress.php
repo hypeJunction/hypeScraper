@@ -2,6 +2,12 @@
 
 namespace hypeJunction\Scraper\Qualifiers;
 
+/**
+ * Helper class for linkifying email addresses
+ * 
+ * @package    HypeJunction
+ * @subpackage Scraper
+ */
 class EmailAddress extends Qualifier {
 
 	const BASE_URI = "mailto:%s";

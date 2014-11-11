@@ -3,7 +3,7 @@
 /**
  * A tool for extracting, interpreting, caching and embedding remote resources.
  * 
- * @package hypeJunction
+ * @package HypeJunction
  * @subpackage Scraper
  *
  * @author Ismayil Khayredinov <ismayil.khayredinov@gmail.com>

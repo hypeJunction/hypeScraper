@@ -2,6 +2,12 @@
 
 namespace hypeJunction\Scraper;
 
+/**
+ * Validates URLs
+ * 
+ * @package    HypeJunction
+ * @subpackage Scraper
+ */
 class Validator {
 
 	/**
@@ -12,7 +18,8 @@ class Validator {
 
 	/**
 	 * Validator constructor
-	 * @param string $url
+	 * 
+	 * @param string $url URL string
 	 */
 	function __construct($url = '') {
 		$this->url = new UrlHandler($url);
@@ -21,8 +28,8 @@ class Validator {
 	/**
 	 * Validate URL format and accessibility
 	 * 
-	 * @param string  $url     URL to validate
-	 * @param boolean $ping    Test if URL is reachable
+	 * @param string  $url  URL to validate
+	 * @param boolean $ping Test if URL is reachable
 	 * @return boolean
 	 */
 	public static function isValidURL($url = '', $ping = false) {

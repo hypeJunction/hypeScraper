@@ -4,7 +4,8 @@ namespace hypeJunction\Places;
 
 $english = array(
 	'scraper:settings:service' => 'Scraper Service',
-	'scraper:settings:service:help' => 'Specify which scraper service to use. If using anything other than native DOM parser, provide necessary configuration details below',
+	'scraper:settings:service:help' => 'Specify which scraper service to use. If using anything other than native DOM parser, '
+	. 'provide necessary configuration details below',
 	'scraper:settings:service:dom_parser' => 'Native DOM parser',
 	'scraper:settings:service:iframely' => 'iframe.ly',
 	'scraper:settings:service:embedly' => 'embed.ly',

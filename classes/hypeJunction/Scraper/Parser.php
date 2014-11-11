@@ -6,6 +6,12 @@ use DOMDocument;
 use Exception;
 use Guzzle\Http\Client;
 
+/**
+ * Parses URL metatags
+ * 
+ * @package    HypeJunction
+ * @subpackage Scraper
+ */
 class Parser {
 
 	const SERVICE_DOM = 'dom_parser';
@@ -17,6 +23,11 @@ class Parser {
 	protected $meta;
 	static $cache;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param string $url URL string
+	 */
 	function __construct($url = '') {
 
 		$this->url = $url;
@@ -67,6 +78,9 @@ class Parser {
 		}
 	}
 
+	/**
+	 * Scrape metatags by parsing DOM
+	 */
 	private function dom() {
 
 		if (!$this->meta) {
@@ -229,8 +243,9 @@ class Parser {
 
 	/**
 	 * Get contents of a remote page
-	 * @param string $url
-	 * @return string
+	 * 
+	 * @param string $url URL string
+	 * @return string 
 	 */
 	private function getContents($url = '') {
 
@@ -246,6 +261,10 @@ class Parser {
 		return $result;
 	}
 
+	/**
+	 * Get tags using iframely service
+	 * @throws Exception
+	 */
 	private function iframely() {
 
 		$apikey = elgg_get_plugin_setting('iframely_key', PLUGIN_ID);
@@ -267,6 +286,10 @@ class Parser {
 		}
 	}
 
+	/**
+	 * Get tags using embedly service
+	 * @throws Exception
+	 */
 	private function embedly() {
 
 		$apikey = elgg_get_plugin_setting('embedly_key', PLUGIN_ID);

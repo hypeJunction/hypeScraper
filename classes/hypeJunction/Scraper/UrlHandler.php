@@ -1,12 +1,5 @@
 <?php
 
-/**
- * URL Class for dependency injection
- * 
- * @package    HypeJunction
- * @subpackage Scraper
- */
-
 namespace hypeJunction\Scraper;
 
 use ElggEntity;
@@ -15,6 +8,12 @@ use Guzzle\Http\Message\Response;
 use Guzzle\Service\Client;
 use UFCOE\Elgg\Url as UrlSniffer;
 
+/**
+ * URL handler for injection
+ * 
+ * @package    HypeJunction
+ * @subpackage Scraper
+ */
 class UrlHandler {
 
 	/**
@@ -37,6 +36,7 @@ class UrlHandler {
 
 	/**
 	 * Construct a new object
+	 * 
 	 * @param string $url URL
 	 */
 	function __construct($url = '') {

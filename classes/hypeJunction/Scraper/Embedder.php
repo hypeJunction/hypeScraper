@@ -1,16 +1,15 @@
 <?php
 
+namespace hypeJunction\Scraper;
+
+use ElggEntity;
+
 /**
  * Generate an embeddable view from a URL
  * 
  * @package    HypeJunction
  * @subpackage Scraper
  */
-
-namespace hypeJunction\Scraper;
-
-use ElggEntity;
-
 class Embedder {
 
 	const TYPE_ENTITY = 'entity';
@@ -56,8 +55,8 @@ class Embedder {
 	/**
 	 * Get embed HTML view for an entity or URL
 	 * 
-	 * @param mixed  $asset  URL or entity to embed
-	 * @param array  $params Rendering options
+	 * @param mixed $asset  URL or entity to embed
+	 * @param array $params Rendering options
 	 * @return string HTML
 	 */
 	public static function getEmbedView($asset = '', $params = array()) {
