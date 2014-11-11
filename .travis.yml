@@ -20,7 +20,7 @@ matrix:
        - phpenv rehash
        - git clone -b 1.9 https://github.com/Elgg/Elgg.git Elgg
        - mv hypeJunction/hypeScraper Elgg/mod/hypeScraper
-       - cd Elgg/mod/hypeScraper && composer update && ../../..
+       - cd Elgg/mod/hypeScraper && composer update && cd ../../../
       script:
        - phpcs --standard=Elgg/mod/hypeScraper/vendors/elgg/sniffs/elgg.xml --warning-severity=0 --ignore=*Elgg/mod/hypeScraper/tests/*,*Elgg/mod/hypeScraper/vendors/* Elgg/mod/hypeScraper/
        - phpunit --configuration=Elgg/mod/hypeScraper/phpunit.xml --coverage-clover=coverage.clover
