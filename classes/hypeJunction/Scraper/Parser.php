@@ -80,6 +80,7 @@ class Parser {
 
 	/**
 	 * Scrape metatags by parsing DOM
+	 * @return void
 	 */
 	private function dom() {
 
@@ -264,6 +265,7 @@ class Parser {
 	/**
 	 * Get tags using iframely service
 	 * @throws Exception
+	 * @return void
 	 */
 	private function iframely() {
 
@@ -289,6 +291,7 @@ class Parser {
 	/**
 	 * Get tags using embedly service
 	 * @throws Exception
+	 * @return void
 	 */
 	private function embedly() {
 

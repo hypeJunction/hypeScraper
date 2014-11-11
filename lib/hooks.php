@@ -22,8 +22,8 @@ function format_embed_view($hook, $type, $return, $params) {
 /**
  * Output metatags for a URL
  * 
- * @param string $hook	 'extract:meta'
- * @param string $type	 'embed'
+ * @param string $hook   'extract:meta'
+ * @param string $type   'embed'
  * @param array  $return Metatags
  * @param array  $params Hook params
  * @return array
@@ -40,7 +40,7 @@ function get_embed_metatags($hook, $type, $return, $params) {
  * Extract qualifiers such as hashtags, usernames, urls, and emails
  * 
  * @param string $hook   Equals 'extract:qualifiers'
- * @param string $type	 Equals 'scraper'
+ * @param string $type   Equals 'scraper'
  * @param array  $return Qualifiers
  * @param array  $params Hook params
  * @return array
@@ -60,8 +60,8 @@ function extract_qualifiers($hook, $type, $return, $params) {
 /**
  * Link qualifiers to their entities
  * 
- * @param string $hook	 Equals 'link:qualifiers'
- * @param string $type	 Equals 'scraper'
+ * @param string $hook   Equals 'link:qualifiers'
+ * @param string $type   Equals 'scraper'
  * @param string $return HTML
  * @param array  $params Hook params
  * @return string

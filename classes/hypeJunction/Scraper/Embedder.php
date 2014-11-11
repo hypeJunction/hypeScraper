@@ -143,8 +143,7 @@ class Embedder {
 	 *   'image' - URL points to an image file
 	 *   'src' - URL points to a parseable resource/page
 	 *   'default' - URL has no meaningful meta tags
-	 *   
-	 * @param string $url URL to embed
+	 *
 	 * @return string
 	 */
 	public function getType() {

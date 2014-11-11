@@ -18,8 +18,8 @@ class Shortener {
 	/**
 	 * Construct a new shortener
 	 * 
-	 * @param string $input		HTML string
-	 * @param boolean $shorten	Enforce shortening of unknown URLs
+	 * @param string  $input   HTML string
+	 * @param boolean $shorten Enforce shortening of unknown URLs
 	 */
 	function __construct($input = '', $shorten = false) {
 		$this->input = $input;

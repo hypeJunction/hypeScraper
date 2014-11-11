@@ -69,16 +69,19 @@ abstract class Qualifier {
 
 	/**
 	 * Get a normalized qualifier, e.g. a hashtag with # or username with @
+	 * @return string Long qualifier
 	 */
 	abstract public function getQualifier();
 
 	/**
 	 * Get an attribute, e.g. a tag without # or username without @
+	 * @return string Short qualifier/attribute
 	 */
 	abstract public function getAttribute();
 
 	/**
 	 * Linkify and output a view
+	 * @return string HTML
 	 */
 	abstract public function output(array $vars = array());
 }

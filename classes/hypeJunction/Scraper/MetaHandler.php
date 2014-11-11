@@ -23,10 +23,20 @@ class MetaHandler {
 	public $og_type;
 	static $cache;
 
+	/**
+	 * Constructor
+	 * @param string $url URL
+	 */
 	function __construct($url = '') {
 		$this->url = $url;
 	}
 
+	/**
+	 * Build MetaHandler from array
+	 * 
+	 * @param array $array Source array (DB cache)
+	 * @return MetaHandler
+	 */
 	public static function fromArray($array = array()) {
 		$meta = new MetaHandler();
 		foreach ($array as $key => $value) {

@@ -21,8 +21,13 @@ class Username extends Qualifier {
 	 */
 	protected $user;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param string $qualifier Email address
+	 * @param string $baseUri   Base href attribute
+	 */
 	function __construct($qualifier = '', $baseUri = '') {
-		error_log($qualifier);
 		parent::__construct($qualifier, $baseUri);
 		$this->user = $this->getUser();
 	}
