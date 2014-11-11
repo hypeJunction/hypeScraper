@@ -3,30 +3,29 @@ php:
  - 5.3
  - 5.4
  - 5.5
-
+ - 5.6
+ 
 branches:
   - master
 
 matrix:
   include:
-    - php: 5.3
+    - php: 5.6
       env: VARIA=true
       before_script:
-       - git clone https://github.com/Elgg/Elgg.git ../Elgg && cd ../Elgg
-       - git checkout 1.9
-       - mv ../hypeScraper mod/hypeScraper
-       - node -v
-       - pear install pear/PHP_CodeSniffer
-       - mkdir ../elgg-coding-standards
-       - git clone https://github.com/Elgg/elgg-coding-standards.git ../elgg-coding-standards/
        - phpenv rehash
-       - curl -sS https://getcomposer.org/installer | php
+       - cd ../../
        - wget https://scrutinizer-ci.com/ocular.phar
+       - git clone -b 1.9 https://github.com/Elgg/Elgg.git Elgg
+       - mv hypeJunction/hypeScraper Elgg/mod/hypeScraper
+       - cd Elgg/mod/hypeScraper
+       - composer update
       script:
-       - cd ../Elgg/mod/hypeScraper
-       - phpcs --standard=../elgg-coding-standards/elgg.xml --warning-severity=0 --ignore=*../Elgg/mod/hypeScraper/tests/*,*./Elgg/mod/hypeScraper/vendors/* ../Elgg/mod/hypeScraper/
+       - cd vendors/bin
+       - phpcs --standard=../vendors/elgg/sniffs/elgg.xml --warning-severity=0 --ignore=*../../tests/*,*../..vendors/* ../../
+       - cd ../..
        - phpunit --coverage-clover=coverage.clover
-       - php composer.phar validate --verbose ../Elgg/mod/hypeScraper/composer.json
+       - php composer.phar validate --verbose composer.json
       after_script:
        - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
 
@@ -34,19 +33,19 @@ services:
  - mysql
 
 before_script:
- - git clone https://github.com/Elgg/Elgg.git ../Elgg && cd ../Elgg
- - git checkout 1.9
- - mv ../hypeScraper mod/hypeScraper
+ - cd ../../
+ - git clone -b 1.9 https://github.com/Elgg/Elgg.git Elgg
+ - mv hypeJunction/hypeScraper Elgg/mod/hypeScraper
  - mysql -e 'create database elgg;'
  - echo "USE mysql; UPDATE user SET password=PASSWORD('password') WHERE user='root'; FLUSH PRIVILEGES;" | mysql -u root
  - mkdir "${HOME}/elgg_data/"
- - php -f ../Elgg/install/cli/travis_installer.php
- - php -f ../Elgg/mod/hypeScraper/.travis/activate.php
+ - php -f Elgg/install/cli/travis_installer.php
+ - php -f Elgg/mod/hypeScraper/.travis/activate.php
 
 script:
- - cd ../Elgg/mod/hypeScraper
- - phpunit --colors=true
- - php -f ../Elgg/engine/tests/suite.php
+ - php -f Elgg/engine/tests/suite.php
+ - cd Elgg/mod/hypeScraper
+ - phpunit
 
 notifications:
   email: false

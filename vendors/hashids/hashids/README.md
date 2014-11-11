@@ -8,7 +8,7 @@ Full Documentation
 
 A small PHP class to generate YouTube-like ids from numbers. Read documentation at [http://hashids.org/php](http://hashids.org/php)
 
-![hashids](https://secure.travis-ci.org/ivanakimov/hashids.php.png "Hashids")
+[![hashids](https://api.travis-ci.org/ivanakimov/hashids.php.svg "Hashids")](https://travis-ci.org/ivanakimov/hashids.php)
 
 Installation
 -------
@@ -137,18 +137,23 @@ Notes
 Changelog
 -------
 
+**1.0.2**
+
+- PSR-2 cleanup + interface changes (thanks [@Trismegiste](https://github.com/ivanakimov/hashids.php/pull/23))
+- `encode()` can accept array of integers (thanks [@leunggamciu](https://github.com/ivanakimov/hashids.php/pull/24))
+
 **1.0.1**
 
-- bug fix for `encodeHex()` (thanks [@leihog](https://github.com/ivanakimov/hashids.php/pull/20))
-- unit test for `encodeHex()/decodeHex()`
+- bug fix for `encode_hex()` (thanks [@leihog](https://github.com/ivanakimov/hashids.php/pull/20))
+- unit test for `encode_hex()/decode_hex()`
 
 **1.0.0**
 
 - Several public functions are renamed to be more appropriate:
 	- Function `encrypt()` changed to `encode()`
 	- Function `decrypt()` changed to `decode()`
-	- Function `encryptHex()` changed to `encodeHex()`
-	- Function `decryptHex()` changed to `decodeHex()`
+	- Function `encrypt_hex()` changed to `encode_hex()`
+	- Function `decrypt_hex()` changed to `decode_hex()`
 	
 	Hashids was designed to encode integers, primary ids at most. We've had several requests to encrypt sensitive data with Hashids and this is the wrong algorithm for that. So to encourage more appropriate use, `encrypt/decrypt` is being "downgraded" to `encode/decode`.
 

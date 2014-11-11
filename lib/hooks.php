@@ -80,7 +80,7 @@ function link_qualifiers($hook, $type, $return, $params) {
 function unit_test($hook, $type, $value, $params) {
 
 	$path = elgg_get_plugins_path();
-	$value[] = $path . PLUGIN_ID . '/tests/ExtractorTest.php';
+	//$value[] = $path . PLUGIN_ID . '/tests/ExtractorTest.php';
 
 	return $value;
 }

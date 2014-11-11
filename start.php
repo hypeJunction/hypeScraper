@@ -40,5 +40,5 @@ function init() {
 
 	elgg_extend_view('css/elgg', 'css/framework/scraper/css');
 
-	elgg_register_plugin_hook_handler('unit_test', 'system', __NAMESPACE__ . '\\unit_test');
+	//elgg_register_plugin_hook_handler('unit_test', 'system', __NAMESPACE__ . '\\unit_test');
 }

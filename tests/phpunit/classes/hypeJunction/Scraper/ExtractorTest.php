@@ -2,8 +2,6 @@
 
 namespace hypeJunction\Scraper;
 
-use Elgg\Http\MockSessionStorage;
-use ElggSession;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -19,7 +17,7 @@ class ExtractorTest extends PHPUnit_Framework_TestCase {
 
 	protected function setUp() {
 
-		_elgg_services()->setValue('session', new ElggSession(new MockSessionStorage()));
+		//_elgg_services()->setValue('session', new ElggSession(new MockSessionStorage()));
 
 		$this->object = $this->getMockBuilder(__NAMESPACE__ . '\\Extractor')
 				->setMethods(array('renderHashtagHTML', 'renderURLHTML', 'renderUsernameHTML', 'renderEmailHTML'))
