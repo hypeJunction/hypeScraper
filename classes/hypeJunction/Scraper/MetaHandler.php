@@ -25,6 +25,7 @@ class MetaHandler {
 
 	/**
 	 * Constructor
+	 * 
 	 * @param string $url URL
 	 */
 	function __construct($url = '') {

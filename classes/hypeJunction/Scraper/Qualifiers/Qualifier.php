@@ -81,6 +81,8 @@ abstract class Qualifier {
 
 	/**
 	 * Linkify and output a view
+	 * 
+	 * @param array $vars Vars to pass to the view
 	 * @return string HTML
 	 */
 	abstract public function output(array $vars = array());
