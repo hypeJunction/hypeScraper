@@ -11,7 +11,6 @@ namespace hypeJunction\Scraper\Qualifiers;
 class Hashtag extends Qualifier {
 
 	const BASE_URI = "search?search_type=tags&q=%s";
-	const CONCRETE_CLASS = __CLASS__;
 	
 	/**
 	 * Get a tag without #
@@ -36,7 +35,7 @@ class Hashtag extends Qualifier {
 	 * Get an <a> tag
 	 * 
 	 * @param array $vars Vars to pass to the view
-	 * @return string
+	 * @return array|string HTML or array of vars
 	 */
 	public function output(array $vars = array()) {
 		$params = array(
@@ -46,7 +45,11 @@ class Hashtag extends Qualifier {
 			'data-value' => $this->getAttribute(),
 		);
 		$vars = array_merge($vars, $params);
-		return elgg_view('framework/scraper/output/hashtag', $vars);
+		
+		if (!is_callable('elgg_view')) {
+			return $vars;
+		}
+		return call_user_func('elgg_view', self::VIEW, $vars);
 	}
 
 }

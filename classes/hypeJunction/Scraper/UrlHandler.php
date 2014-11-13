@@ -27,7 +27,13 @@ class UrlHandler {
 	 * @var array 
 	 */
 	protected $analysis;
-	
+
+	/**
+	 * Guzzle client
+	 * @var Client 
+	 */
+	protected $client;
+
 	/**
 	 * Cache HTTP request results
 	 * @staticvar array 
@@ -40,6 +46,16 @@ class UrlHandler {
 	 * @param string $url URL
 	 */
 	function __construct($url = '') {
+		$this->setURL($url);
+	}
+
+	/**
+	 * Set URL
+	 * 
+	 * @param string $url URL
+	 * @return void
+	 */
+	public function setURL($url = '') {
 		$this->url = $url;
 	}
 
@@ -60,6 +76,27 @@ class UrlHandler {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Set client
+	 * 
+	 * @param Client $client Guzzle client
+	 * @return void
+	 */
+	public function setClient(Client $client) {
+		$this->client = $client;
+	}
+
+	/**
+	 * Get guzzle client
+	 * @return Client
+	 */
+	public function getClient() {
+		if ($this->client instanceof Client) {
+			return $this->client;
+		}
+		return new Client();
 	}
 
 	/**
@@ -85,9 +122,21 @@ class UrlHandler {
 	 * @return boolean
 	 */
 	public function isReachable() {
-		$response = $this->requestHead(new Client());
+		$response = $this->requestHead();
 		if ($response instanceof Response) {
 			return $response->isSuccessful();
+		}
+		return false;
+	}
+
+	/**
+	 * Get mime type of the URL content
+	 * @return string|false
+	 */
+	public function getContentType() {
+		$response = $this->requestHead();
+		if ($response instanceof Response) {
+			return $response->getContentType();
 		}
 		return false;
 	}
@@ -107,21 +156,19 @@ class UrlHandler {
 	 * @return boolean
 	 */
 	public function isInSite($siteUrl = null) {
-		if (!isset($this->analysis)) {
-			$this->analysis = $this->analyze($siteUrl);
-		}
+		$this->analysis = $this->analyze($siteUrl);
 		return (isset($this->analysis['in_site']) && $this->analysis['in_site']);
 	}
 
 	/**
-	 * Sniff URL to see if contains and entity GUID
+	 * Retrieve a guid from the URL
 	 * 
-	 * @param string $siteUrl URL of the site, defaults to current site url
-	 * @return void
+	 * @param string $siteUrl URL of the site, default to current site url
+	 * @return int GUID or false
 	 */
-	protected function analyze($siteUrl = null) {
-		$sniffer = new UrlSniffer($siteUrl);
-		return $sniffer->analyze($this->url);
+	public function getGuid($siteUrl = null) {
+		$this->analysis = $this->analyze($siteUrl);
+		return (isset($this->analysis['guid'])) ? $this->analysis['guid'] : 0;
 	}
 
 	/**
@@ -131,36 +178,29 @@ class UrlHandler {
 	 * @return ElggEntity|false
 	 */
 	public function getEntity($siteUrl = null) {
-		if (!isset($this->analysis)) {
-			$this->analysis = $this->analyze($siteUrl);
-		}
-		$guid = (isset($this->analysis['guid'])) ? $this->analysis['guid'] : 0;
-		return get_entity($guid);
+		$guid = $this->getGuid($siteUrl);
+		return ($guid) ? get_entity($guid) : false;
 	}
 
 	/**
-	 * Get mime type of the URL content
-	 * @return string|false
+	 * Sniff URL to see if contains and entity GUID
+	 * 
+	 * @param string $siteUrl URL of the site, defaults to current site url
+	 * @return array
 	 */
-	public function getContentType() {
-		$response = $this->requestHead(new Client());
-		if ($response instanceof Response) {
-			return $response->getContentType();
-		}
-		return false;
+	protected function analyze($siteUrl = null) {
+		$sniffer = new UrlSniffer($siteUrl);
+		return $sniffer->analyze($this->url);
 	}
 
 	/**
 	 * Request headers from URL
-	 * 
-	 * @param Client $client Guzzle client
 	 * @return Response|false
 	 */
-	protected function requestHead(Client $client) {
+	protected function requestHead() {
 		if (!isset(self::$cache[$this->url])) {
 			try {
-				$request = $client->head($this->url);
-				$response = $request->send();
+				$response = $this->getClient()->head($this->url)->send();
 			} catch (BadResponseException $e) {
 				$response = false;
 			}

@@ -12,7 +12,7 @@ namespace hypeJunction\Scraper\Qualifiers;
 abstract class Qualifier {
 
 	const BASE_URI = "%s";
-	const CONCRETE_CLASS = '';
+	const VIEW = 'output/url';
 
 	/**
 	 * Qualifier
@@ -35,20 +35,6 @@ abstract class Qualifier {
 	function __construct($qualifier = '', $baseUri = '') {
 		$this->qualifier = trim($qualifier);
 		$this->baseUri = ($baseUri) ? : static::BASE_URI;
-	}
-
-	/**
-	 * Shortcut method for linkifying qualifiers
-	 * 
-	 * @param string $qualifier Qualifier
-	 * @param string $baseUri   Base URI
-	 * @param array  $vars      Vars to pass to the view
-	 * @return string
-	 */
-	public static function linkify($qualifier = '', $baseUri = '', $vars = array()) {
-		$class = static::CONCRETE_CLASS;
-		$obj = new $class($qualifier, $baseUri);
-		return $obj->output($vars);
 	}
 
 	/**

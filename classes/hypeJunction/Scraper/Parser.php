@@ -20,6 +20,11 @@ class Parser {
 
 	protected $service;
 	protected $url;
+	
+	/**
+	 * Meta
+	 * @var MetaHandler
+	 */
 	protected $meta;
 	static $cache;
 
@@ -30,6 +35,7 @@ class Parser {
 	 */
 	function __construct($url = '') {
 
+		$this->meta = new MetaHandler($url);
 		$this->url = $url;
 
 		if (isset(self::$cache[$this->url])) {

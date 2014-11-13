@@ -11,7 +11,7 @@ namespace hypeJunction\Scraper\Qualifiers;
 class EmailAddress extends Qualifier {
 
 	const BASE_URI = "mailto:%s";
-	const CONCRETE_CLASS = __CLASS__;
+	const VIEW = 'framework/scraper/output/email';
 
 	/**
 	 * Get email address
@@ -33,9 +33,10 @@ class EmailAddress extends Qualifier {
 	 * Get an <a> tag
 	 * 
 	 * @param array $vars Vars to pass to the view
-	 * @return string HTML
+	 * @return string|array HTML or array of vars
 	 */
 	public function output(array $vars = array()) {
+
 		$params = array(
 			'text' => $this->getQualifier(),
 			'href' => $this->getHref(),
@@ -43,7 +44,11 @@ class EmailAddress extends Qualifier {
 			'data-value' => $this->getAttribute(),
 		);
 		$vars = array_merge($vars, $params);
-		return elgg_view('framework/scraper/output/email', $vars);
+
+		if (!is_callable('elgg_view')) {
+			return $vars;
+		}
+		return call_user_func('elgg_view', self::VIEW, $vars);
 	}
 
 }

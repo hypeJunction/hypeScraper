@@ -13,7 +13,7 @@ use ElggUser;
 class Username extends Qualifier {
 
 	const BASE_URI = "search?search_type=user&q=%s";
-	const CONCRETE_CLASS = __CLASS__;
+	const VIEW = 'framework/scraper/output/username';
 
 	/**
 	 * User that owns the username
@@ -82,7 +82,7 @@ class Username extends Qualifier {
 	 * Render an <a> tag
 	 * 
 	 * @param array $vars Vars to pass to the view
-	 * @return string HTML
+	 * @return array|string HTML or array of vars
 	 */
 	public function output(array $vars = array()) {
 		$params = array(
@@ -98,7 +98,11 @@ class Username extends Qualifier {
 		}
 
 		$vars = array_merge($vars, $params);
-		return elgg_view('framework/scraper/output/username', $vars);
+
+		if (!is_callable('elgg_view')) {
+			return $vars;
+		}
+		return call_user_func('elgg_view', self::VIEW, $vars);
 	}
 
 }
