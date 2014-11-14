@@ -2,10 +2,7 @@
 
 namespace hypeJunction\Scraper;
 
-use hypeJunction\Scraper\Qualifiers\EmailAddress;
-use hypeJunction\Scraper\Qualifiers\Hashtag;
-use hypeJunction\Scraper\Qualifiers\Url;
-use hypeJunction\Scraper\Qualifiers\Username;
+use hypeJunction\Scraper\Qualifiers\Qualifier;
 
 /**
  * Extracts qualifier (hashtags, urls, emails and usernames) from text
@@ -372,23 +369,7 @@ class Extractor {
 	 * @return string
 	 */
 	public function linkifyQualifier($type, $qualifier, $url_base = '', $vars = array()) {
-		switch ($type) {
-			case self::TYPE_HASHTAG :
-				$qualifier = new Hashtag($qualifier, $url_base);
-				break;
-			case self::TYPE_URL :
-				$qualifier = new Url($qualifier, $url_base);
-				break;
-			case self::TYPE_EMAIL :
-				$qualifier = new EmailAddress($qualifier, $url_base);
-				break;
-			case self::TYPE_USERNAME :
-				$qualifier = new Username($qualifier, $url_base);
-				break;
-			default :
-				return '';
-		}
-
+		$qualifier = Qualifier::constructFromType($type, $qualifier, $url_base);
 		return $qualifier->output($vars);
 	}
 
