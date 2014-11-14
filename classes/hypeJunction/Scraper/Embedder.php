@@ -42,8 +42,8 @@ class Embedder {
 	/**
 	 * Get embed HTML view for an entity or URL
 	 * 
-	 * @param mixed $resource  URL or entity to embed
-	 * @param array $params    Rendering options
+	 * @param mixed $resource URL or entity to embed
+	 * @param array $params   Rendering options
 	 * @return string HTML
 	 */
 	public static function getEmbedView($resource = '', $params = array()) {
