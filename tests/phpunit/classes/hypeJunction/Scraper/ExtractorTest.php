@@ -2,6 +2,7 @@
 
 namespace hypeJunction\Scraper;
 
+use hypeJunction\Scraper\Qualifiers\Qualifier;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -37,13 +38,13 @@ class ExtractorTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function linkifyQualifierCallback($type, $base_url, $vars) {
 		switch ($type) {
-			case Extractor::TYPE_HASHTAG:
+			case Qualifier::TYPE_HASHTAG:
 				return '<a>#foobar</a>';
-			case Extractor::TYPE_URL :
+			case Qualifier::TYPE_URL :
 				return '<a>http://foo.bar/</a>';
-			case Extractor::TYPE_USERNAME :
+			case Qualifier::TYPE_USERNAME :
 				return '<a>@foobar</a>';
-			case Extractor::TYPE_EMAIL :
+			case Qualifier::TYPE_EMAIL :
 				return '<a>foo@bar.com</a>';
 			default :
 				return '';

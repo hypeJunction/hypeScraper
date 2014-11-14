@@ -39,14 +39,6 @@ class Extractor {
 	 * Uses noncapturing group to match URLs with hashtags, which we will remove from results
 	 */
 	const REGEX_USERNAME = '((?:h?[t|f]??tps*:\/\/[^\s\r\n\t<>"\'\)\(]+)?(?<=[^\w]|\G)@\b[\p{L}\p{Nd}._]+\b)';
-	
-	/**
-	 * Qualifier types
-	 */
-	const TYPE_HASHTAG = 'Hashtag';
-	const TYPE_URL = 'Url';
-	const TYPE_USERNAME = 'Username';
-	const TYPE_EMAIL = 'EmailAddress';
 
 	protected $text;
 	public $html = '';
@@ -122,6 +114,7 @@ class Extractor {
 	 * 
 	 * @param string $text Source text
 	 * @return Extractor
+	 * @deprecated 1.1
 	 */
 	public static function extract($text = '') {
 		$extractor = new Extractor($text);
@@ -133,6 +126,7 @@ class Extractor {
 	 * 
 	 * @param string $text Source text
 	 * @return string Rendered HTML
+	 * @deprecated 1.1
 	 */
 	public static function render($text = '') {
 		$extractor = new Extractor($text);
@@ -223,7 +217,7 @@ class Extractor {
 			// Matched a hashtag in a URL
 			return $matches[0];
 		}
-		return $this->linkifyQualifier(self::TYPE_HASHTAG, $matches[0]);
+		return $this->linkifyQualifier(Qualifier::TYPE_HASHTAG, $matches[0]);
 	}
 
 	/**
@@ -246,7 +240,7 @@ class Extractor {
 	 * @return string
 	 */
 	public function pregReplaceUrlCallback($matches) {
-		return $this->linkifyQualifier(self::TYPE_URL, $matches[0]);
+		return $this->linkifyQualifier(Qualifier::TYPE_URL, $matches[0]);
 	}
 
 	/**
@@ -273,7 +267,7 @@ class Extractor {
 			// Matched a username in a URL
 			return $matches[0];
 		}
-		return $this->linkifyQualifier(self::TYPE_USERNAME, $matches[0]);
+		return $this->linkifyQualifier(Qualifier::TYPE_USERNAME, $matches[0]);
 	}
 
 	/**
@@ -296,7 +290,7 @@ class Extractor {
 	 * @return string
 	 */
 	public function pregReplaceEmailCallback($matches) {
-		return $this->linkifyQualifier(self::TYPE_EMAIL, $matches[0]);
+		return $this->linkifyQualifier(Qualifier::TYPE_EMAIL, $matches[0]);
 	}
 
 	/**
@@ -311,7 +305,7 @@ class Extractor {
 	public static function renderHashtagHTML($hashtag, $url_base = '', $vars = array()) {
 		$vars['class'] = 'extractor-hashtag';
 		$extractor = new Extractor;
-		return $extractor->linkifyQualifier(self::TYPE_HASHTAG, $hashtag, $url_base, $vars);
+		return $extractor->linkifyQualifier(Qualifier::TYPE_HASHTAG, $hashtag, $url_base, $vars);
 	}
 
 	/**
@@ -326,7 +320,7 @@ class Extractor {
 	public static function renderURLHTML($url, $url_base = '', $vars = array()) {
 		$vars['class'] = 'extractor-link';
 		$extractor = new Extractor;
-		return $extractor->linkifyQualifier(self::TYPE_URL, $url, $url_base, $vars);
+		return $extractor->linkifyQualifier(Qualifier::TYPE_URL, $url, $url_base, $vars);
 	}
 
 	/**
@@ -341,7 +335,7 @@ class Extractor {
 	public static function renderUsernameHTML($username, $url_base = '', $vars = array()) {
 		$vars['class'] = 'extractor-username';
 		$extractor = new Extractor;
-		return $extractor->linkifyQualifier(self::TYPE_USERNAME, $username, $url_base, $vars);
+		return $extractor->linkifyQualifier(Qualifier::TYPE_USERNAME, $username, $url_base, $vars);
 	}
 
 	/**
@@ -356,7 +350,7 @@ class Extractor {
 	public static function renderEmailHTML($email, $url_base = '', $vars = array()) {
 		$vars['class'] = 'extractor-email';
 		$extractor = new Extractor;
-		return $extractor->linkifyQualifier(self::TYPE_EMAIL, $email, $url_base, $vars);
+		return $extractor->linkifyQualifier(Qualifier::TYPE_EMAIL, $email, $url_base, $vars);
 	}
 
 	/**

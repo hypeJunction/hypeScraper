@@ -24,23 +24,10 @@ class Embedder {
 	protected $url;
 
 	/**
-	 * An object describing useful meta tags associated with the URL, 
-	 * e.g. title, description, alternate links, Open Graph tags
-	 * @var MetaHandler 
-	 */
-	protected $meta;
-
-	/**
 	 * Local entity this URL represents (if any)
 	 * @var ElggEntity 
 	 */
 	protected $entity;
-
-	/**
-	 * Cached meta tags
-	 * @var array 
-	 */
-	static $cache;
 
 	/**
 	 * Construct a new Embedder
@@ -55,17 +42,17 @@ class Embedder {
 	/**
 	 * Get embed HTML view for an entity or URL
 	 * 
-	 * @param mixed $asset  URL or entity to embed
-	 * @param array $params Rendering options
+	 * @param mixed $resource  URL or entity to embed
+	 * @param array $params    Rendering options
 	 * @return string HTML
 	 */
-	public static function getEmbedView($asset = '', $params = array()) {
+	public static function getEmbedView($resource = '', $params = array()) {
 
 		$embedder = new Embedder;
-		if ($asset instanceof ElggEntity) {
-			$embedder->setEntity($asset);
+		if ($resource instanceof ElggEntity) {
+			$embedder->setEntity($resource);
 		} else {
-			$embedder->setUrl($asset);
+			$embedder->setUrl($resource);
 		}
 		return $embedder->getView($params);
 	}
@@ -77,6 +64,7 @@ class Embedder {
 	 * @return UrlHandler
 	 */
 	public function setURL($url = '') {
+		unset($this->entity);
 		if ($url instanceof UrlHandler) {
 			$this->url = $url;
 		} else {
@@ -101,8 +89,8 @@ class Embedder {
 	 * @return ElggEntity
 	 */
 	public function setEntity(ElggEntity $entity) {
-		$this->entity = $entity;
 		$this->setURL($entity->getURL());
+		$this->entity = $entity;
 	}
 
 	/**
@@ -121,10 +109,7 @@ class Embedder {
 	 * @return MetaHandler
 	 */
 	public function getMeta() {
-		if (!isset($this->meta)) {
-			$this->meta = $this->url->getMeta();
-		}
-		return $this->meta;
+		return $this->url->getMeta();
 	}
 
 	/**
@@ -160,25 +145,41 @@ class Embedder {
 	}
 
 	/**
+	 * Prepare view/hook params
+	 * 
+	 * @param array $params Params to pass by default
+	 * @return array
+	 */
+	public function prepareParams(array $params = array()) {
+		
+		$embed_params = array_filter(array(
+			'src' => $this->url->getURL(),
+			'entity' => $this->getEntity(),
+			'meta' => $this->getMeta(),
+		));
+		
+		return array_merge($params, $embed_params);
+	}
+	
+	/**
 	 * Render embed HTML
 	 * 
 	 * @param array $params Params to pass to views and hooks
 	 * @return string HTML
 	 */
 	public function getView(array $params = array()) {
-
+		
+		$output = '';
+		
 		$type = $this->getType();
 
-		$embed_params = array_filter(array(
-			'src' => $this->url->getURL(),
-			'entity' => $this->getEntity(),
-			'meta' => $this->getMeta(),
-		));
-
 		$view = "framework/scraper/embed/$type";
-		$params = array_merge($params, $embed_params);
+		$params = $this->prepareParams($params);
 
-		$output = elgg_view($view, $params);
+		if (is_callable('elgg_view')) {
+			$output = elgg_view($view, $params);
+		}
+		
 		return elgg_trigger_plugin_hook("output:$type", 'embed', $params, $output);
 	}
 
