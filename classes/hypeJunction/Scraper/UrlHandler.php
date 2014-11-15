@@ -201,7 +201,7 @@ class UrlHandler {
 		if (!isset(self::$cache[$this->url])) {
 			try {
 				$response = $this->getClient()->head($this->url)->send();
-			} catch (BadResponseException $e) {
+			} catch (Exception $e) {
 				$response = false;
 			}
 
