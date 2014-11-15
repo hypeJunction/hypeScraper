@@ -158,7 +158,8 @@ class Embedder {
 			'meta' => $this->getMeta(),
 		));
 		
-		return array_merge($params, $embed_params);
+		$params = array_merge($params, $embed_params);
+		return $params;
 	}
 	
 	/**
@@ -175,7 +176,7 @@ class Embedder {
 
 		$view = "framework/scraper/embed/$type";
 		$params = $this->prepareParams($params);
-
+			
 		if (is_callable('elgg_view')) {
 			$output = elgg_view($view, $params);
 		}

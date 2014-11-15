@@ -5,7 +5,7 @@ namespace hypeJunction\Scraper;
 /**
  * Output an embedded view of a URL
  * 
- * @param string $hook   'output:src'
+ * @param string $hook   'format:src'
  * @param string $type   'embed'
  * @param string $return HTML
  * @param array  $params Hook params
