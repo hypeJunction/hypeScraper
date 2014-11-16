@@ -40,10 +40,31 @@ class MetaHandler {
 	 */
 	public static function fromArray($array = array()) {
 		$meta = new MetaHandler();
-		foreach ($array as $key => $value) {
-			$meta->$key = $value;
+		if (is_array($array)) {
+			foreach ($array as $key => $value) {
+				$meta->$key = $value;
+			}
 		}
 		return $meta;
 	}
 
+	/**
+	 * Build metahandler from URL
+	 * 
+	 * @param string $url URL
+	 * @return MetaHandler
+	 */
+	public static function fromUrl($url = '') {
+		$handler = new UrlHandler($url);
+		$meta = $handler->getMeta();
+		return MetaHandler::fromArray($meta);
+	}
+	
+	/**
+	 * Get metatags as array
+	 * @return array
+	 */
+	public function toArray() {
+		return json_decode(json_encode($this), true);
+	}
 }

@@ -3,8 +3,6 @@
 namespace hypeJunction\Scraper;
 
 use DOMDocument;
-use Exception;
-use Guzzle\Http\Client;
 
 /**
  * Parses URL metatags
@@ -18,15 +16,17 @@ class Parser {
 	const SERVICE_IFRAMELY = 'iframely';
 	const SERVICE_EMBEDLY = 'embedly';
 
-	protected $service;
+	/**
+	 * Url
+	 * @var UrlHandler 
+	 */
 	protected $url;
-	
+
 	/**
 	 * Meta
 	 * @var MetaHandler
 	 */
 	protected $meta;
-	static $cache;
 
 	/**
 	 * Constructor
@@ -34,72 +34,73 @@ class Parser {
 	 * @param string $url URL string
 	 */
 	function __construct($url = '') {
-
-		$this->meta = new MetaHandler($url);
-		$this->url = $url;
-
-		if (isset(self::$cache[$this->url])) {
-			$this->meta = self::$cache['url'];
-		} else if (Validator::isValidURL($this->url)) {
-			$meta = Hasher::getMetaFromURL($url);
-			if ($meta) {
-				$this->meta = $meta;
-			} else {
-				$service = elgg_get_plugin_setting('service', PLUGIN_ID);
-				switch ($service) {
-					default :
-						$this->service = self::SERVICE_DOM;
-						$this->dom();
-						break;
-
-					case self::SERVICE_IFRAMELY :
-						$this->service = self::SERVICE_IFRAMELY;
-						$this->iframely();
-						break;
-
-					case self::SERVICE_EMBEDLY :
-						$this->service = self::SERVICE_EMBEDLY;
-						$this->embedly();
-						break;
-				}
-				Hasher::hash($this->url, $this->meta);
-			}
-		}
-		
+		$this->setUrl($url);
 	}
 
+	/**
+	 * Set url
+	 * @param string $url
+	 * @return Parser
+	 */
+	public function setUrl($url) {
+		$this->url = new UrlHandler($url);
+		return $this;
+	}
+	
 	/**
 	 * Scrape meta tags from a URL
 	 * 
 	 * @param string $url URL to scrape
-	 * @return MetaHandler
+	 * @return array
 	 */
 	public static function getMeta($url = '') {
-		try {
-			$parser = new Parser($url);
-			return $parser->meta;
-		} catch (Exception $ex) {
-			elgg_log($ex->getMessage(), 'ERROR');
-			return new MetaHandler;
+		$parser = new Parser($url);
+		return $parser->parseMeta($parser->getParsingService());
+	}
+
+	/**
+	 * Determine which approach to parsing to use
+	 * @return string
+	 */
+	public function getParsingService() {
+		$setting = $this->getPluginSetting('service');
+		return $setting ?: self::SERVICE_DOM;
+	}
+
+	/**
+	 * Parse metatags
+	 * 
+	 * @param string $service Parsing service
+	 * @return array
+	 */
+	public function parseMeta($service = '') {
+		switch ($service) {
+			default :
+			case self::SERVICE_DOM;
+				return $this->dom();
+
+			case self::SERVICE_IFRAMELY :
+				return $this->iframely();
+
+			case self::SERVICE_EMBEDLY :
+				return $this->embedly();
 		}
 	}
 
 	/**
-	 * Scrape metatags by parsing DOM
-	 * @return void
+	 * Scrape metatags from DOM
+	 * @return array
 	 */
-	private function dom() {
+	public function dom() {
 
-		if (!$this->meta) {
-			$this->meta = new MetaHandler();
-		}
+		$url = $this->url->getURL();
+		
+		$meta['url'] = $url;
+		$meta['title'] = parse_url($url, PHP_URL_HOST);
+		$meta['description'] = '';
 
-		$this->meta->url = $this->url;
-		$this->meta->title = parse_url($this->url, PHP_URL_HOST);
-		$this->meta->description = '';
-
-		$html = $this->getContents($this->url);
-
+		$html = $this->url->getContent();
+		
 		$doc = new DOMDocument();
 		@$doc->loadHTML($html);
 
@@ -107,7 +108,7 @@ class Parser {
 		$node = $doc->getElementsByTagName('title');
 		$title = $node->item(0)->nodeValue;
 		if ($title) {
-			$this->meta->title = $title;
+			$meta['title'] = $title;
 		}
 
 		// Get oEmbed content and canonical URLs
@@ -119,11 +120,11 @@ class Parser {
 			switch ($rel) {
 
 				case 'icon' :
-					$this->meta->icons[] = $href;
+					$meta['icons'][] = $href;
 					break;
 
 				case 'canonical' :
-					$this->meta->canonical = $href;
+					$meta['canonical'] = $href;
 					break;
 
 				case 'alternate' :
@@ -141,14 +142,14 @@ class Parser {
 				$oembed_params = json_decode($json, true);
 				if ($oembed_params) {
 					foreach ($oembed_params as $key => $value) {
-						if (!$this->meta->$key) {
-							$this->meta->$key = $value;
+						if (!$meta[$key]) {
+							$meta[$key] = $value;
 						}
 						if ($key == 'url') {
-							$this->meta->oembed_url = $value;
+							$meta['oembed_url'] = $value;
 						}
-						if ($key == 'thumbnail_url' && !$this->meta->oembed_url) {
-							$this->meta->oembed_url = $value;
+						if ($key == 'thumbnail_url' && !$meta['oembed_url']) {
+							$meta['oembed_url'] = $value;
 						}
 					}
 				}
@@ -156,7 +157,7 @@ class Parser {
 		}
 
 		if ($title) {
-			$this->meta->title = $title;
+			$meta['title'] = $title;
 		}
 
 		$nodes = $doc->getElementsByTagName('meta');
@@ -176,65 +177,65 @@ class Parser {
 				switch ($name) {
 
 					default :
-						if ($name && !$this->meta->$name) {
+						if ($name && !$meta[$name]) {
 							$name = str_replace(':', '_', $name);
-							$this->meta->$name = $content;
+							$meta[$name] = $content;
 						}
 						break;
 
 					case 'title' :
 					case 'og:title' :
 					case 'twitter:title' :
-						if (!$this->meta->title) {
-							$this->meta->title = $content;
+						if (!$meta['title']) {
+							$meta['title'] = $content;
 						}
 						break;
 
 					case 'description' :
 					case 'og:description' :
 					case 'twitter:description' :
-						if (!$this->meta->description) {
-							$this->meta->description = $content;
+						if (!$meta['description']) {
+							$meta['description'] = $content;
 						}
 						break;
 
 					case 'keywords' :
-						$this->meta->keywords = $content;
+						$meta['keywords'] = $content;
 						break;
 
 					case 'og:site_name' :
 					case 'twitter:site' :
-						if (!$this->meta->provider_name) {
-							$this->meta->provider_name = $content;
+						if (!$meta['provider_name']) {
+							$meta['provider_name'] = $content;
 						}
 						break;
 
 					case 'og:type' :
-						$this->meta->og_type = $content;
+						$meta['og_type'] = $content;
 						break;
 
 					case 'og:image' :
 					case 'twitter:image' :
-						$this->meta->thumbnails[] = $content;
+						$meta['thumbnails'][] = $content;
 						break;
 				}
 			}
 		}
 
-		if (count($this->meta->thumbnails)) {
+		if (count($meta['thumbnails'])) {
 			// Display a thumbnail parsed from <meta> tags
-			$this->meta->thumbnail_url = $this->meta->thumbnails[0];
-		} else if (count($this->meta->icons)) {
+			$meta['thumbnail_url'] = $meta['thumbnails'][0];
+		} else if (count($meta['icons'])) {
 			// Display an icon parsed from <link> tags
-			$this->meta->thumbnail_url = $this->meta->icons[0];
+			$meta['thumbnail_url'] = $meta['icons'][0];
 		} else {
 			$max_width = 0;
 			$nodes = $doc->getElementsByTagName('img');
 			foreach ($nodes as $node) {
 				$src = $node->getAttribute('src');
 				$width = $node->getAttribute('width');
-				if (!$this->meta->thumbnail_url || $width > $max_width) {
-					$this->meta->thumbnail_url = $src;
+				if (!$meta['thumbnail_url'] || $width > $max_width) {
+					$meta['thumbnail_url'] = $src;
 					$max_width = $width;
 				}
 			}
@@ -243,81 +244,85 @@ class Parser {
 		/**
 		 * @todo: figure out what to do with relative URLs in DOM
 		 */
-		if (!Validator::isImage($this->meta->thumbnail_url)) {
-			unset($this->meta->thumbnail_url);
+		if (!Validator::isImage($meta['thumbnail_url'])) {
+			unset($meta['thumbnail_url']);
 		}
+		
+		return $meta;
 	}
 
 	/**
-	 * Get contents of a remote page
+	 * Get meta using iframe.ly service
+	 * @return array
+	 */
+	public function iframely() {
+		$json = $this->parseJson($this->getIframelyUrl());
+		return ($json) ?: array();
+	}
+
+	/**
+	 * Get endpoint for retrieving iframely meta
+	 * @return string
+	 */
+	public function getIframelyUrl() {
+		$apikey = $this->getPluginSetting('iframely_key');
+		$endpoint = $this->getPluginSetting('iframely_endpoint');
+
+		return elgg_http_add_url_query_elements($endpoint, array(
+			'url' => $this->url->getUrl(),
+			'api_key' => $apikey,
+			'iframe' => true,
+		));
+	}
+	
+	/**
+	 * Get meta using embedly service
+	 * @return array
+	 */
+	public function embedly() {
+		$json = $this->parseJson($this->getEmbedlyUrl());
+		return ($json) ?: array();
+	}
+
+	/**
+	 * Get endpoint for retrieving embed.ly meta
+	 * @return string
+	 */
+	public function getEmbedlyUrl() {
+		$apikey = $this->getPluginSetting('embedly_key');
+		$endpoint = $this->getPluginSetting('embedly_endpoint');
+
+		return elgg_http_add_url_query_elements($endpoint, array(
+			'url' => $this->url->getUrl(),
+			'api_key' => $apikey,
+			'iframe' => true,
+		));
+	}
+	
+	/**
+	 * Parse JSON from the URL
 	 * 
-	 * @param string $url URL string
-	 * @return string 
+	 * @param string  $endpoint Endpoint 
+	 * @param boolean $as_array Decode as array
+	 * @return boolean
 	 */
-	private function getContents($url = '') {
-
-		if (!Validator::isValidURL($url)) {
-			return false;
-		}
-
-		$client = new Client();
-		$client->setDefaultOption('verify', false);
-		$request = $client->createRequest('GET', $url);
-		$response = $request->send();
-		$result = $response->getBody();
-		return $result;
-	}
-
-	/**
-	 * Get tags using iframely service
-	 * @throws Exception
-	 * @return void
-	 */
-	private function iframely() {
-
-		$apikey = elgg_get_plugin_setting('iframely_key', PLUGIN_ID);
-		$endpoint = elgg_get_plugin_setting('iframely_endpoint', PLUGIN_ID);
-
-		if (!$endpoint) {
-			throw new Exception("iframe.ly endpoint is not specified");
-		}
-
-		$url = elgg_http_add_url_query_elements($endpoint, array(
-			'url' => $this->url,
-			'api_key' => $apikey,
-			'iframe' => true,
-		));
-
-		$json = $this->getContents($url);
+	protected function parseJson($endpoint = '', $as_array = true) {
+		$handler = new UrlHandler($endpoint);
+		$json = $handler->getContent($endpoint);
 		if ($json) {
-			$this->meta = json_decode($json);
+			return json_decode($json, $as_array);
 		}
+		return false;
 	}
-
+	
 	/**
-	 * Get tags using embedly service
-	 * @throws Exception
-	 * @return void
+	 * Get plugin setting
+	 * 
+	 * @param string $name
+	 * @return mixed
 	 */
-	private function embedly() {
-
-		$apikey = elgg_get_plugin_setting('embedly_key', PLUGIN_ID);
-		$endpoint = elgg_get_plugin_setting('embedly_endpoint', PLUGIN_ID);
-
-		if (!$endpoint) {
-			throw new Exception("embed.ly endpoint is not specified");
-		}
-
-		$url = elgg_http_add_url_query_elements($endpoint, array(
-			'url' => $this->url,
-			'api_key' => $apikey,
-			'iframe' => true,
-		));
-
-		$json = $this->getContents($url);
-		if ($json) {
-			$this->meta = json_decode($json);
-		}
+	protected function getPluginSetting($name) {
+		$plugin_id = basename(dirname(dirname(dirname(dirname(__FILE__)))));
+		return elgg_get_plugin_setting($name, $plugin_id);
 	}
-
 }

@@ -12,79 +12,174 @@ use Hashids\Hashids;
  */
 class Hasher {
 
-	static $hashes;
-	static $metas;
+	static $cache;
+	protected $id;
+	protected $hash;
+	protected $url;
+	protected $meta = array();
+	protected $time_created;
+
+	/**
+	 * Constructor
+	 * 
+	 * @param string $url URL
+	 */
+	public function __construct($url = '') {
+		$this->dbprefix = elgg_get_config('dbprefix');
+
+		$this->time_created = time();
+		$this->setUrl($url);
+		$this->load();
+	}
+
+	public function load() {
+		if (isset(self::$cache[$this->url])) {
+			$this->id = self::$cache[$this->url]['id'];
+			$this->hash = self::$cache[$this->url]['hash'];
+			$this->meta = self::$cache[$this->url]['meta'];
+			$this->time_created = self::$cache[$this->url]['time_created'];
+		} else {
+			$query = "SELECT * FROM {$this->dbprefix}url_meta_cache
+					WHERE long_url = '{$this->url}'";
+			$data = get_data($query);
+
+			if ($data) {
+				$this->id = $data[0]->id;
+				$this->hash = $data[0]->hash;
+				$this->meta = json_decode($data[0]->meta, true);
+				$this->time_created = $data[0]->time_created;
+				self::$cache[$this->url] = array(
+					'id' => $this->id,
+					'hash' => $this->hash,
+					'meta' => $this->meta,
+					'time_created' > $this->time_created,
+				);
+			}
+		}
+	}
+
+	public function setUrl($url = '') {
+		$this->url = sanitize_string($url);
+		return $this;
+	}
+
+	public function setHash($hash = '') {
+		if ($hash) {
+			$this->hash = $hash;
+			self::$cache[$this->url]['hash'] = $hash;
+		}
+		return $this;
+	}
+
+	public function setMetadata(array $meta = array()) {
+		if ($this->meta !== $meta) {
+			$this->meta = $meta;
+			self::$cache[$this->url]['meta'] = $meta;
+			if ($this->hash) {
+				$this->save();
+			}
+		}
+		return $this;
+	}
+
+	public function getId() {
+		return $this->id;
+	}
+
+	/**
+	 * Get unique hash associated with this URL
+	 * @return string|false
+	 */
+	public function getHash() {
+		return $this->hash;
+	}
+
+	public function getMetadata() {
+		return $this->meta;
+	}
+
+	public function getTimeCreated() {
+		return $this->time_created;
+	}
+
+	/**
+	 * Create unqiue hash and store it in the database
+	 * 
+	 * @param array $meta Additional meta to add with the URL
+	 * @return string Hash
+	 */
+	public function save() {
+
+		$url = sanitize_string($this->url);
+		$hash = sanitize_string($this->hash);
+		$time_created = sanitize_int($this->time_created);
+
+		$meta = (!is_string($this->meta)) ? json_encode($this->meta) : $this->meta;
+		$meta = sanitize_string($meta);
+
+		if (!$this->id) {
+			$query = "INSERT INTO {$this->dbprefix}url_meta_cache (long_url, hash, meta, time_created)
+					VALUES ('{$url}','{$hash}','{$meta}',{$time_created})
+						ON DUPLICATE KEY UPDATE long_url='{$url}',meta='{$meta}'";
+
+			$id = insert_data($query);
+			$this->id = $id;
+			$hashids = new Hashids(get_site_secret());
+			$hash = $hashids->encode($id, $this->time_created);
+
+			$query = "UPDATE LOW_PRIORITY {$this->dbprefix}url_meta_cache
+					SET hash = '{$hash}' WHERE id = $id";
+
+			update_data($query);
+		} else {
+			$query = "UPDATE {$this->dbprefix}url_meta_cache SET meta='{$meta}'
+						WHERE id='{$this->id}'";
+		}
+
+		self::$cache[$this->url] = array(
+			'id' => $this->id,
+			'hash' => $this->hash,
+			'meta' => $this->meta,
+			'time_created' > $this->time_created,
+		);
+
+		return $hash;
+	}
 
 	/**
 	 * Hash a URL
 	 * 
 	 * @param string $url      URL
-	 * @param array  $metadata Metadata describing URL to store in the DB
+	 * @param array  $meta Metadata describing URL to store in the DB
 	 * @return string Hash
 	 */
-	public static function hash($url, $metadata = null) {
-
-		$dbprefix = elgg_get_config('dbprefix');
-		$url = sanitize_string($url);
-		if (is_null($metadata)) {
-			$metadata = Parser::getMeta($url);
-		}
-		$metadata = (!is_string($metadata)) ? json_encode($metadata) : $metadata;
-		$metadata = sanitize_string($metadata);
-		$hash = sanitize_string(self::getHashFromURL($url));
-
-		$time = time();
-		$query = "INSERT INTO {$dbprefix}url_meta_cache (long_url, hash, meta, time_created)
-					VALUES ('{$url}','{$hash}','{$metadata}',{$time})
-						ON DUPLICATE KEY UPDATE long_url='{$url}',meta='{$metadata}'";
-
-		$id = insert_data($query);
-
-		if (!$hash) {
-			$hashids = new Hashids(get_site_secret());
-			$hash = $hashids->encode($id, $time);
-
-			$query = "UPDATE LOW_PRIORITY {$dbprefix}url_meta_cache
-					SET hash = '{$hash}' WHERE id = $id";
-
-			if (update_data($query)) {
-				self::$hashes[$url] = $hash;
-			}
-		}
-
-		self::$metas[$url] = json_decode($metadata);
-
-		return $hash;
+	public static function hash($url, array $meta = array()) {
+		$hasher = new Hasher($url);
+		$hasher->setMetadata($meta);
+		return $hasher->save();
 	}
 
 	/**
 	 * Get a unique hash that is associated with this URL
 	 * 
 	 * @param string $url URL
-	 * @return string
+	 * @return string|false
 	 */
 	public static function getHashFromURL($url) {
+		$hasher = new Hasher($url);
+		return $hasher->getHash();
+	}
 
-		$url = sanitize_string($url);
+	/**
+	 * Get cached URL meta
+	 * 
+	 * @param string $url URL
+	 * @return array|boolean
+	 */
+	public static function getMetaFromURL($url) {
 
-		if (!Validator::isValidURL($url)) {
-			return false;
-		}
-
-		if (!isset(self::$hashes[$url])) {
-			$dbprefix = elgg_get_config('dbprefix');
-			$query = "SELECT hash FROM {$dbprefix}url_meta_cache
-					WHERE long_url = '{$url}'";
-			$short = get_data($query);
-
-			if ($short && count($short)) {
-				self::$hashes[$url] = $short[0]->hash;
-			} else {
-				return false;
-			}
-		}
-
-		return self::$hashes[$url];
+		$hasher = new Hasher($url);
+		return $hasher->meta;
 	}
 
 	/**
@@ -101,10 +196,11 @@ class Hasher {
 
 		$hash = sanitize_string($hash);
 
-		if (isset(self::$hashes)) {
-			$url = array_search($hash, self::$hashes);
-			if ($url !== false) {
-				return $url;
+		if (isset(self::$cache)) {
+			foreach (self::$cache as $url => $cache) {
+				if ($cache['hash'] == $hash) {
+					return $url;
+				}
 			}
 		}
 
@@ -115,47 +211,7 @@ class Hasher {
 
 		if ($short && count($short)) {
 			$url = $short[0]->long_url;
-			self::$hashes[$url] = $hash;
 			return $url;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Get cached URL metadata
-	 * 
-	 * @param string $url URL
-	 * @return array|boolean
-	 */
-	public static function getMetaFromURL($url) {
-
-		if (empty($url)) {
-			return false;
-		}
-
-		$url = sanitize_string($url);
-
-		if (isset(self::$metas)) {
-			$meta = array_search($meta, self::$metas);
-			if ($meta !== false) {
-				return $meta;
-			}
-		}
-
-		$dbprefix = elgg_get_config('dbprefix');
-		$query = "SELECT meta FROM {$dbprefix}url_meta_cache
-					WHERE long_url = '{$url}'";
-		$short = get_data($query);
-
-		if ($short && count($short)) {
-			$meta_array = json_decode($short[0]->meta, true);
-			$meta = MetaHandler::fromArray($meta_array);
-			
-			if ($meta) {
-				self::$metas[$url] = $meta;
-				return $meta;
-			}
 		}
 
 		return false;

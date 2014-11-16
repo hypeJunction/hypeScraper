@@ -3,7 +3,6 @@
 namespace hypeJunction\Scraper;
 
 use ElggEntity;
-use Guzzle\Http\Exception\BadResponseException;
 use Guzzle\Http\Message\Response;
 use Guzzle\Service\Client;
 use UFCOE\Elgg\Url as UrlSniffer;
@@ -90,13 +89,15 @@ class UrlHandler {
 
 	/**
 	 * Get guzzle client
-	 * @return Client
+	 * @return Client2
 	 */
 	public function getClient() {
 		if ($this->client instanceof Client) {
 			return $this->client;
 		}
-		return new Client();
+		$client = new Client();
+		$client->setDefaultOption('verify', false);
+		return $client;
 	}
 
 	/**
@@ -122,7 +123,7 @@ class UrlHandler {
 	 * @return boolean
 	 */
 	public function isReachable() {
-		$response = $this->requestHead();
+		$response = $this->getHead();
 		if ($response instanceof Response) {
 			return $response->isSuccessful();
 		}
@@ -134,7 +135,7 @@ class UrlHandler {
 	 * @return string|false
 	 */
 	public function getContentType() {
-		$response = $this->requestHead();
+		$response = $this->getHead();
 		if ($response instanceof Response) {
 			return $response->getContentType();
 		}
@@ -142,11 +143,37 @@ class UrlHandler {
 	}
 
 	/**
+	 * Get contents of the page
+	 * @return string
+	 */
+	public function getContent() {
+		$response = $this->getBody();
+		if ($response instanceof Response) {
+			return $response->getBody(true);
+		}
+		return '';
+	}
+
+	/**
 	 * Get useful meta information
+	 *
 	 * @return MetaHandler
 	 */
-	public function getMeta() {
-		return Parser::getMeta($this->url);
+	public function getMeta($cache = true) {
+		if (isset(self::$cache[$this->url]['meta'])) {
+			$meta = self::$cache[$this->url]['meta'];
+		} else {
+			$hasher = new Hasher($this->url);
+			$meta = $hasher->getMetadata();
+			if (!$meta) {
+				$meta = Parser::getMeta($this->url);
+				$hasher->setMetadata($meta);
+				$hasher->save();
+			}
+			self::$cache[$this->url]['meta'] = $meta;
+		}
+		
+		return MetaHandler::fromArray($meta);
 	}
 
 	/**
@@ -194,20 +221,25 @@ class UrlHandler {
 	}
 
 	/**
-	 * Request headers from URL
+	 * Get head of the HTTP request
 	 * @return Response|false
 	 */
-	protected function requestHead() {
-		if (!isset(self::$cache[$this->url])) {
-			try {
-				$response = $this->getClient()->head($this->url)->send();
-			} catch (Exception $e) {
-				$response = false;
-			}
-
-			self::$cache[$this->url] = $response;
+	protected function getHead() {
+		if (!isset(self::$cache[$this->url]['head'])) {
+			self::$cache[$this->url]['head'] = $this->getClient()->head($this->url)->send();
 		}
-		return self::$cache[$this->url];
+		return self::$cache[$this->url]['head'];
+	}
+
+	/**
+	 * Get body of the HTTP request
+	 * @return Response|false
+	 */
+	protected function getBody() {
+		if (!isset(self::$cache[$this->url]['body'])) {
+			self::$cache[$this->url]['body'] = $this->getClient()->get($this->url)->send();
+		}
+		return self::$cache[$this->url]['body'];
 	}
 
 }

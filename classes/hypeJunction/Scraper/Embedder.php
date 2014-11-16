@@ -157,7 +157,7 @@ class Embedder {
 			'entity' => $this->getEntity(),
 			'meta' => $this->getMeta(),
 		));
-		
+				
 		$params = array_merge($params, $embed_params);
 		return $params;
 	}
