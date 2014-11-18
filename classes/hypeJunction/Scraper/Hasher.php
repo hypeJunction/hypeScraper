@@ -34,6 +34,10 @@ class Hasher {
 		}
 	}
 
+	/**
+	 * Load data from static or DB cache
+	 * @return Hasher
+	 */
 	public function load() {
 		if (isset(self::$cache[$this->url])) {
 			$this->id = self::$cache[$this->url]['id'];
@@ -58,13 +62,26 @@ class Hasher {
 				);
 			}
 		}
+		return $this;
 	}
 
+	/**
+	 * Sanitize and set URL
+	 * 
+	 * @param string $url URL
+	 * @return Hasher
+	 */
 	public function setUrl($url = '') {
 		$this->url = sanitize_string($url);
 		return $this;
 	}
 
+	/**
+	 * Set generated hash
+	 * 
+	 * @param string $hash Hash
+	 * @return Hasher
+	 */
 	public function setHash($hash = '') {
 		if ($hash) {
 			$this->hash = $hash;
@@ -73,6 +90,12 @@ class Hasher {
 		return $this;
 	}
 
+	/**
+	 * Set metadata and update database records
+	 * 
+	 * @param array $meta Metadata
+	 * @return Hasher
+	 */
 	public function setMetadata(array $meta = array()) {
 		if ($this->meta !== $meta) {
 			$this->meta = $meta;
@@ -84,6 +107,10 @@ class Hasher {
 		return $this;
 	}
 
+	/**
+	 * Get database ID
+	 * @return int|null
+	 */
 	public function getId() {
 		return $this->id;
 	}
@@ -96,18 +123,24 @@ class Hasher {
 		return $this->hash;
 	}
 
+	/**
+	 * Get metadata
+	 * @return array|null
+	 */
 	public function getMetadata() {
 		return $this->meta;
 	}
 
+	/**
+	 * Get created time
+	 * @return int|null
+	 */
 	public function getTimeCreated() {
 		return $this->time_created;
 	}
 
 	/**
 	 * Create unqiue hash and store it in the database
-	 * 
-	 * @param array $meta Additional meta to add with the URL
 	 * @return string Hash
 	 */
 	public function save() {
@@ -151,7 +184,7 @@ class Hasher {
 	/**
 	 * Hash a URL
 	 * 
-	 * @param string $url      URL
+	 * @param string $url  URL
 	 * @param array  $meta Metadata describing URL to store in the DB
 	 * @return string Hash
 	 */

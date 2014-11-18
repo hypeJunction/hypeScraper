@@ -39,7 +39,8 @@ class Parser {
 
 	/**
 	 * Set url
-	 * @param string $url
+	 * 
+	 * @param string $url URL
 	 * @return Parser
 	 */
 	public function setUrl($url) {
@@ -327,7 +328,7 @@ class Parser {
 	/**
 	 * Get plugin setting
 	 * 
-	 * @param string $name
+	 * @param string $name Setting name
 	 * @return mixed
 	 */
 	protected function getPluginSetting($name) {
