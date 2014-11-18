@@ -190,16 +190,16 @@
         },
         {
             "name": "hashids/hashids",
-            "version": "1.0.2",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ivanakimov/hashids.php.git",
-                "reference": "b7a3b455afd8ce1b3251ba19a8a173acb654d664"
+                "reference": "fd6593e705bee9d0443c6faeaa6aa004a9fca28d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ivanakimov/hashids.php/zipball/b7a3b455afd8ce1b3251ba19a8a173acb654d664",
-                "reference": "b7a3b455afd8ce1b3251ba19a8a173acb654d664",
+                "url": "https://api.github.com/repos/ivanakimov/hashids.php/zipball/fd6593e705bee9d0443c6faeaa6aa004a9fca28d",
+                "reference": "fd6593e705bee9d0443c6faeaa6aa004a9fca28d",
                 "shasum": ""
             },
             "require": {
@@ -243,7 +243,7 @@
                 "obfuscate",
                 "youtube"
             ],
-            "time": "2014-10-27 18:05:58"
+            "time": "2014-11-14 20:39:09"
         },
         {
             "name": "symfony/event-dispatcher",
