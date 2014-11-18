@@ -145,7 +145,8 @@ class Parser {
 		}
 
 		if ($oembed_endpoint) {
-			$json = $this->getContents($oembed_endpoint);
+			$oembed_handler = new UrlHandler($oembed_endpoint);
+			$json = $oembed_handler->getContent();
 			if ($json) {
 				$oembed_params = json_decode($json, true);
 				if ($oembed_params) {
