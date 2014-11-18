@@ -23,7 +23,7 @@ function elgg_get_config($name) {
 }
 
 function sanitize_string($value) {
-	return mysql_real_escape_string($value);
+	return $value;
 }
 
 require_once dirname(__DIR__) . "/vendors/autoload.php";
