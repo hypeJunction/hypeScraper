@@ -48,6 +48,14 @@ class Parser {
 	}
 	
 	/**
+	 * Scrape meta tags using the service specified in plugin settings
+	 * @return array
+	 */
+	public function getMetadata() {
+		return $this->parseMeta($this->getParsingService());
+	}
+	
+	/**
 	 * Scrape meta tags from a URL
 	 * 
 	 * @param string $url URL to scrape
@@ -55,7 +63,7 @@ class Parser {
 	 */
 	public static function getMeta($url = '') {
 		$parser = new Parser($url);
-		return $parser->parseMeta($parser->getParsingService());
+		return $parser->getMetadata();
 	}
 
 	/**

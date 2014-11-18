@@ -29,7 +29,9 @@ class Hasher {
 
 		$this->time_created = time();
 		$this->setUrl($url);
-		$this->load();
+		if (Validator::isValidURL($url)) {
+			$this->load();
+		}
 	}
 
 	public function load() {

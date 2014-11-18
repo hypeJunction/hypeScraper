@@ -3,6 +3,7 @@
 namespace hypeJunction\Scraper;
 
 use ElggEntity;
+use Exception;
 use Guzzle\Http\Message\Response;
 use Guzzle\Service\Client;
 use UFCOE\Elgg\Url as UrlSniffer;
@@ -89,7 +90,7 @@ class UrlHandler {
 
 	/**
 	 * Get guzzle client
-	 * @return Client2
+	 * @return Client
 	 */
 	public function getClient() {
 		if ($this->client instanceof Client) {
@@ -98,6 +99,22 @@ class UrlHandler {
 		$client = new Client();
 		$client->setDefaultOption('verify', false);
 		return $client;
+	}
+
+	/**
+	 * Get hasher service
+	 * @return Hasher
+	 */
+	public function getHasher() {
+		return new Hasher($this->url);
+	}
+
+	/**
+	 * Get parser service
+	 * @return Parser
+	 */
+	public function getParser() {
+		return new Parser($this->url);
 	}
 
 	/**
@@ -156,23 +173,27 @@ class UrlHandler {
 
 	/**
 	 * Get useful meta information
-	 *
+	 * 
+	 * @param boolean $enable_cache Retrieve/store meta from cache
 	 * @return MetaHandler
 	 */
-	public function getMeta($cache = true) {
+	public function getMeta($enable_cache = true) {
 		if (isset(self::$cache[$this->url]['meta'])) {
 			$meta = self::$cache[$this->url]['meta'];
 		} else {
-			$hasher = new Hasher($this->url);
-			$meta = $hasher->getMetadata();
-			if (!$meta) {
-				$meta = Parser::getMeta($this->url);
-				$hasher->setMetadata($meta);
-				$hasher->save();
+			if (!$enable_cache) {
+				$meta = $this->getParser()->getMetadata();
+			} else {
+				$hasher = $this->getHasher();
+				$meta = $hasher->getMetadata();
+				if (!$meta) {
+					$meta = $this->getParser()->getMetadata();
+					$hasher->setMetadata($meta);
+				}
 			}
 			self::$cache[$this->url]['meta'] = $meta;
 		}
-		
+
 		return MetaHandler::fromArray($meta);
 	}
 
@@ -215,7 +236,7 @@ class UrlHandler {
 	 * @param string $siteUrl URL of the site, defaults to current site url
 	 * @return array
 	 */
-	protected function analyze($siteUrl = null) {
+	public function analyze($siteUrl = null) {
 		$sniffer = new UrlSniffer($siteUrl);
 		return $sniffer->analyze($this->url);
 	}
@@ -224,9 +245,15 @@ class UrlHandler {
 	 * Get head of the HTTP request
 	 * @return Response|false
 	 */
-	protected function getHead() {
+	public function getHead() {
 		if (!isset(self::$cache[$this->url]['head'])) {
-			self::$cache[$this->url]['head'] = $this->getClient()->head($this->url)->send();
+			$head = false;
+			try {
+				$head = $this->getClient()->head($this->url)->send();
+			} catch (Exception $e) {
+				
+			}
+			self::$cache[$this->url]['head'] = $head;
 		}
 		return self::$cache[$this->url]['head'];
 	}
@@ -235,9 +262,15 @@ class UrlHandler {
 	 * Get body of the HTTP request
 	 * @return Response|false
 	 */
-	protected function getBody() {
+	public function getBody() {
 		if (!isset(self::$cache[$this->url]['body'])) {
-			self::$cache[$this->url]['body'] = $this->getClient()->get($this->url)->send();
+			$body = false;
+			try {
+				$body = $this->getClient()->get($this->url)->send();
+			} catch (Exception $e) {
+				
+			}
+			self::$cache[$this->url]['body'] = $body;
 		}
 		return self::$cache[$this->url]['body'];
 	}

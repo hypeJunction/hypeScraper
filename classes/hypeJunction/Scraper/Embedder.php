@@ -30,6 +30,12 @@ class Embedder {
 	protected $entity;
 
 	/**
+	 * Singleton
+	 * @var Embedder 
+	 */
+	static $instance;
+	
+	/**
 	 * Construct a new Embedder
 	 * 
 	 * @param UrlHandler|string $url URL to embed
@@ -37,6 +43,7 @@ class Embedder {
 	 */
 	function __construct($url = '') {
 		$this->setURL($url);
+		self::$instance = $this;
 	}
 
 	/**
@@ -48,15 +55,26 @@ class Embedder {
 	 */
 	public static function getEmbedView($resource = '', $params = array()) {
 
-		$embedder = new Embedder;
+		$embedder = self::getInstance();
 		if ($resource instanceof ElggEntity) {
 			$embedder->setEntity($resource);
 		} else {
-			$embedder->setUrl($resource);
+			$embedder->setURL($resource);
 		}
 		return $embedder->getView($params);
 	}
 
+	/**
+	 * Get singleton
+	 * @return Embedder
+	 */
+	public static function getInstance() {
+		if (isset(self::$instance)) {
+			return self::$instance;
+		}
+		return new Embedder;
+	}
+	
 	/**
 	 * Normalize and set URL
 	 * 

@@ -3,14 +3,15 @@
 namespace hypeJunction\Scraper;
 
 use ElggEntity;
-use Guzzle\Service\Client;
 use Guzzle\Http\Message\Response;
+use Guzzle\Service\Client;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @coversDefaultClass hypeJunction\Scraper\UrlHandler
  * 
  */
-class UrlHandlerTest extends \PHPUnit_Framework_TestCase {
+class UrlHandlerTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * @var UrlHandler
@@ -48,12 +49,8 @@ class UrlHandlerTest extends \PHPUnit_Framework_TestCase {
 	protected function setUp() {
 
 		$stub = $this->getMockBuilder('hypeJunction\\Scraper\\UrlHandler')
-				->setMethods(array('getMeta', 'getEntity', 'requestHead'))
+				->setMethods(array('getHead', 'getBody', 'getHasher', 'getParser'))
 				->getMock();
-
-		$stub->expects($this->any())
-				->method('getMeta')
-				->willReturn($this->getMock('hypeJunction\\Scraper\\MetaHandler'));
 
 		$this->object = $stub;
 	}
@@ -138,7 +135,7 @@ class UrlHandlerTest extends \PHPUnit_Framework_TestCase {
 
 		$this->object
 				->expects($this->any())
-				->method('requestHead')
+				->method('getHead')
 				->willReturn($response);
 
 		$this->object->setURL($url);
@@ -159,7 +156,7 @@ class UrlHandlerTest extends \PHPUnit_Framework_TestCase {
 
 		$this->object
 				->expects($this->any())
-				->method('requestHead')
+				->method('getHead')
 				->willReturn($response);
 
 		$this->object->setURL($url);
@@ -184,7 +181,48 @@ class UrlHandlerTest extends \PHPUnit_Framework_TestCase {
 	 * @covers ::getContentType
 	 */
 	public function testGetContentTypeNoReponse() {
-		$this->assertFalse($this->object->getContentType(), false);
+		$this->assertFalse($this->object->getContentType());
+	}
+
+	/**
+	 * @covers ::getContent
+	 * @dataProvider providerGetContent
+	 */
+	public function testGetContent($url, $content) {
+
+		$response = $this->getMockBuilder('Guzzle\\Http\\Message\\Response')->disableOriginalConstructor()->getMock();
+
+		$response->expects($this->any())
+				->method('getBody')
+				->willReturn($content);
+
+		$this->object
+				->expects($this->any())
+				->method('getBody')
+				->willReturn($response);
+
+		$this->object->setURL($url);
+		$this->assertEquals($this->object->getContent(), $content);
+	}
+
+	/**
+	 * Assertions for getContent()
+	 * @return array
+	 */
+	public function providerGetContent() {
+
+		return array(
+			array('invalid', false),
+			array('http://foo.bar/', '<html></html>'),
+			array('http://foo.bar/', json_encode(array('foo' => 'bar'))),
+		);
+	}
+
+	/**
+	 * @covers ::getContent
+	 */
+	public function testGetContentNoReponse() {
+		$this->assertEquals('', $this->object->getContent());
 	}
 
 	/**
@@ -193,7 +231,7 @@ class UrlHandlerTest extends \PHPUnit_Framework_TestCase {
 	public function testIsReachableNullHead() {
 		$this->object->setURL('http://foo.bar/');
 		// Call to requestHead() will return null
-		$this->assertEquals($this->object->isReachable(), false);
+		$this->assertEquals(false, $this->object->isReachable());
 	}
 
 	/**
@@ -210,7 +248,7 @@ class UrlHandlerTest extends \PHPUnit_Framework_TestCase {
 
 		$this->object
 				->expects($this->any())
-				->method('requestHead')
+				->method('getHead')
 				->willReturn($response);
 
 		$this->object->setURL($url);
@@ -229,8 +267,60 @@ class UrlHandlerTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @covers ::getMeta
 	 */
-	public function testGetMeta() {
+	public function testGetMetaFromCacheWithData() {
+		$hasher = $this->getMock('hypeJunction\\Scraper\\Hasher');
+		$hasher->expects($this->any())
+				->method('getMetadata')
+				->willReturn(array('title' => 'Foo'));
+
+		$this->object->expects($this->any())
+				->method('getHasher')
+				->willReturn($hasher);
+
+		$this->object->setURL('http://localhost/url1');
 		$this->assertInstanceOf('hypeJunction\\Scraper\\MetaHandler', $this->object->getMeta());
+
+		// check static cache
+		$this->assertInstanceOf('hypeJunction\\Scraper\\MetaHandler', $this->object->getMeta());
+	}
+
+	/**
+	 * @covers ::getMeta
+	 */
+	public function testGetMetaFromCacheNoData() {
+
+		$hasher = $this->getMock('hypeJunction\\Scraper\\Hasher');
+		$this->object->expects($this->any())
+				->method('getHasher')
+				->willReturn($hasher);
+
+		$parser = $this->getMock('hypeJunction\\Scraper\\Parser');
+		$parser->expects($this->any())
+				->method('getMetadata')
+				->willReturn(array('title' => 'Foo'));
+		$this->object->expects($this->any())
+				->method('getParser')
+				->willReturn($parser);
+
+		$this->object->setURL('http://localhost/url2');
+		$this->assertInstanceOf('hypeJunction\\Scraper\\MetaHandler', $this->object->getMeta());
+	}
+
+	/**
+	 * @covers ::getMeta
+	 */
+	public function testGetMetaNoCache() {
+		$parser = $this->getMock('hypeJunction\\Scraper\\Parser');
+		$parser->expects($this->any())
+				->method('getMetadata')
+				->willReturn(array('title' => 'Foo'));
+
+		$this->object->expects($this->any())
+				->method('getParser')
+				->willReturn($parser);
+
+		$this->object->setURL('http://localhost/url3');
+		$this->assertInstanceOf('hypeJunction\\Scraper\\MetaHandler', $this->object->getMeta(false));
 	}
 
 	/**
@@ -263,20 +353,79 @@ class UrlHandlerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testGetEntity() {
 
-		$entity = $this->getMock('ElggEntity');
-
-		$this->object->expects($this->any())
-				->method('getEntity')
-				->willReturnOnConsecutiveCalls(false, false, $entity);
-
 		$this->object->setURL('http://localhost/');
 		$this->assertEquals($this->object->getEntity('http://localhost/'), false);
 
 		$this->object->setURL('http://localhost/');
 		$this->assertEquals($this->object->getEntity('http://bar/'), false);
 
-		$this->object->setURL('http://localhost/foo/123');
-		$this->assertEquals($this->object->getEntity('http://localhost/'), $entity);
+		/** @todo: mock get_entity() * */
+		// $this->object->setURL('http://localhost/foo/123');
+		// $this->assertInstanceOf('ElggEntity', $this->object->getEntity('http://localhost/'));
+	}
+
+	/**
+	 * @covers ::analyze()
+	 */
+	public function testAnalyze() {
+		$this->object->setURL('http://localhost/123');
+		$this->assertInternalType('array', $this->object->analyze('http://localhost/'));
+	}
+
+	/**
+	 * @covers ::getHasher
+	 */
+	public function testGetHasher() {
+		$handler = new UrlHandler;
+		return $this->assertInstanceOf('hypeJunction\\Scraper\\Hasher', $handler->getHasher());
+	}
+
+	/**
+	 * @covers ::getParser
+	 */
+	public function testGetParser() {
+		$handler = new UrlHandler;
+		return $this->assertInstanceOf('hypeJunction\\Scraper\\Parser', $handler->getParser());
+	}
+
+	/**
+	 * @covers ::getHead
+	 * @covers ::getBody
+	 */
+	public function testGetHeadAndBody() {
+
+		$response = $this->getMockBuilder('Guzzle\\Http\\Message\\Response')
+				->disableOriginalConstructor()
+				->getMock();
+
+		$request = $this->getMockBuilder('Guzzle\\Http\\Message\\Request')
+				->disableOriginalConstructor()
+				->setMethods(array('send'))
+				->getMock();
+		$request->expects($this->any())
+				->method('send')
+				->willReturn($response);
+
+		$client = $this->getMockBuilder('Guzzle\\Service\\Client')
+				->disableOriginalConstructor()
+				->setMethods(array('head', 'get'))
+				->getMock();
+		$client->expects($this->any())
+				->method('head')
+				->willReturn($request);
+		$client->expects($this->any())
+				->method('get')
+				->willReturn($request);
+
+		$stub = $this->getMockBuilder('hypeJunction\\Scraper\\UrlHandler')
+				->setMethods(array('getClient'))
+				->getMock();
+		$stub->expects($this->any())
+				->method('getClient')
+				->willReturn($client);
+
+		$this->assertInstanceOf('Guzzle\\Http\\Message\\Response', $stub->getHead());
+		$this->assertInstanceOf('Guzzle\\Http\\Message\\Response', $stub->getBody());
 	}
 
 }

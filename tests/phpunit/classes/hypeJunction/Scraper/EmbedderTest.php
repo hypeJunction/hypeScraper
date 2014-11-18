@@ -20,7 +20,15 @@ class EmbedderTest extends PHPUnit_Framework_TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = new Embedder;
+		$stub = $this->getMockBuilder('hypeJunction\\Scraper\\Embedder')
+				->setMethods(array('getMeta'))
+				->getMock();
+
+		$stub->expects($this->any())
+				->method('getMeta')
+				->willReturn(new MetaHandler);
+
+		$this->object = $stub;
 	}
 
 	/**
@@ -32,6 +40,16 @@ class EmbedderTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * @covers ::getInstance
+	 */
+	public function testGetInstance() {
+		$this->assertInstanceOf('hypeJunction\\Scraper\\Embedder', Embedder::getInstance());
+		$embedder = new Embedder('http://localhost/test');
+		$instance = Embedder::getInstance();
+		$this->assertEquals($embedder->getURL(), $instance->getURL());
+	}
+	
+	/**
 	 * @covers ::__construct
 	 */
 	public function testConstructorNotNull() {
@@ -42,12 +60,21 @@ class EmbedderTest extends PHPUnit_Framework_TestCase {
 	 * @covers ::getEmbedView
 	 * @covers ::getView
 	 */
-	public function testGetEmbedView() {
-		
+	public function testGetEmbedViewEntity() {
 		$entity = $this->getMockBuilder('ElggEntity')->disableOriginalConstructor()->getMock();
 		$this->assertInternalType('string', $this->object->getEmbedView($entity));
-		
-		$stub = $this->getMock('hypeJunction\\Scraper\\UrlHandler');
+	}
+
+	/**
+	 * @covers ::getEmbedView
+	 * @covers ::getView
+	 */
+	public function testGetEmbedViewURL() {
+		$stub = $this->getMockBuilder('hypeJunction\\Scraper\\UrlHandler')->getMock();
+		$stub->expects($this->any())
+				->method('getMeta')
+				->willReturn(new MetaHandler);
+
 		$this->assertInternalType('string', $this->object->getEmbedView($stub));
 	}
 
@@ -107,7 +134,7 @@ class EmbedderTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testGetMeta() {
 		$stub = $this->getMock('hypeJunction\\Scraper\\UrlHandler');
-		$stub->expects($this->once())
+		$stub->expects($this->any())
 				->method('getMeta')
 				->willReturn(new MetaHandler);
 
@@ -120,7 +147,7 @@ class EmbedderTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testExtractMeta() {
 		$stub = $this->getMock('hypeJunction\\Scraper\\UrlHandler');
-		$stub->expects($this->once())
+		$stub->expects($this->any())
 				->method('getMeta')
 				->willReturn(new MetaHandler);
 
@@ -133,7 +160,7 @@ class EmbedderTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testGetTypeEntity() {
 		$entity = $this->getMockBuilder('ElggEntity')->disableOriginalConstructor()->getMock();
-		
+
 		$this->object->setEntity($entity);
 		$this->assertEquals(Embedder::TYPE_ENTITY, $this->object->getType());
 	}
@@ -152,10 +179,10 @@ class EmbedderTest extends PHPUnit_Framework_TestCase {
 		$stub->expects($this->any())
 				->method('getMeta')
 				->willReturn(new MetaHandler);
-		
+
 		$this->object->setURL($stub);
 		$this->assertEquals(Embedder::TYPE_SRC, $this->object->getType());
-		
+
 		$stub->expects($this->once())
 				->method('isImageFile')
 				->willReturn(true);
@@ -181,12 +208,12 @@ class EmbedderTest extends PHPUnit_Framework_TestCase {
 	 * @covers ::prepareParams
 	 */
 	public function testPrepareParams() {
-		
+
 		$stub = $this->getMock('hypeJunction\\Scraper\\UrlHandler');
 		$this->object->setURL($stub);
-		
+
 		$params = $this->object->prepareParams();
-		
+
 		$this->assertInternalType('array', $params);
 	}
 
