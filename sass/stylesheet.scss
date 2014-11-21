@@ -1,29 +1,70 @@
+$screen: "only screen";
+$small-width: 40em;
+$small-only: "#{$screen} and (max-width: #{$small-width})";
+
 $border-color: #cccccc !default;
 
+// make preview images have a decent ratio
+$image-width: 200px;
+$image-height: $image-width * 9 / 16;
+
 .elgg-module.elgg-module-embed {
-	font-family: "Open Sans", 'sans-serif';
-	background: lighten($border-color, 15%);
 	border: 1px solid $border-color;
-	margin: 10px 0;
-	& > .elgg-head {
-		padding: 10px;
-		border-bottom: 1px solid $border-color;
-		h3 {
-			margin: 0;
+	padding: 3px;
+	h3 {
+		margin: 0;
+	}
+	.embedder-link {
+		display: block;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		margin: 0;
+		max-width: 300px;
+	}
+	.embedder-description {
+		margin: 0;
+		p {
+			margin: 4px 0;
+			font-size: 90%;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 	}
-	& > .elgg-body {
-		background: white;
-		padding: 0;
-		.elgg-image-block {
-			padding: 10px;
-		}
+	.embedder-icon-bg {
+		background-position: 50%;
+		background-size: cover;
+		min-width: $image-width;
+		min-height: $image-height;
+		display: block;
+		max-width: 100%;
+		max-height: 100%;
+		width: 100%;
+		height: 100%;
 	}
-	& > .elgg-foot {
-		border-top: 1px solid $border-color;
-		padding: 10px;
-		a {
-			word-break: break-all;
+	.embedder-block {
+		position: relative;
+		min-height: $image-height;
+		overflow: hidden;
+		&.embedder-has-icon {
+			padding-left: $image-width + 6px;
+		}
+		.elgg-image {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: $image-width;
+			height: 100%;
+			float: none;
+		}
+		@media #{$small-only} {
+			&.embedder-has-icon {
+				padding-left: 0;
+			}
+			.elgg-image {
+				position: relative;
+				width: 100%;
+				height: $image-width;
+			}
 		}
 	}
 }
