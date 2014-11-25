@@ -58,6 +58,14 @@
     height: 200px;
   }
 }
+.elgg-widget-content .elgg-module.elgg-module-embed .embedder-block.embedder-has-icon {
+  padding-left: 0;
+}
+.elgg-widget-content .elgg-module.elgg-module-embed .embedder-block .elgg-image {
+  position: relative;
+  width: 100%;
+  height: 200px;
+}
 
 .extractor-link {
   line-height: 110%;

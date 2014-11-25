@@ -67,6 +67,18 @@ $image-height: $image-width * 9 / 16;
 			}
 		}
 	}
+	.elgg-widget-content & {
+		.embedder-block {
+			&.embedder-has-icon {
+				padding-left: 0;
+			}
+			.elgg-image {
+				position: relative;
+				width: 100%;
+				height: $image-width;
+			}
+		}
+	}
 }
 
 .extractor-link {
