@@ -29,7 +29,7 @@ function init() {
 
 	elgg_register_viewtype('embed');
 	elgg_register_viewtype_fallback('embed');
-	
+
 	elgg_register_page_handler(PAGEHANDLER, __NAMESPACE__ . '\\page_handler');
 
 	elgg_register_plugin_hook_handler('format:src', 'embed', __NAMESPACE__ . '\\format_embed_view');

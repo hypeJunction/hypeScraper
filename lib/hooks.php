@@ -65,9 +65,10 @@ function extract_qualifiers($hook, $type, $return, $params) {
  * @param string $return HTML
  * @param array  $params Hook params
  * @return string
+ * @deprecated 1.1.3
  */
 function link_qualifiers($hook, $type, $return, $params) {
-
+	elgg_deprecated_notice("'link:qualifiers',\$type hook has been deprecated. Use 'output/linkify' view instead", $type);
 	$source = elgg_extract('source', $params);
 	return Extractor::render($source);
 }
