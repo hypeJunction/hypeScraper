@@ -51,7 +51,7 @@ class Qualifier {
 	 * @return Qualifier
 	 */
 	public static function constructFromType($type, $qualifier = '', $baseUri = '') {
-		$class = __NAMESPACE__ . '\\Qualifiers\\' . $type;
+		$class = __NAMESPACE__ . '\\' . $type;
 		if (class_exists($class)) {
 			return new $class($qualifier, $baseUri);
 		}
