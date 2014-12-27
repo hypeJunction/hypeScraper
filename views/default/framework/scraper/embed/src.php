@@ -28,7 +28,7 @@ if ($meta->provider_name) {
 }
 
 if ($meta->html) {
-	$classes[] = 'flex-video';
+	$classes[] = 'scraper-video';
 	$body = str_replace('http://', '//', $meta->html);
 } else {
 	if (!$module) {

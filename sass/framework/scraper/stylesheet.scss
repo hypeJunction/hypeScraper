@@ -1,15 +1,9 @@
-$screen: "only screen";
-$small-width: 40em;
-$small-only: "#{$screen} and (max-width: #{$small-width})";
-
-$border-color: #cccccc !default;
-
-// make preview images have a decent ratio
-$image-width: 200px;
-$image-height: $image-width * 9 / 16;
+@import "compass/css3"; // compass css3 helpers
+@import "../../../../../sass/global/variables";
+@import "variables";
 
 .elgg-module.elgg-module-embed {
-	border: 1px solid $border-color;
+	border: 1px solid $lighter-border-color;
 	padding: 3px;
 	h3 {
 		margin: 0;
@@ -33,8 +27,8 @@ $image-height: $image-width * 9 / 16;
 	.embedder-icon-bg {
 		background-position: 50%;
 		background-size: cover;
-		min-width: $image-width;
-		min-height: $image-height;
+		min-width: $embed-imagewidth;
+		min-height: $embed-imageheight;
 		display: block;
 		max-width: 100%;
 		max-height: 100%;
@@ -43,16 +37,16 @@ $image-height: $image-width * 9 / 16;
 	}
 	.embedder-block {
 		position: relative;
-		min-height: $image-height;
+		min-height: $embed-imageheight;
 		overflow: hidden;
 		&.embedder-has-icon {
-			padding-left: $image-width + 6px;
+			padding-left: $embed-imagewidth + 6px;
 		}
 		.elgg-image {
 			position: absolute;
 			top: 0;
 			left: 0;
-			width: $image-width;
+			width: $embed-imagewidth;
 			height: 100%;
 			float: none;
 		}
@@ -63,7 +57,7 @@ $image-height: $image-width * 9 / 16;
 			.elgg-image {
 				position: relative;
 				width: 100%;
-				height: $image-width;
+				height: $embed-imagewidth;
 			}
 		}
 	}
@@ -75,7 +69,7 @@ $image-height: $image-width * 9 / 16;
 			.elgg-image {
 				position: relative;
 				width: 100%;
-				height: $image-width;
+				height: $embed-imagewidth;
 			}
 		}
 	}
@@ -96,4 +90,27 @@ $image-height: $image-width * 9 / 16;
 	.link {
 		margin: 0 5px;
 	}
+}
+
+.scraper-video {
+  position: relative;
+  padding-top: 25px;
+  padding-bottom: 67.5%;
+  height: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+
+  &.widescreen { padding-bottom: 56.34%; }
+  &.vimeo { padding-top: 0; }
+
+  iframe,
+  object,
+  embed,
+  video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
