@@ -1,12 +1,6 @@
-$screen: "only screen";
-$small-width: 40em;
-$small-only: "#{$screen} and (max-width: #{$small-width})";
-
-$border-color: #cccccc !default;
-
-// make preview images have a decent ratio
-$image-width: 200px;
-$image-height: $image-width * 9 / 16;
+@import "compass/css3"; // compass css3 helpers
+@import "../../../../../sass/global/variables";
+@import "variables";
 
 .elgg-module.elgg-module-embed {
 	border: 1px solid $border-color;
