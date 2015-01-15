@@ -38,7 +38,7 @@ function init() {
 	elgg_register_plugin_hook_handler('extract:qualifiers', 'all', __NAMESPACE__ . '\\extract_qualifiers');
 	elgg_register_plugin_hook_handler('link:qualifiers', 'all', __NAMESPACE__ . '\\link_qualifiers');
 
-	elgg_extend_view('css/elgg', 'css/framework/scraper/css');
+	elgg_extend_view('css/elgg', 'css/framework/scraper/stylesheet.css');
 
 	//elgg_register_plugin_hook_handler('unit_test', 'system', __NAMESPACE__ . '\\unit_test');
 }
