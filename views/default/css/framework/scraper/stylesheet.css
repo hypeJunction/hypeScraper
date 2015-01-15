@@ -1,109 +1,21 @@
-.elgg-module.elgg-module-embed {
-  border: 1px solid #eeeeee;
-  padding: 3px;
-}
-.elgg-module.elgg-module-embed h3 {
-  margin: 0;
-}
-.elgg-module.elgg-module-embed .embedder-link {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 0;
-  max-width: 300px;
-}
-.elgg-module.elgg-module-embed .embedder-description {
-  margin: 0;
-}
-.elgg-module.elgg-module-embed .embedder-description p {
-  margin: 4px 0;
-  font-size: 90%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.elgg-module.elgg-module-embed .embedder-icon-bg {
-  background-position: 50%;
-  background-size: cover;
-  min-width: 200px;
-  min-height: 112.5px;
-  display: block;
-  max-width: 100%;
-  max-height: 100%;
-  width: 100%;
-  height: 100%;
-}
-.elgg-module.elgg-module-embed .embedder-block {
-  position: relative;
-  min-height: 112.5px;
-  overflow: hidden;
-}
-.elgg-module.elgg-module-embed .embedder-block.embedder-has-icon {
-  padding-left: 206px;
-}
-.elgg-module.elgg-module-embed .embedder-block .elgg-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200px;
-  height: 100%;
-  float: none;
-}
-@media only screen and (max-width: 40em) {
-  .elgg-module.elgg-module-embed .embedder-block.embedder-has-icon {
-    padding-left: 0;
-  }
-  .elgg-module.elgg-module-embed .embedder-block .elgg-image {
-    position: relative;
-    width: 100%;
-    height: 200px;
-  }
-}
-.elgg-module.elgg-module-embed .embedder-block.embedder-flex-video {
-  position: relative;
-  padding-top: 25px;
-  padding-bottom: 67.5%;
-  height: 0;
-  margin-bottom: 0;
-  overflow: hidden;
-}
-.elgg-module.elgg-module-embed .embedder-block.embedder-flex-video.widescreen {
-  padding-bottom: 56.34%;
-}
-.elgg-module.elgg-module-embed .embedder-block.embedder-flex-video.vimeo {
-  padding-top: 0;
-}
-.elgg-module.elgg-module-embed .embedder-block.embedder-flex-video iframe,
-.elgg-module.elgg-module-embed .embedder-block.embedder-flex-video object,
-.elgg-module.elgg-module-embed .embedder-block.embedder-flex-video embed,
-.elgg-module.elgg-module-embed .embedder-block.embedder-flex-video video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-.elgg-widget-content .elgg-module.elgg-module-embed .embedder-block.embedder-has-icon {
-  padding-left: 0;
-}
-.elgg-widget-content .elgg-module.elgg-module-embed .embedder-block .elgg-image {
-  position: relative;
-  width: 100%;
-  height: 200px;
-}
+.elgg-module.elgg-module-embed { border: 1px solid #eeeeee; padding: 3px; }
+.elgg-module.elgg-module-embed h3 { margin: 0; }
+.elgg-module.elgg-module-embed .embedder-link { display: block; overflow: hidden; text-overflow: ellipsis; margin: 0; max-width: 300px; }
+.elgg-module.elgg-module-embed .embedder-description { margin: 0; }
+.elgg-module.elgg-module-embed .embedder-description p { margin: 4px 0; font-size: 90%; overflow: hidden; text-overflow: ellipsis; }
+.elgg-module.elgg-module-embed .embedder-icon-bg { background-position: 50%; background-size: cover; min-width: 200px; min-height: 112.5px; display: block; max-width: 100%; max-height: 100%; width: 100%; height: 100%; }
+.elgg-module.elgg-module-embed .embedder-block { position: relative; min-height: 112.5px; overflow: hidden; }
+.elgg-module.elgg-module-embed .embedder-block.embedder-has-icon { padding-left: 206px; }
+.elgg-module.elgg-module-embed .embedder-block .elgg-image { position: absolute; top: 0; left: 0; width: 200px; height: 100%; float: none; }
+@media only screen and (max-width: 40em) { .elgg-module.elgg-module-embed .embedder-block.embedder-has-icon { padding-left: 0; }
+  .elgg-module.elgg-module-embed .embedder-block .elgg-image { position: relative; width: 100%; height: 200px; } }
+.elgg-module.elgg-module-embed .embedder-block.embedder-flex-video { position: relative; padding-top: 25px; padding-bottom: 67.5%; height: 0; margin-bottom: 0; overflow: hidden; }
+.elgg-module.elgg-module-embed .embedder-block.embedder-flex-video.widescreen { padding-bottom: 56.34%; }
+.elgg-module.elgg-module-embed .embedder-block.embedder-flex-video.vimeo { padding-top: 0; }
+.elgg-module.elgg-module-embed .embedder-block.embedder-flex-video iframe, .elgg-module.elgg-module-embed .embedder-block.embedder-flex-video object, .elgg-module.elgg-module-embed .embedder-block.embedder-flex-video embed, .elgg-module.elgg-module-embed .embedder-block.embedder-flex-video video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.elgg-widget-content .elgg-module.elgg-module-embed .embedder-block.embedder-has-icon { padding-left: 0; }
+.elgg-widget-content .elgg-module.elgg-module-embed .embedder-block .elgg-image { position: relative; width: 100%; height: 200px; }
 
-.extractor-link {
-  line-height: 110%;
-  background: #f4f4f4;
-  vertical-align: middle;
-}
-.extractor-link .favicon {
-  background-size: 16px;
-  width: 16px;
-  height: 16px;
-  background-repeat: no-repeat;
-  display: inline-block;
-  margin: 0 5px;
-}
-.extractor-link .link {
-  margin: 0 5px;
-}
+.extractor-link { line-height: 110%; background: #fafafa; vertical-align: middle; }
+.extractor-link .favicon { background-size: 16px; width: 16px; height: 16px; background-repeat: no-repeat; display: inline-block; margin: 0 5px; }
+.extractor-link .link { margin: 0 5px; }

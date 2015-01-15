@@ -1,5 +1,5 @@
 @import "compass/css3"; // compass css3 helpers
-@import "../../../../../sass/global/variables";
+@import "../../../../../../sass/global/variables";
 @import "variables";
 
 .elgg-module.elgg-module-embed {
@@ -99,7 +99,7 @@
 
 .extractor-link {
 	line-height: 110%;
-	background: #f4f4f4;
+	background: $lighter-bg-color;
 	vertical-align: middle;
 	.favicon {
 		background-size: 16px;
