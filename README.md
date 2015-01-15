@@ -35,4 +35,16 @@ if (elgg_view_exists('output/linkify')) {
 }
 ```
 
+### Previews/Embeds
 
+To generate a preview (or in some cases an embed) for a URL (or multiple URLs), use ```output/url_preview``` view.
+Pass your text as a	```value``` parameter. The view will parse all URLs and generate previews.
+
+```php
+$text = 'This video is really cool https://vimeo.com/channels/staffpicks/116498390';
+if (elgg_view_exists('output/url_preview')) {
+	$text = elgg_view('output/url_preview', array(
+		'value' => $text,
+	));
+}
+```
