@@ -48,3 +48,18 @@ if (elgg_view_exists('output/url_preview')) {
 	));
 }
 ```
+
+To generate a preview for bookmarks in the river, override ```views/default/river/object/bookmarks/create```
+
+```php
+
+$object = $vars['item']->getObjectEntity();
+$excerpt = elgg_get_excerpt($object->description);
+
+echo elgg_view('river/elements/layout', array(
+	'item' => $vars['item'],
+	'message' => $excerpt,
+	'attachments' => elgg_view('output/url_preview', array('value' => $object->address)),
+));
+
+```
