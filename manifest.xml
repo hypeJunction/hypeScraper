@@ -9,12 +9,12 @@
 	
 	<description>URL scraping, embeding and shortening services</description>
 	<website>http://hypejunction.com/</website>
-	<copyright>See COPYRIGHT.txt</copyright>
-	<license>GNU General Public License version 2</license>
+	<copyright>2011-2015 (c) Ismayil Khayredinov</copyright>
+	<license>GNU Public License version 2</license>
 	
 	<requires>
 		<type>elgg_release</type>
-		<version>1.8</version>
+		<version>1.9</version>
 	</requires>
 	
 	<requires>
