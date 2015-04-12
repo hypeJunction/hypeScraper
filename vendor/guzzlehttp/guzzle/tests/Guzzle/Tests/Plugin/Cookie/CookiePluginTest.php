@@ -15,7 +15,7 @@ use Guzzle\Plugin\Cookie\CookiePlugin;
  */
 class CookiePluginTest extends \Guzzle\Tests\GuzzleTestCase
 {
-    public function testurl_meta_cacheAndStoresCookies()
+    public function testExtractsAndStoresCookies()
     {
         $response = new Response(200);
         $mock = $this->getMockBuilder('Guzzle\Plugin\Cookie\CookieJar\ArrayCookieJar')

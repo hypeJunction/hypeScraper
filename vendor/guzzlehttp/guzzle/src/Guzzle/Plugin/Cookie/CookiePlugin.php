@@ -8,7 +8,7 @@ use Guzzle\Plugin\Cookie\CookieJar\CookieJarInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Adds, url_meta_cache, and persists cookies between HTTP requests
+ * Adds, extracts, and persists cookies between HTTP requests
  */
 class CookiePlugin implements EventSubscriberInterface
 {

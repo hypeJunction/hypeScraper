@@ -16,10 +16,6 @@
 	"extra": {
 		"installer-name": "hypeWall"
 	},
-	"config": {
-		"vendor-dir": "vendors",
-		"preferred-install": "dist"
-	},
 	"require": {
 		"php": ">=5.3.3",
 		"ext-json": "*",
@@ -28,16 +24,5 @@
 		"composer/installers": "1.*",
 		"hashids/hashids": "1.0.*",
 		"guzzlehttp/guzzle": "3.8.*"
-	},
-	"require-dev": {
-		"phpunit/phpunit": "4.*",
-		"elgg/sniffs": "dev-master",
-		"squizlabs/php_codesniffer": "1.5.*"
-	},
-	"autoload": {
-		"psr-4": {
-			"hypeJunction\\": ["classes/hypeJunction/", "tests/phpunit/classes/hypeJunction"],
-			"UFCOE\\": ["classes/UFCOE/", "tests/phpunit/classes/UFCOE"]
-		}
 	}
 }

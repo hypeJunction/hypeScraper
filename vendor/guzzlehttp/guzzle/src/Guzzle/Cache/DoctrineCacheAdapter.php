@@ -14,7 +14,7 @@ class DoctrineCacheAdapter extends AbstractCacheAdapter
     /**
      * @param Cache $cache Doctrine cache object
      */
-    public function __construct(Hasher $cache)
+    public function __construct(Cache $cache)
     {
         $this->cache = $cache;
     }

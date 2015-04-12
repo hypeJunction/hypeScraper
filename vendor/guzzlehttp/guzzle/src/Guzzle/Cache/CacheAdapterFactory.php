@@ -30,7 +30,7 @@ class CacheAdapterFactory implements FromConfigInterface
 
         if ($cache instanceof CacheAdapterInterface) {
             return $cache;
-        } elseif ($cache instanceof Hasher) {
+        } elseif ($cache instanceof Cache) {
             return new DoctrineCacheAdapter($cache);
         } elseif ($cache instanceof StorageInterface) {
             return new Zf2CacheAdapter($cache);

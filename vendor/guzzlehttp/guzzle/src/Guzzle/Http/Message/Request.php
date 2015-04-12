@@ -170,7 +170,7 @@ class Request extends AbstractMessage implements RequestInterface
 
     public function setUrl($url)
     {
-        if ($url instanceof UrlHandler) {
+        if ($url instanceof Url) {
             $this->url = $url;
         } else {
             $this->url = Url::factory($url);
