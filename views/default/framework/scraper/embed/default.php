@@ -7,8 +7,6 @@
  * @uses $vars['src']   URL
  */
 
-namespace hypeJunction\Scraper;
-
 $url = elgg_extract('src', $vars, '');
 unset($vars['src']);
 

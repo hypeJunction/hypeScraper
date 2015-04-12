@@ -11,7 +11,8 @@
  * @uses $vars['parse_emails']    BOOL Disable email linkification
  * @uses $vars['parse_usernames'] BOOL Disable usernames linkification
  */
-namespace hypeJunction\Scraper;
+
+use hypeJunction\Scraper\Extractor;
 
 $value = elgg_extract('value', $vars, '');
 

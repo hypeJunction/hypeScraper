@@ -7,7 +7,8 @@
  * @uses $vars['limit']  INT Max number of links to display. 0 for no limit
  * @uses $vars['params'] ARR Params to pass to the embed view
  */
-namespace hypeJunction\Scraper;
+use hypeJunction\Scraper\Embedder;
+use hypeJunction\Scraper\Extractor;
 
 $value = elgg_extract('value', $vars, '');
 $limit = elgg_extract('limit', $vars, 0);

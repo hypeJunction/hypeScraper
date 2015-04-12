@@ -2,13 +2,13 @@
 
 /**
  * Render an embed view for a scraped link
- * 
+ *
  * @uses $vars['src']    Originally embedded URL
  * @uses $vars['meta']   Scraped URL metadata
  * @link Embedder::getEmbedView()
  */
 
-namespace hypeJunction\Scraper;
+use hypeJunction\Scraper\MetaHandler;
 
 $meta = elgg_extract('meta', $vars);
 
@@ -62,7 +62,7 @@ if ($meta->html) {
 
 $body = elgg_view_image_block($icon, $body, array(
 	'class' => implode(' ', array_filter($classes))
-));
+		));
 
 if ($module) {
 	$footer = elgg_view('output/url', array(

@@ -8,10 +8,6 @@
  * @link hypeJunction\Scraper\Embedder::getEmbedView()
  */
 
-namespace hypeJunction\Scraper;
-
-use ElggFile;
-
 $entity = elgg_extract('entity', $vars);
 
 if (isset($vars['module'])) {

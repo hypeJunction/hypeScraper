@@ -7,8 +7,6 @@
  * @link Embedder::getEmbedView()
  */
 
-namespace hypeJunction\Scraper;
-
 if (isset($vars['module'])) {
 	$module = elgg_extract('module', $vars, 'embed');
 	unset($vars['module']);

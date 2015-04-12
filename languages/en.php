@@ -1,7 +1,5 @@
 <?php
 
-namespace hypeJunction\Places;
-
 $english = array(
 	'scraper:settings:service' => 'Scraper Service',
 	'scraper:settings:service:help' => 'Specify which scraper service to use. If using anything other than native DOM parser, '
