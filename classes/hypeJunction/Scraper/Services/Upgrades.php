@@ -13,11 +13,9 @@ class Upgrades {
 	/**
 	 * Constructor
 	 * @param Config   $config   Config
-	 * @param Model $model Taxonomy
 	 */
-	public function __construct(Config $config, Model $model) {
+	public function __construct(Config $config) {
 		$this->config = $config;
-		$this->model = $model;
 	}
 
 	/**
