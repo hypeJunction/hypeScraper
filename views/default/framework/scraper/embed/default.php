@@ -5,17 +5,8 @@
  * 
  * @uses $vars['class'] Class for a formatted tag
  * @uses $vars['src']   URL
+ * @deprecated since 1.2
  */
 
-$url = elgg_extract('src', $vars, '');
-unset($vars['src']);
-
-$vars['value'] = $url;
-
-$classes = array('scraper-default-url');
-if ($class = elgg_extract('class', $vars)) {
-	$classes[] = $class;
-}
-$vars['class'] = implode(' ', $classes);
-
-echo elgg_view('output/url', $vars);
+$vars['href'] = $vars['src'];
+echo elgg_view('output/card', $vars);

@@ -4,7 +4,6 @@
  * Render an embed view for an image
  * 
  * @uses $vars['src'] URL of an embedded image
- * @link Embedder::getEmbedView()
  */
 
 if (isset($vars['module'])) {

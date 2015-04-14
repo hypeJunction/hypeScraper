@@ -3,7 +3,7 @@
 namespace hypeJunction\Scraper\Services;
 
 use hypeJunction\Scraper\Config\Config;
-use hypeJunction\Scraper\Models\Model;
+use hypeJunction\Scraper\Models\Resources;
 
 class Upgrades {
 

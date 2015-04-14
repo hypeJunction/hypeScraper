@@ -5,6 +5,7 @@
  * 
  * @uses $vars['text'] Title of the URL
  * @uses $vars['href'] URL to profile
+ * @deprecated since 1.2
  */
 
 if (isset($vars['class'])) {

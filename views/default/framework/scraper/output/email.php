@@ -5,6 +5,7 @@
  * 
  * @uses $vars['text'] Email address
  * @uses $vars['href'] Mailto href
+ * @deprecated since 1.2
  */
 
 if (isset($vars['class'])) {

@@ -3,9 +3,9 @@
 namespace hypeJunction\Scraper\Listeners;
 
 use hypeJunction\Scraper\Config\Config;
-use hypeJunction\Scraper\Embedder;
-use hypeJunction\Scraper\Extractor;
-use hypeJunction\Scraper\Parser;
+use hypeJunction\Scraper\Models\Resources;
+use hypeJunction\Scraper\Services\Extractor;
+use hypeJunction\Scraper\Services\Linkify;
 use hypeJunction\Scraper\Services\Router;
 
 /**
@@ -15,15 +15,23 @@ class PluginHooks {
 
 	private $config;
 	private $router;
+	private $resources;
+	private $extractor;
+	private $linkify;
 
 	/**
 	 * Constructor
 	 * @param Config $config
 	 * @param Router $router
+	 * @param Resources $resources
+	 * @param Extractor $extractor
 	 */
-	public function __construct(Config $config, Router $router) {
+	public function __construct(Config $config, Router $router, Resources $resources, Extractor $extractor, Linkify $linkify) {
 		$this->config = $config;
 		$this->router = $router;
+		$this->resources = $resources;
+		$this->extractor = $extractor;
+		$this->linkify = $linkify;
 	}
 
 	/**
@@ -52,7 +60,9 @@ class PluginHooks {
 		$src = elgg_extract('src', $params);
 		unset($params['src']);
 
-		return Embedder::getEmbedView($src, $params);
+		$params['href'] = $src;
+
+		return elgg_view('output/card', $params);
 	}
 
 	/**
@@ -67,9 +77,9 @@ class PluginHooks {
 	function getEmbedMetadata($hook, $type, $return, $params) {
 
 		$src = elgg_extract('src', $params);
-		unset($params['src']);
+		$handle = elgg_extract('handle', $params);
 
-		return Parser::getMeta($src);
+		return $this->resources->get($src, $handle);
 	}
 
 	/**
@@ -85,10 +95,10 @@ class PluginHooks {
 
 		$source = elgg_extract('source', $params);
 
-		$return['hashtags'] = Extractor::extractHashtags($source);
-		$return['emails'] = Extractor::extractEmails($source);
-		$return['usernames'] = Extractor::extractUsernames($source);
-		$return['urls'] = Extractor::extractURLs($source);
+		$return['hashtags'] = $this->extractor->hashtags($source);
+		$return['emails'] = $this->extractor->emails($source);
+		$return['usernames'] = $this->extractor->usernames($source);
+		$return['urls'] = $this->extractor->urls($source);
 
 		return $return;
 	}
@@ -106,7 +116,7 @@ class PluginHooks {
 	function linkQualifiers($hook, $type, $return, $params) {
 		//elgg_deprecated_notice("'link:qualifiers',\$type hook has been deprecated. Use 'output/linkify' view instead", $type);
 		$source = elgg_extract('source', $params);
-		return Extractor::render($source);
+		return $this->linkify->all($source);
 	}
 
 }

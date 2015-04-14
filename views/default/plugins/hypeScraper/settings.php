@@ -1,6 +1,6 @@
 <?php
 
-use hypeJunction\Scraper\Parser;
+use hypeJunction\Scraper\Services\Parser;
 
 
 $entity = elgg_extract('entity', $vars);

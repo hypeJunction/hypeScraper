@@ -5,6 +5,7 @@
  * 
  * @uses $vars['text'] Hashtag text
  * @uses $vars['href'] Hashtag destination URL
+ * @deprecated since 1.2
  */
 
 if (isset($vars['class'])) {

@@ -135,7 +135,7 @@ class Extractor {
 
 	/**
 	 * Extract hashtags from text
-	 * 
+	 *
 	 * @param string $text Source text
 	 * @return array
 	 */
@@ -150,10 +150,10 @@ class Extractor {
 		}
 		return $results;
 	}
-
+	
 	/**
 	 * Extract URLs from text
-	 * 
+	 *
 	 * @param string $text Source text
 	 * @return array
 	 */
@@ -165,7 +165,7 @@ class Extractor {
 
 	/**
 	 * Extract usernames from text
-	 * 
+	 *
 	 * @param string $text Source text
 	 * @return array
 	 */
@@ -183,7 +183,7 @@ class Extractor {
 
 	/**
 	 * Extract emails from text
-	 * 
+	 *
 	 * @param string $text Source text
 	 * @return array
 	 */

@@ -12,26 +12,22 @@
  * @uses $vars['parse_usernames'] BOOL Disable usernames linkification
  */
 
-use hypeJunction\Scraper\Extractor;
-
 $value = elgg_extract('value', $vars, '');
 
-$extractor = new Extractor();
-
 if (elgg_extract('parse_urls', $vars, true)) {
-	$value = $extractor->linkifyURLs($value);
+	$value = hypeScraper()->linkify->urls($value);
 }
 
 if (elgg_extract('parse_hashtags', $vars, true)) {
-	$value = $extractor->linkifyHashtags($value);
+	$value = hypeScraper()->linkify->hashtags($value);
 }
 
 if (elgg_extract('parse_emails', $vars, true)) {
-	$value = $extractor->linkifyEmails($value);
+	$value = hypeScraper()->linkify->emails($value);
 }
 
 if (elgg_extract('parse_usernames', $vars, true)) {
-	$value = $extractor->linkifyUsernames($value);
+	$value = hypeScraper()->linkify->usernames($value);
 }
 
 echo $value;

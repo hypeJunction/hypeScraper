@@ -2,23 +2,27 @@
 
 namespace hypeJunction\Scraper\Services;
 
+use ElggFile;
 use hypeJunction\Scraper\Config\Config;
-use hypeJunction\Scraper\Embedder;
-use hypeJunction\Scraper\Hasher;
+use hypeJunction\Scraper\MetaHandler;
+use hypeJunction\Scraper\Models\Resources;
 
 /**
  * Routing and page handling service
  */
 class Router {
 
-	protected $config;
+	private $config;
+	private $model;
 
 	/**
 	 * Constructor
 	 * @param Config $config
+	 * @param Resources  $model
 	 */
-	public function __construct(Config $config) {
+	public function __construct(Config $config, Resources $model) {
 		$this->config = $config;
+		$this->model = $model;
 	}
 
 	/**
@@ -37,31 +41,40 @@ class Router {
 	 */
 	function handlePages($page) {
 
-		$hash = elgg_extract(0, $page, '');
-		$viewtype = elgg_extract(1, $page, 'iframe');
-
 		$url = get_input('url');
+		$handle = get_input('handle');
 
-		if (!$url) {
-			$url = Hasher::getURLFromHash($hash);
+		$iframe = get_input('iframe', false);
+		
+		$site = elgg_get_site_entity();
+		if (!$handle) {
+			$handle = $site->guid;
 		}
-		if (!$url) {
+
+		if (!$url || !$handle) {
 			return false;
 		}
+		
+		$parse = elgg_is_logged_in();
 
-		switch ($viewtype) {
+		switch ($page[0]) {
 
 			default :
-				forward($url);
+				$data = $this->model->get($url, $handle, $parse);
+				$layout = elgg_view('output/card', array(
+					'href' => $url,
+					'handle' => $handle,
+				));
+				$shell = ($iframe) ? 'iframe' : 'default';
+				echo elgg_view_page($data['title'], $layout, $shell);
 				break;
 
-			case 'iframe' :
-				$embedder = new Embedder($url);
-				$meta = $embedder->extractMeta();
-				$title = $meta->title;
-				$layout = $embedder->getEmbedView($url);
-				echo elgg_view_page($title, $layout, 'iframe');
-				break;
+			case 'json' :
+				$data = $this->model->get($url, $handle, $parse);
+				header('Content-Type: application/json');
+				echo json_encode($data);
+				exit;
+
 		}
 
 		return true;

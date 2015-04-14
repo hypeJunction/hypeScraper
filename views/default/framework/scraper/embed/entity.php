@@ -5,7 +5,6 @@
  * 
  * @uses $vars['entity'] Entity whose view to render
  * @uses $vars['src']    Originally embedded URL
- * @link hypeJunction\Scraper\Embedder::getEmbedView()
  */
 
 $entity = elgg_extract('entity', $vars);
