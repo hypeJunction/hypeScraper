@@ -49,6 +49,8 @@ class Parser {
 				if (!empty($data['oembed_url'])) {
 					foreach ($data['oembed_url'] as $oembed_url) {
 						$oembed_data = $this->parse($oembed_url, $options);
+						$oembed_data['oembed_url'] = $oembed_data['url'];
+						unset($oembed_data['url']);
 						if (!empty($oembed_data) && is_array($oembed_data)) {
 							$data = array_merge($data, $oembed_data);
 						}
