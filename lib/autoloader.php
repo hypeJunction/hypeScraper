@@ -2,7 +2,8 @@
 
 require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
 
-elgg_register_classes(dirname(dirname(__FILE__)) . '/classes/');
+// Elgg 1.8 autoloader does not recurse into folders
+//elgg_register_classes(dirname(dirname(__FILE__)) . '/classes/');
 
 /**
  * Plugin DI Container

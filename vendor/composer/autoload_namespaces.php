@@ -11,4 +11,5 @@ return array(
     'Guzzle\\Tests' => array($vendorDir . '/guzzlehttp/guzzle/tests'),
     'Guzzle' => array($vendorDir . '/guzzlehttp/guzzle/src'),
     'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src'),
+    '' => array($baseDir . '/classes'),
 );

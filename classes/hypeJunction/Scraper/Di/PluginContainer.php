@@ -2,9 +2,9 @@
 
 namespace hypeJunction\Scraper\Di;
 
-use Elgg\Di\DiContainer;
 use Guzzle\Http\Client;
 use hypeJunction\Scraper\Config\Config;
+use hypeJunction\Scraper\Di\DiContainer;
 use hypeJunction\Scraper\Http\Cache;
 use hypeJunction\Scraper\Http\Resource;
 use hypeJunction\Scraper\Listeners\Events;
