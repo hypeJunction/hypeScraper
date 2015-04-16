@@ -14,7 +14,7 @@ class Config {
 	private $plugin;
 	private $settings;
 	private $config = array(
-		'legacy_mode' => true,
+		'legacy_mode' => false,
 		'pagehandler_id' => 'url',
 		'cache_thumbnails' => true,
 		'cache_thumb_size' => 500,
