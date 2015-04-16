@@ -11,7 +11,7 @@ if (!$handle) {
 $parse = elgg_extract('parse', $vars, elgg_is_logged_in());
 
 $data = hypeScraper()->resources->get($href, $handle, $parse);
-if (empty($data)) {
+if (empty($data) || empty($data['url'])) {
 	echo elgg_view('output/url', array(
 		'href' => $href,
 	));
