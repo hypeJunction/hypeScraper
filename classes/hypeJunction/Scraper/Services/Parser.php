@@ -31,7 +31,9 @@ class Parser {
 
 	public function parse($url = '', array $options = array()) {
 
-		$data = array();
+		$data = array(
+			'__url' => $url,
+		);
 
 		$service = $this->config->get('service');
 
