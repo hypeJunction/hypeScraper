@@ -14,9 +14,6 @@ elgg_register_event_handler('init', 'system', function() {
 	hypeScraper()->hooks->init();
 	hypeScraper()->router->init();
 
-	elgg_register_viewtype('embed');
-	elgg_register_viewtype_fallback('embed');
-
 	elgg_extend_view('css/elgg', 'css/framework/scraper/stylesheet.css');
 
 });
