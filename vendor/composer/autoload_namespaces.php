@@ -7,7 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Symfony\\Component\\EventDispatcher\\' => array($vendorDir . '/symfony/event-dispatcher'),
-    'Hashids' => array($vendorDir . '/hashids/hashids/lib'),
     'Guzzle\\Tests' => array($vendorDir . '/guzzlehttp/guzzle/tests'),
     'Guzzle' => array($vendorDir . '/guzzlehttp/guzzle/src'),
     'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src'),
