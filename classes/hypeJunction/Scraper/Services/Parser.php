@@ -31,10 +31,6 @@ class Parser {
 
 	public function parse($url = '', array $options = array()) {
 
-		$data = array(
-			'__url' => $url,
-		);
-
 		$service = $this->config->get('service');
 
 		if ($this->httpResource->isImage($url, $options)) {
@@ -60,6 +56,12 @@ class Parser {
 				}
 			}
 		}
+
+		if (!is_array($data)) {
+			$data = array();
+		}
+
+		$data['__url'] = $url;
 
 		return elgg_trigger_plugin_hook('parse', 'framework:scraper', array(
 			'url' => $url,
