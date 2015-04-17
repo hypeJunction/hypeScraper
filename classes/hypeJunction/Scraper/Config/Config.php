@@ -77,20 +77,20 @@ class Config {
 	 * @return array
 	 */
 	public function getHttpClientConfig() {
-		$http_config = [
-			'headers' => [
+		$http_config = array(
+			'headers' => array(
 				'User-Agent' => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.12) Gecko/20101026 Firefox/3.6.12',
-			],
-			'allow_redirects' => [
+			),
+			'allow_redirects' => array(
 				'max' => 3,
 				'strict' => true,
 				'referer' => true,
-				'protocols' => ['http', 'https']
-			],
+				'protocols' => array('http', 'https')
+			),
 			'timeout' => 5,
 			'connect_timeout' => 5,
 			'verify' => false,
-		];
+		);
 
 		return elgg_trigger_plugin_hook('http:config', 'framework:scraper', array('config' => $this), $http_config);
 	}
