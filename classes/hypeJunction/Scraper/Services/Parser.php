@@ -61,6 +61,10 @@ class Parser {
 			$data = array();
 		}
 
+		if (!empty($data) && !isset($data['url'])) {
+			$data['url'] = $url;
+		}
+		
 		$data['__url'] = $url;
 
 		return elgg_trigger_plugin_hook('parse', 'framework:scraper', array(

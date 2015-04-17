@@ -17,12 +17,8 @@ class embedlyParser {
 
 	public function parse($url = '', array $options = array()) {
 
-		$meta = array(
-			'url' => $url,
-		);
-
 		if (!$url) {
-			return $meta;
+			return array();
 		}
 
 		$apikey = $this->config->get('embedly_key');

@@ -14,6 +14,9 @@ elgg_register_event_handler('init', 'system', function() {
 	hypeScraper()->hooks->init();
 	hypeScraper()->router->init();
 
-	elgg_extend_view('css/elgg', 'css/framework/scraper/stylesheet.css');
+	elgg_extend_view('css/elgg', 'css/framework/scraper/stylesheet');
 
+	elgg_register_simplecache_view('js/scraper/play');
+	elgg_register_js('scraper/play', elgg_get_simplecache_url('js', 'scraper/play'));
+	
 });

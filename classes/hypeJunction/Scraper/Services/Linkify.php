@@ -108,7 +108,7 @@ class Linkify implements Regexp {
 
 		$tag = str_replace('#', '', $matches[0]);
 		$href = sprintf($this->config->get("hastag_uri", "%s"), $tag);
-		return elgg_format_element('a', array(
+		return elgg_echo('output/url', array(
 			'class' => 'scraper-hashtag',
 			'href' => $href,
 			'data-qualifier' => 'hashtag',
@@ -129,7 +129,7 @@ class Linkify implements Regexp {
 			$text = (!empty($data['title'])) ? $data['title'] : $text;
 		}
 		
-		return elgg_format_element('a', array(
+		return elgg_view('output/url', array(
 			'class' => 'scraper-url',
 			'href' => $matches[0],
 			'data-qualifier' => 'url',
@@ -158,7 +158,7 @@ class Linkify implements Regexp {
 
 		$href = sprintf($this->config->get("username_uri", "%s"), $username);
 
-		return elgg_format_element('a', array(
+		return elgg_view('output/url', array(
 			'class' => 'scraper-username',
 			'href' => $href,
 			'data-qualifier' => 'username',
@@ -176,7 +176,7 @@ class Linkify implements Regexp {
 	 */
 	public function callbackEmail($matches) {
 		$href = sprintf($this->config->get("email_uri", "%s"), $matches[0]);
-		return elgg_format_element('a', array(
+		return elgg_view('output/url', array(
 			'class' => 'scraper-email',
 			'href' => $href,
 			'data-qualifier' => 'email',

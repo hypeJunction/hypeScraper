@@ -65,10 +65,11 @@ class Cache {
 		}
 
 		if (!empty($data)) {
+			$default = array($data['thumbnail_url']);
 			$thumbnails = !empty($data['thumbnails']) ? $data['thumbnails'] : array();
 			$icons = !empty($data['icons']) ? $data['icons'] : array();
 
-			$thumbnails = array_merge($thumbnails, $icons);
+			$thumbnails = array_merge($default, $thumbnails, $icons);
 
 			if (!empty($thumbnails) && $this->config->get('cache_thumbnails')) {
 				foreach ($thumbnails as $thumbnail_url) {

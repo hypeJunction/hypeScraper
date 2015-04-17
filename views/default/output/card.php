@@ -1,6 +1,7 @@
 <?php
 
-elgg_require_js('scraper/play');
+//elgg_require_js('scraper/play');
+elgg_load_js('scraper/play');
 
 $href = elgg_extract('href', $vars);
 $handle = elgg_extract('handle', $vars);
@@ -75,7 +76,7 @@ if ($meta->type == 'image' || $meta->type == 'photo') {
 	));
 
 	if ($meta->html && ($meta->type == 'rich' || $meta->type == 'video')) {
-		$icon .= elgg_format_element('div', array(
+		$icon .= elgg_view('output/url', array(
 			'class' => 'scraper-play-button',
 			'data-href' => hypeScraper()->router->normalize('json', array(
 				'url' => $href,
