@@ -22,13 +22,17 @@ if (empty($data) || empty($data['url'])) {
 $meta = (object) $data;
 
 if ($meta->thumb_cache) {
-	
+
+	$dir = elgg_get_site_entity()->guid;
+	$dir_tc = elgg_get_site_entity()->time_created;
+
 	$icon_url = elgg_http_add_url_query_elements('/mod/hypeScraper/servers/thumb.php', array(
 		'url' => $href,
 		'handle' => $handle,
-		'dir_guid' => elgg_get_site_entity()->guid,
+		'dir' => $dir,
+		'dir_tc' => $dir_tc,
 		'ts' => $meta->thumb_cache,
-		'mac' => hash_hmac('sha256', $href . $handle, get_site_secret()),
+		'mac' => hash_hmac('sha256', $href . $handle . $dir . $dir_tc, get_site_secret()),
 	));
 } else if ($meta->thumbnail_url) {
 	$icon_url = $meta->thumbnail_url;

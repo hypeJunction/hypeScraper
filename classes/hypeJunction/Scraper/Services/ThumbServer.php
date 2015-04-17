@@ -4,22 +4,28 @@ namespace hypeJunction\Scraper\Services;
 
 class ThumbServer {
 
-	private $dbConfig;
+	const READ = 'read';
+	const WRITE = 'write';
+	const READ_WRITE = 'readwrite';
+
+	private $config;
 	private $dbPrefix;
 	private $dbLink;
 	private $url;
 	private $handle;
-	private $dir_guid;
+	private $dir;
+	private $dir_tc;
 	private $ts;
 	private $hmac;
 
-	public function __construct(\Elgg\Database\Config $dbConfig, $dbPrefix = 'elgg_') {
-		$this->dbConfig = $dbConfig;
-		$this->dbPrefix = $dbPrefix;
+	public function __construct($config) {
+		$this->config = $config;
+		$this->dbPrefix = $config->dbprefix;
 
 		$this->url = $this->get('url');
 		$this->handle = $this->get('handle');
-		$this->dir_guid = $this->get('dir_guid');
+		$this->dir = $this->get('dir');
+		$this->dir_tc = $this->get('dir_tc');
 		$this->ts = $this->get('ts');
 		$this->hmac = $this->get('mac');
 	}
@@ -35,7 +41,7 @@ class ThumbServer {
 			return;
 		}
 
-		if (!$this->url || !$this->handle || !$this->dir_guid || !$this->hmac) {
+		if (!$this->url || !$this->handle || !$this->dir || !$this->hmac) {
 			header("HTTP/1.1 400 Bad request");
 			exit;
 		}
@@ -58,18 +64,19 @@ class ThumbServer {
 		$data_root = $values['dataroot'];
 		$key = $values['__site_secret__'];
 
-		$hmac = hash_hmac('sha256', $this->url . $this->handle, $key);
+		$hmac = hash_hmac('sha256', $this->url . $this->handle . $this->dir . $this->dir_tc, $key);
 
 		if ($this->hmac != $hmac) {
 			header("HTTP/1.1 403 Forbidden");
 			exit;
 		}
 
-		$locator = new \Elgg\EntityDirLocator($this->dir_guid);
-		$filename = $data_root . $locator->getPath() . 'scraper_cache/thumbs/' . md5($this->url) . '.' . $this->handle . '.jpg';
+		//$locator = new \Elgg\EntityDirLocator($this->dir);
+		//$filename = $data_root . $locator->getPath() . 'scraper_cache/thumbs/' . md5($this->url) . '.' . $this->handle . '.jpg';
 
-		error_log($this->url);
-		error_log($filename);
+		$md = md5($this->url);
+		$time_created = date('Y/m/d', $this->dir_tc);
+		$filename = "{$data_root}{$time_created}/{$this->dir}/scraper_cache/thumbs/{$md}.{$this->handle}.jpg";
 
 		if (!file_exists($filename)) {
 			header("HTTP/1.1 404 Not Found");
@@ -93,10 +100,10 @@ class ThumbServer {
 	 * @return array
 	 */
 	protected function getDbConfig() {
-		if ($this->dbConfig->isDatabaseSplit()) {
-			return $this->dbConfig->getConnectionConfig(\Elgg\Database\Config::READ);
+		if ($this->isDatabaseSplit()) {
+			return $this->getConnectionConfig(self::READ);
 		}
-		return $this->dbConfig->getConnectionConfig(\Elgg\Database\Config::READ_WRITE);
+		return $this->getConnectionConfig(self::READ_WRITE);
 	}
 
 	/**
@@ -175,6 +182,109 @@ class ThumbServer {
 			return $_GET[$name];
 		}
 		return $default;
+	}
+
+	/**
+	 * Are the read and write connections separate?
+	 *
+	 * @return bool
+	 */
+	public function isDatabaseSplit() {
+		if (isset($this->config->db) && isset($this->config->db['split'])) {
+			return $this->config->db['split'];
+		}
+		// this was the recommend structure from Elgg 1.0 to 1.8
+		if (isset($this->config->db) && isset($this->config->db->split)) {
+			return $this->config->db->split;
+		}
+		return false;
+	}
+
+	/**
+	 * Get the connection configuration
+	 *
+	 * The parameters are in an array like this:
+	 * array(
+	 * 	'host' => 'xxx',
+	 *  'user' => 'xxx',
+	 *  'password' => 'xxx',
+	 *  'database' => 'xxx',
+	 * )
+	 *
+	 * @param int $type The connection type: READ, WRITE, READ_WRITE
+	 * @return array
+	 */
+	public function getConnectionConfig($type = self::READ_WRITE) {
+		$config = array();
+		switch ($type) {
+			case self::READ:
+			case self::WRITE:
+				$config = $this->getParticularConnectionConfig($type);
+				break;
+			default:
+				$config = $this->getGeneralConnectionConfig();
+				break;
+		}
+		return $config;
+	}
+
+	/**
+	 * Get the read/write database connection information
+	 *
+	 * @return array
+	 */
+	protected function getGeneralConnectionConfig() {
+		return array(
+			'host' => $this->config->dbhost,
+			'user' => $this->config->dbuser,
+			'password' => $this->config->dbpass,
+			'database' => $this->config->dbname,
+		);
+	}
+
+	/**
+	 * Get connection information for reading or writing
+	 *
+	 * @param string $type Connection type: 'write' or 'read'
+	 * @return array
+	 */
+	protected function getParticularConnectionConfig($type) {
+		if (is_object($this->config->db[$type])) {
+			// old style single connection (Elgg < 1.9)
+			$config = array(
+				'host' => $this->config->db[$type]->dbhost,
+				'user' => $this->config->db[$type]->dbuser,
+				'password' => $this->config->db[$type]->dbpass,
+				'database' => $this->config->db[$type]->dbname,
+			);
+		} else if (array_key_exists('dbhost', $this->config->db[$type])) {
+			// new style single connection
+			$config = array(
+				'host' => $this->config->db[$type]['dbhost'],
+				'user' => $this->config->db[$type]['dbuser'],
+				'password' => $this->config->db[$type]['dbpass'],
+				'database' => $this->config->db[$type]['dbname'],
+			);
+		} else if (is_object(current($this->config->db[$type]))) {
+			// old style multiple connections
+			$index = array_rand($this->config->db[$type]);
+			$config = array(
+				'host' => $this->config->db[$type][$index]->dbhost,
+				'user' => $this->config->db[$type][$index]->dbuser,
+				'password' => $this->config->db[$type][$index]->dbpass,
+				'database' => $this->config->db[$type][$index]->dbname,
+			);
+		} else {
+			// new style multiple connections
+			$index = array_rand($this->config->db[$type]);
+			$config = array(
+				'host' => $this->config->db[$type][$index]['dbhost'],
+				'user' => $this->config->db[$type][$index]['dbuser'],
+				'password' => $this->config->db[$type][$index]['dbpass'],
+				'database' => $this->config->db[$type][$index]['dbname'],
+			);
+		}
+		return $config;
 	}
 
 }
