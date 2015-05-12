@@ -1,0 +1,32 @@
+{
+	"name": "hypejunction/hypescraper",
+	"type": "elgg-plugin",
+	"description": "Extraction and embedding service",
+	"homepage": "http://hypejunction.com",
+	"keywords": [
+		"elgg", "plugin", "extract", "embed"
+	],
+	"license": "GPL-2.0",
+	"authors": [
+		{
+			"name": "Ismayil Khayredinov",
+			"email": "info@hypejunction.com"
+		}
+	],
+	"extra": {
+		"installer-name": "hypeScraper"
+	},
+	"require": {
+		"php": ">=5.3.3",
+		"ext-json": "*",
+		"ext-xml": "*",
+		"ext-curl": "*",
+		"composer/installers": "1.*",
+		"guzzlehttp/guzzle": "3.8.*"
+	},
+	"autoload": {
+		"psr-0": {
+			"": "classes/"
+		}
+	}
+}
