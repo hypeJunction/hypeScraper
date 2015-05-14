@@ -35,7 +35,7 @@ class Router {
 		$handle = get_input('handle');
 
 		$iframe = get_input('iframe', false);
-		
+
 		$site = elgg_get_site_entity();
 		if (!$handle) {
 			$handle = $site->guid;
@@ -44,7 +44,7 @@ class Router {
 		if (!$url || !$handle) {
 			return false;
 		}
-		
+
 		$parse = elgg_is_logged_in();
 
 		switch ($page[0]) {
@@ -55,8 +55,12 @@ class Router {
 					'href' => $url,
 					'handle' => $handle,
 				));
-				$shell = ($iframe) ? 'iframe' : 'default';
-				echo elgg_view_page($data['title'], $layout, $shell);
+				if (elgg_is_xhr()) {
+					echo $layout;
+				} else {
+					$shell = ($iframe) ? 'iframe' : 'default';
+					echo elgg_view_page($data['title'], $layout, $shell);
+				}
 				break;
 
 			case 'json' :
@@ -64,7 +68,6 @@ class Router {
 				header('Content-Type: application/json');
 				echo json_encode($data);
 				exit;
-
 		}
 
 		return true;

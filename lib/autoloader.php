@@ -17,5 +17,5 @@ require_once "{$path}vendor/autoload.php";
  * @return \hypeJunction\Scraper\Plugin
  */
 function hypeScraper() {
-	return \hypeJunction\Scraper\Plugin::factory('hypeScraper');
+	return \hypeJunction\Scraper\Plugin::factory();
 }

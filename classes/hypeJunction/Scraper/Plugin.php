@@ -25,8 +25,15 @@ namespace hypeJunction\Scraper;
  */
 final class Plugin extends \hypeJunction\Plugin {
 
-	static $singleton;
+	/**
+	 * Instance
+	 * @var self
+	 */
+	static $instance;
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function __construct(\ElggPlugin $plugin) {
 
 		$this->setValue('plugin', $plugin);
@@ -86,18 +93,27 @@ final class Plugin extends \hypeJunction\Plugin {
 		});
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public static function factory($id) {
-		if (null === self::$singleton) {
+		if (null === self::$instance) {
 			$plugin = elgg_get_plugin_from_id($id);
-			self::$singleton = new self($plugin);
+			self::$instance = new self($plugin);
 		}
-		return self::$singleton;
+		return self::$instance;
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function boot() {
 		elgg_register_event_handler('init', 'system', array($this, 'init'));
 	}
 
+	/**
+	 * 'init','system' callback
+	 */
 	public function init() {
 
 		elgg_register_page_handler($this->config->get('pagehandler_id'), array($this->router, 'handlePages'));
@@ -110,13 +126,9 @@ final class Plugin extends \hypeJunction\Plugin {
 		elgg_extend_view('css/elgg', 'css/framework/scraper/stylesheet');
 
 		if (\hypeJunction\Integration::isElggVersionBelow('1.9.0')) {
-			elgg_register_simplecache_view('js/scraper/static/play');
-			elgg_register_js('scraper/play', elgg_get_simplecache_url('js', 'scraper/static/play'), 'footer');
+			elgg_register_simplecache_view('js/scraper/legacy/play');
+			elgg_register_js('scraper/play', elgg_get_simplecache_url('js', 'scraper/legacy/play'), 'footer');
 		}
-	}
-
-	public function deactivate() {
-		$this->plugin->deactivate();
 	}
 
 }
