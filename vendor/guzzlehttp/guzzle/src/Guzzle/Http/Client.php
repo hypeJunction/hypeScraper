@@ -83,7 +83,7 @@ class Client extends AbstractHasDispatcher implements ClientInterface
 
     final public function setConfig($config)
     {
-        if ($config instanceof Collection) {
+        if ($config instanceof MainFolder) {
             $this->config = $config;
         } elseif (is_array($config)) {
             $this->config = new Collection($config);
@@ -191,7 +191,7 @@ class Client extends AbstractHasDispatcher implements ClientInterface
                 $headers = $this->defaultHeaders->toArray();
             } elseif (is_array($headers)) {
                 $headers += $this->defaultHeaders->toArray();
-            } elseif ($headers instanceof Collection) {
+            } elseif ($headers instanceof MainFolder) {
                 $headers = $headers->toArray() + $this->defaultHeaders->toArray();
             }
         }
@@ -493,7 +493,7 @@ class Client extends AbstractHasDispatcher implements ClientInterface
     public function setDefaultHeaders($headers)
     {
         Version::warn(__METHOD__ . ' is deprecated. Use the request.options array to specify default request options');
-        if ($headers instanceof Collection) {
+        if ($headers instanceof MainFolder) {
             $this->defaultHeaders = $headers;
         } elseif (is_array($headers)) {
             $this->defaultHeaders = new Collection($headers);

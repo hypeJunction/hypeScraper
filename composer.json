@@ -4,7 +4,7 @@
 	"description": "Extraction and embedding service",
 	"homepage": "http://hypejunction.com",
 	"keywords": [
-		"elgg", "plugin", "extract", "embed", "shortener"
+		"elgg", "plugin", "extract", "embed"
 	],
 	"license": "GPL-2.0",
 	"authors": [
@@ -14,15 +14,19 @@
 		}
 	],
 	"extra": {
-		"installer-name": "hypeWall"
+		"installer-name": "hypeScraper"
 	},
 	"require": {
 		"php": ">=5.3.3",
 		"ext-json": "*",
-        "ext-xml": "*",
+		"ext-xml": "*",
 		"ext-curl": "*",
 		"composer/installers": "1.*",
-		"hashids/hashids": "1.0.*",
 		"guzzlehttp/guzzle": "3.8.*"
+	},
+	"autoload": {
+		"psr-0": {
+			"": "classes/"
+		}
 	}
 }

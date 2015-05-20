@@ -1,22 +1,21 @@
 <?php
 
-require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
-
-elgg_register_classes(dirname(dirname(__FILE__)) . '/classes/');
-
-if (hypeScraper()->config->get('legacy_mode')) {
-	elgg_register_classes(dirname(dirname(__FILE__)) . '/lib/deprecated/');
+if (!is_callable('hypeApps')) {
+	throw new Exception("hypeScraper requires hypeApps");
 }
 
+$path = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR;
+
+if (!file_exists("{$path}vendor/autoload.php")) {
+	throw new Exception('hypeScraper can not resolve composer dependencies. Run composer install');
+}
+
+require_once "{$path}vendor/autoload.php";
+
 /**
- * Plugin DI Container
- * @staticvar \hypeJunction\Scraper\Di\PluginContainer $provider
- * @return \hypeJunction\Scraper\Di\PluginContainer
+ * Plugin container
+ * @return \hypeJunction\Scraper\Plugin
  */
 function hypeScraper() {
-	static $provider;
-	if (null === $provider) {
-		$provider = \hypeJunction\Scraper\Di\PluginContainer::create();
-	}
-	return $provider;
+	return \hypeJunction\Scraper\Plugin::factory();
 }

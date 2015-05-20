@@ -118,7 +118,7 @@ class HeaderComparison
      */
     protected function hasKey($key, $array)
     {
-        if ($array instanceof Collection) {
+        if ($array instanceof MainFolder) {
             $keys = $array->getKeys();
         } else {
             $keys = array_keys($array);

@@ -3,7 +3,7 @@
 namespace hypeJunction\Scraper\Resources;
 
 use ElggFile;
-use hypeJunction\Scraper\Config\Config;
+use hypeJunction\Scraper\Config;
 
 class Cache {
 

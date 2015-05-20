@@ -466,7 +466,7 @@ class CollectionTest extends \Guzzle\Tests\GuzzleTestCase
     /**
      * @dataProvider getPathProvider
      */
-    public function testGetPath(Collection $c, $path, $expected, $separator = '/')
+    public function testGetPath(MainFolder $c, $path, $expected, $separator = '/')
     {
         $this->assertEquals($expected, $c->getPath($path, $separator));
     }

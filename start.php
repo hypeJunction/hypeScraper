@@ -5,18 +5,9 @@
  * 
  * @author Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
  */
-
-require_once __DIR__ . '/lib/autoloader.php';
-
-elgg_register_event_handler('init', 'system', function() {
-
-	hypeScraper()->events->init();
-	hypeScraper()->hooks->init();
-	hypeScraper()->router->init();
-
-	elgg_register_viewtype('embed');
-	elgg_register_viewtype_fallback('embed');
-
-	elgg_extend_view('css/elgg', 'css/framework/scraper/stylesheet.css');
-
-});
+try {
+	require_once __DIR__ . '/lib/autoloader.php';
+	hypeScraper()->boot();
+} catch (Exception $ex) {
+	register_error($ex->getMessage());
+}

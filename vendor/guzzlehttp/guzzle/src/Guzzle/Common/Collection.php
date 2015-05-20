@@ -237,7 +237,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable, ToArra
     {
         if (is_array($data)) {
             $this->data = $data + $this->data;
-        } elseif ($data instanceof Collection) {
+        } elseif ($data instanceof MainFolder) {
             $this->data = $data->toArray() + $this->data;
         } else {
             foreach ($data as $key => $value) {

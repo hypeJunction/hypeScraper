@@ -1,6 +1,10 @@
 <?php
 
-elgg_require_js('scraper/play');
+if (\hypeJunction\Integration::isElggVersionBelow('1.9.0')) {
+	elgg_load_js('scraper/play');
+} else {
+	elgg_require_js('scraper/play');
+}
 
 $href = elgg_extract('href', $vars);
 $handle = elgg_extract('handle', $vars);
@@ -20,20 +24,7 @@ if (empty($data) || empty($data['url'])) {
 
 $meta = (object) $data;
 
-if ($meta->thumb_cache) {
-	
-	$icon_url = elgg_http_add_url_query_elements('/mod/hypeScraper/servers/thumb.php', array(
-		'url' => $href,
-		'handle' => $handle,
-		'dir_guid' => elgg_get_site_entity()->guid,
-		'ts' => $meta->thumb_cache,
-		'mac' => hash_hmac('sha256', $href . $handle, get_site_secret()),
-	));
-} else if ($meta->thumbnail_url) {
-	$icon_url = $meta->thumbnail_url;
-} else {
-	$icon_url = '/mod/hypeScraper/graphics/placeholder.png';
-}
+$icon_url = hypeScraper()->resources->getThumbUrl($href, $handle);
 
 $module = elgg_extract('module', $vars, 'scraper-card');
 $classes = array(elgg_extract('class', $vars));
@@ -65,7 +56,6 @@ if ($meta->type == 'image' || $meta->type == 'photo') {
 		'class' => 'scraper-card-description'
 	));
 
-	$icon = '';
 	$classes[] = 'scraper-card-has-icon';
 	$icon = elgg_view('output/url', array(
 		'class' => 'scraper-card-icon-bg',

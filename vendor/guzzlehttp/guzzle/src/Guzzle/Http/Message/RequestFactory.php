@@ -99,7 +99,7 @@ class RequestFactory implements RequestFactoryInterface
             $request = new $this->entityEnclosingRequestClass($method, $url, $headers);
             if ($body || $body === '0') {
                 // Add POST fields and files to an entity enclosing request if an array is used
-                if (is_array($body) || $body instanceof Collection) {
+                if (is_array($body) || $body instanceof MainFolder) {
                     // Normalize PHP style cURL uploads with a leading '@' symbol
                     foreach ($body as $key => $value) {
                         if (is_string($value) && substr($value, 0, 1) == '@') {

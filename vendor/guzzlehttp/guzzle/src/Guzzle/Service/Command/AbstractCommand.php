@@ -76,7 +76,7 @@ abstract class AbstractCommand extends Collection implements CommandInterface
         }
 
         $headers = $this[self::HEADERS_OPTION];
-        if (!$headers instanceof Collection) {
+        if (!$headers instanceof MainFolder) {
             $this[self::HEADERS_OPTION] = new Collection((array) $headers);
         }
 
