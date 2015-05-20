@@ -96,9 +96,9 @@ final class Plugin extends \hypeJunction\Plugin {
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function factory($id) {
+	public static function factory() {
 		if (null === self::$instance) {
-			$plugin = elgg_get_plugin_from_id($id);
+			$plugin = elgg_get_plugin_from_id('hypeScraper');
 			self::$instance = new self($plugin);
 		}
 		return self::$instance;
