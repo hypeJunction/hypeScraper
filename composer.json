@@ -16,13 +16,14 @@
 	"extra": {
 		"installer-name": "hypeScraper"
 	},
+	"config": {
+		"vendor-dir": "/vendor/"
+	},
 	"require": {
 		"php": ">=5.3.3",
-		"ext-json": "*",
-		"ext-xml": "*",
-		"ext-curl": "*",
 		"composer/installers": "1.*",
-		"guzzlehttp/guzzle": "3.8.*"
+		"guzzlehttp/guzzle": "3.8.*",
+		"hypejunction/hypeapps": "4.*"
 	},
 	"autoload": {
 		"psr-0": {
