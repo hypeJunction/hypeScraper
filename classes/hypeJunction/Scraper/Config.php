@@ -18,7 +18,7 @@ class Config extends \hypeJunction\Config {
 			'cache_thumb_size' => 500,
 			'cache_thumb_size_lower_threshold' => 100,
 			'hashtag_uri' => "search?search_type=tags&q=%s",
-			'username_uri' => "profile\/%s",
+			'username_uri' => "profile/%s",
 			'email_uri' => "mailto:%s",
 			'linkify_url_titles' => true,
 			'defer_loading' => true,
