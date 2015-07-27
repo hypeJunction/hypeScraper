@@ -2,18 +2,21 @@
 
 namespace hypeJunction\Scraper\Services;
 
-class ThumbServer {
+use Elgg\Database\Config;
+use Elgg\EntityDirLocator;
+use hypeJunction\Servers\Server;
+
+class ThumbServer extends Server {
 
 	private $dbConfig;
 	private $dbPrefix;
-	private $dbLink;
 	private $url;
 	private $handle;
 	private $dir_guid;
 	private $ts;
 	private $hmac;
 
-	public function __construct(\Elgg\Database\Config $dbConfig, $dbPrefix = 'elgg_') {
+	public function __construct(Config $dbConfig, $dbPrefix = 'elgg_') {
 		$this->dbConfig = $dbConfig;
 		$this->dbPrefix = $dbPrefix;
 
@@ -65,7 +68,7 @@ class ThumbServer {
 			exit;
 		}
 
-		$locator = new \Elgg\EntityDirLocator($this->dir_guid);
+		$locator = new EntityDirLocator($this->dir_guid);
 		$filename = $data_root . $locator->getPath() . 'scraper_cache/thumbs/' . md5($this->url) . '.' . $this->handle . '.jpg';
 
 		error_log($this->url);
@@ -86,95 +89,6 @@ class ThumbServer {
 		header("ETag: \"$etag\"");
 		readfile($filename);
 		exit;
-	}
-
-	/**
-	 * Returns DB config
-	 * @return array
-	 */
-	protected function getDbConfig() {
-		if ($this->dbConfig->isDatabaseSplit()) {
-			return $this->dbConfig->getConnectionConfig(\Elgg\Database\Config::READ);
-		}
-		return $this->dbConfig->getConnectionConfig(\Elgg\Database\Config::READ_WRITE);
-	}
-
-	/**
-	 * Connects to DB
-	 * @return void
-	 */
-	protected function openDbLink() {
-		$dbConfig = $this->getDbConfig();
-		$this->dbLink = @mysql_connect($dbConfig['host'], $dbConfig['user'], $dbConfig['password'], true);
-	}
-
-	/**
-	 * Closes DB connection
-	 * @return void
-	 */
-	protected function closeDbLink() {
-		if ($this->dbLink) {
-			mysql_close($this->dbLink);
-		}
-	}
-
-	/**
-	 * Retreive values from datalists table
-	 * 
-	 * @param array $names Parameter names to retreive
-	 * @return array
-	 */
-	protected function getDatalistValue(array $names = array()) {
-
-		if (!$this->dbLink) {
-			return array();
-		}
-
-		$dbConfig = $this->getDbConfig();
-		if (!mysql_select_db($dbConfig['database'], $this->dbLink)) {
-			return array();
-		}
-
-		if (empty($names)) {
-			return array();
-		}
-		$names_in = array();
-		foreach ($names as $name) {
-			$name = mysql_real_escape_string($name);
-			$names_in[] = "'$name'";
-		}
-		$names_in = implode(',', $names_in);
-
-		$values = array();
-
-		$q = "SELECT name, value
-				FROM {$this->dbPrefix}datalists
-				WHERE name IN ({$names_in})";
-
-		$result = mysql_query($q, $this->dbLink);
-		if ($result) {
-			$row = mysql_fetch_object($result);
-			while ($row) {
-				$values[$row->name] = $row->value;
-				$row = mysql_fetch_object($result);
-			}
-		}
-
-		return $values;
-	}
-
-	/**
-	 * Returns request query value
-	 *
-	 * @param string $name    Query name
-	 * @param mixed  $default Default value
-	 * @return mixed
-	 */
-	protected function get($name, $default = null) {
-		if (isset($_GET[$name])) {
-			return $_GET[$name];
-		}
-		return $default;
 	}
 
 }
