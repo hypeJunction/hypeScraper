@@ -107,7 +107,7 @@ class Linkify implements Regexp {
 		}
 
 		$tag = str_replace('#', '', $matches[0]);
-		$href = sprintf($this->config->get("hastag_uri", "%s"), $tag);
+		$href = sprintf($this->config->get("hashtag_uri", "%s"), $tag);
 		return elgg_format_element('a', array(
 			'class' => 'scraper-hashtag',
 			'href' => $href,
