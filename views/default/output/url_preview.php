@@ -13,7 +13,7 @@ $limit = elgg_extract('limit', $vars, 0);
 $params = elgg_extract('params', $vars, array());
 $i = 0;
 
-$urls = hypeScraper()->extractor->urls();
+$urls = hypeScraper()->extractor->urls($value);
 
 if (!empty($urls)) {
 	foreach ($urls as $url) {
