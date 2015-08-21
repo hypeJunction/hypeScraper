@@ -3,11 +3,7 @@
 /**
  * A tool for extracting, interpreting, caching and embedding remote resources.
  * 
- * @author Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
+ * @author Ismayil Khayredinov <info@hypejunction.com>
  */
-try {
-	require_once __DIR__ . '/lib/autoloader.php';
-	hypeScraper()->boot();
-} catch (Exception $ex) {
-	register_error($ex->getMessage());
-}
+require_once __DIR__ . '/lib/autoloader.php';
+hypeScraper()->boot();
