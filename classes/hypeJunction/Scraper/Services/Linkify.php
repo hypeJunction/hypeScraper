@@ -165,7 +165,7 @@ class Linkify implements Regexp {
 			'data-value' => $username,
 			'data-guid' => $user->guid,
 			//'data-icon' => $user->getIconURL('tiny')
-				), $user->getDisplayName());
+				), $user->name);
 	}
 
 	/**
