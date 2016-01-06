@@ -48,9 +48,9 @@ class Resources {
 		} else if (!empty($data['thumbnail_url'])) {
 			$icon_url = $data['thumbnail_url'];
 		} else {
-			$icon_url = elgg_normalize_url('/mod/hypeScraper/graphics/placeholder.png');
+			$icon_url = '/mod/hypeScraper/graphics/placeholder.png';
 		}
-		return $icon_url;
+		return elgg_normalize_url($icon_url);
 	}
 
 }
