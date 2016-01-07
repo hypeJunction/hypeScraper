@@ -77,6 +77,15 @@ class Cache {
 						continue;
 					}
 
+					$post_max_size = elgg_get_ini_setting_in_bytes('post_max_size');
+					$upload_max_filesize = elgg_get_ini_setting_in_bytes('upload_max_filesize');
+					$max_upload = $upload_max_filesize > $post_max_size ? $post_max_size : $upload_max_filesize;
+
+					$filesize = filesize($thumbnail_url);
+					if (!$filesize || $filesize > $max_upload) {
+						continue;
+					}
+
 					$size = $this->config->get('cache_thumb_size');
 					$thumb = get_resized_image_from_existing_file($thumbnail_url, $size, $size, false, 0, 0, 0, 0, true);
 					if ($thumb) {
