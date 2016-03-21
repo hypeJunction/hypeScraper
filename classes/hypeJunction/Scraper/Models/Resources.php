@@ -30,7 +30,7 @@ class Resources {
 	public function getThumbUrl($url = '', $handle = null) {
 		$data = $this->resourceCache->get($url, $handle);
 		if (!empty($data['thumb_cache'])) {
-			$thumb = new ElggFile();
+			$thumb = new \ElggFile();
 			$thumb->owner_guid = elgg_get_site_entity()->guid;
 			$thumb->setFilename("scraper_cache/thumbs/{$uid}.{$handle}.jpg");
 			$icon_url = elgg_get_inline_url($thumb);
