@@ -29,6 +29,6 @@ interface Regexp {
 	 * Username regex
 	 * Uses noncapturing group to match URLs with hashtags, which we will remove from results
 	 */
-	const REGEX_USERNAME = '((?:h?[t|f]??tps*:\/\/[^\s\r\n\t<>"\'\)\(]+)?(?<=[^\w]|\G)@\b[\p{L}\p{Nd}._]+\b)';
+	const REGEX_USERNAME = '((?:h?[t|f]??tps*:\/\/[^\s\r\n\t<>"\'\)\(]+)?(?<=[^\w]|\G)@\b[\p{L}\p{Nd}._-]+\b)';
 
 }
