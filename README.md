@@ -10,6 +10,9 @@ A tool for scraping, caching and embedding remote resources.
 * Aggressive caching of scraped resources for enhanced performance
 * Linkifies #hashtags, @usernames, links and emails
 
+![Card view](https://raw.github.com/hypeJunction/hypeScraper/master/screenshots/scraper-card.png "Card")
+![Card mobile](https://raw.github.com/hypeJunction/hypeScraper/master/screenshots/scraper-card-mobile.png "Responsive Card")
+![Player](https://raw.github.com/hypeJunction/hypeScraper/master/screenshots/scraper-player.png "Player")
 
 ## Developer notes
 

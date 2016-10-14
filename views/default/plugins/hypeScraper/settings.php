@@ -10,7 +10,7 @@ echo elgg_view_input('select', [
 		1 => elgg_echo('option:yes'),
 	],
 	'label' => elgg_echo('scraper:settings:linkify'),
-	'help' => elgg_echo('scraper:settings:help'),
+	'help' => elgg_echo('scraper:settings:linkify:help'),
 ]);
 
 if (elgg_is_active_plugin('bookmarks')) {
@@ -22,6 +22,6 @@ if (elgg_is_active_plugin('bookmarks')) {
 			1 => elgg_echo('option:yes'),
 		],
 		'label' => elgg_echo('scraper:settings:bookmarks'),
-		'help' => elgg_echo('scraper:settings:help'),
+		'help' => elgg_echo('scraper:settings:bookmarks:help'),
 	]);
 }
