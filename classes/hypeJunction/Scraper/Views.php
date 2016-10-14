@@ -137,7 +137,7 @@ class Views {
 	 * Linkify longtext output
 	 *
 	 * @param string $hook   "view"
-	 * @param string $type   "output/longtext""
+	 * @param string $type   "output/longtext"
 	 * @param array  $return View vars
 	 * @param array  $params Hook params
 	 * @return array
@@ -149,4 +149,24 @@ class Views {
 		return hypeapps_linkify_tokens($return, $params['vars']);
 	}
 
+	/**
+	 * Filter parsed metatags
+	 *
+	 * @param string $hook   "parse"
+	 * @param string $type   "framework/scraper"
+	 * @param array  $return Data
+	 * @param array  $params Hook params
+	 * @return array
+	 */
+	public static function cleanEmbedHTML($hook, $type, $return, $params) {
+
+		if (!empty($return['html'])) {
+			// only allow iframe, video, and audio tags
+			if (!preg_match('/<iframe|video|audio/i', $return['html'])) {
+				unset($return['html']);
+			}
+		}
+
+		return $return;
+	}
 }

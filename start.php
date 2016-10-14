@@ -30,6 +30,8 @@ elgg_register_event_handler('init', 'system', function() {
 	}
 
 	elgg_register_plugin_hook_handler('view', 'output/longtext', [Views::class, 'linkifyLongtext']);
+
+	elgg_register_plugin_hook_handler('parse', 'framework:scraper', [Views::class, 'cleanEmbedHTML']);
 	
 });
 
