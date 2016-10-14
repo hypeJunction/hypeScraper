@@ -1,30 +1,22 @@
 <?php
 
-if (\hypeJunction\Integration::isElggVersionBelow('1.9.0')) {
-	elgg_load_js('scraper/play');
-} else {
-	elgg_require_js('scraper/play');
-}
-
 $href = elgg_extract('href', $vars);
-$handle = elgg_extract('handle', $vars);
-if (!$handle) {
-	$handle = elgg_get_site_entity()->guid;
+
+$data = hypeapps_scrape($href);
+if (!$data) {
+	return;
 }
 
-$parse = elgg_extract('parse', $vars, elgg_is_logged_in());
-
-$data = hypeScraper()->resources->get($href, $handle, $parse);
 if (empty($data) || empty($data['url'])) {
-	echo elgg_view('output/url', array(
-		'href' => $href,
-	));
 	return;
 }
 
 $meta = (object) $data;
 
-$icon_url = hypeScraper()->resources->getThumbUrl($href, $handle);
+$icon_url = elgg_extract('thumbnail_url', $data);
+if (!$icon_url) {
+	$icon_url = elgg_get_simplecache_url('framework/scraper/placeholder.png');
+}
 
 $module = elgg_extract('module', $vars, 'scraper-card');
 $classes = array(elgg_extract('class', $vars));
@@ -36,7 +28,7 @@ if ($meta->provider_name) {
 	$classes[] = 'scraper-card-' . preg_replace('/[^a-z0-9\-]/i', '-', strtolower($meta->provider_name));
 }
 
-if ($meta->type == 'image' || $meta->type == 'photo') {
+if (($meta->type == 'image' || $meta->type == 'photo') && $icon_url) {
 	$vars['src'] = $icon_url;
 	$vars['class'] = 'sraper-card-photo';
 	$img = elgg_view('output/img', $vars);
@@ -56,32 +48,32 @@ if ($meta->type == 'image' || $meta->type == 'photo') {
 		'class' => 'scraper-card-description'
 	));
 
-	$classes[] = 'scraper-card-has-icon';
-	$icon = elgg_view('output/url', array(
-		'class' => 'scraper-card-icon-bg',
-		'text' => '<span></span>',
-		'style' => 'background-image:url(' . $icon_url . ')',
-		'href' => $meta->url
-	));
+	if ($icon_url) {
+		$classes[] = 'scraper-card-has-icon';
+		$icon = elgg_view('output/url', array(
+			'class' => 'scraper-card-icon-bg',
+			'text' => '<span></span>',
+			'style' => 'background-image:url(' . $icon_url . ')',
+			'href' => $meta->url
+		));
+	}
 
 	if ($meta->html && ($meta->type == 'rich' || $meta->type == 'video')) {
-		$icon .= elgg_format_element('div', array(
+		$icon .= elgg_format_element('div', [
 			'class' => 'scraper-play-button',
-			'data-href' => hypeScraper()->router->normalize('json', array(
+			'data-href' => elgg_http_add_url_query_elements(elgg_normalize_url('scraper/json'), array(
 				'url' => $href,
-				'handle' => $handle,
-			))
-		));
+				'm' => elgg_build_hmac($href)->getToken(),
+			)),
+		], elgg_view_icon('youtube-play'));
 	}
 }
 
 $body = elgg_view_image_block($icon, $body, array(
 	'class' => implode(' ', array_filter($classes))
-		));
-
+));
 
 if ($module) {
-
 	$class = ($meta->type) ? " scraper-card-$meta->type" : '';
 	echo elgg_view_module($module, false, $body, array(
 		'class' => $class,

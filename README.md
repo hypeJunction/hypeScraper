@@ -1,25 +1,40 @@
 hypeScraper
 ===========
-![Elgg 1.8](https://img.shields.io/badge/Elgg-1.8.x-orange.svg?style=flat-square)
-![Elgg 1.9](https://img.shields.io/badge/Elgg-1.9.x-orange.svg?style=flat-square)
-![Elgg 1.10](https://img.shields.io/badge/Elgg-1.10.x-orange.svg?style=flat-square)
-![Elgg 1.11](https://img.shields.io/badge/Elgg-1.11.x-orange.svg?style=flat-square)
-![Elgg 1.12](https://img.shields.io/badge/Elgg-1.12.x-orange.svg?style=flat-square)
-![Elgg 2.0](https://img.shields.io/badge/Elgg-2.0.x-orange.svg?style=flat-square)
+![Elgg 2.2](https://img.shields.io/badge/Elgg-2.2-orange.svg?style=flat-square)
 
-A tool for extracting, interpreting, caching and embedding remote resources.
+A tool for scraping, caching and embedding remote resources.
 
 ## Features
 
-* Convert URLs to embeddable content using native parser, iframe.ly or embed.ly
-* Parse #hashtags, @usernames, links and emails
+* Scrapes URLs and turns them in responsive preview cards
+* Aggressive caching of scraped resources for enhanced performance
+* Linkifies #hashtags, @usernames, links and emails
 
-## Developer Notes
+![Card view](https://raw.github.com/hypeJunction/hypeScraper/master/screenshots/scraper-card.png "Card")
+![Card mobile](https://raw.github.com/hypeJunction/hypeScraper/master/screenshots/scraper-card-mobile.png "Responsive Card")
+![Player](https://raw.github.com/hypeJunction/hypeScraper/master/screenshots/scraper-player.png "Player")
 
-### Cache
+## Developer notes
 
-The plugin caches URL metadata and thumbnails on the Elgg file store. You can use custom handles to
-maintain multiple instances of the same URL.
+### Card
+
+To display a URL card with an image preview, title and brief description, use ``output/card`` view:
+
+```php
+echo elgg_view('output/card', array(
+	'href' => 'https://www.youtube.com/watch?v=Dlf1_vuIR4I',
+));
+```
+
+### Player
+
+To dipslay a rich media player use ``output/player`` view:
+
+```php
+echo elgg_view('output/player', array(
+	'href' => 'https://www.youtube.com/watch?v=Dlf1_vuIR4I',
+));
+```
 
 ### Linkify
 
@@ -39,16 +54,6 @@ if (elgg_view_exists('output/linkify')) {
 }
 ```
 
-### Previews/Embeds
-
-To generate a preview/card, use ```output/card``` view. Pass your URL as ```href``` parameter;
-
-```php
-echo elgg_view('output/card', array(
-	'href' => 'https://www.youtube.com/watch?v=Dlf1_vuIR4I',
-));
-```
-
 To generate a preview for multiple URLs extracted from text, use ```output/url_preview``` view.
 Pass your text as a	```value``` parameter. The view will parse all URLs and generate previews.
 
@@ -59,19 +64,4 @@ if (elgg_view_exists('output/url_preview')) {
 		'value' => $text,
 	));
 }
-```
-
-To generate a preview for bookmarks in the river, override ```views/default/river/object/bookmarks/create```
-
-```php
-
-$object = $vars['item']->getObjectEntity();
-$excerpt = elgg_get_excerpt($object->description);
-
-echo elgg_view('river/elements/layout', array(
-	'item' => $vars['item'],
-	'message' => $excerpt,
-	'attachments' => elgg_view('output/card', array('href' => $object->address)),
-));
-
 ```

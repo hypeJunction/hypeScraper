@@ -1,6 +1,5 @@
 {
 	"name": "hypejunction/hypescraper",
-	"version": "4.2.2",
 	"type": "elgg-plugin",
 	"description": "Extraction and embedding service",
 	"homepage": "http://hypejunction.com",
@@ -18,11 +17,10 @@
 		"installer-name": "hypeScraper"
 	},
 	"require": {
-		"guzzlehttp/guzzle": "~3.0"
-	},
-	"require-dev": {
+		"php": ">=5.5",
 		"composer/installers": "~1.0",
-		"hypejunction/hypeapps": "~4.0"
+		"hypejunction/http-parser": "dev-master",
+		"fire015/flintstone": "^2.0"
 	},
 	"autoload": {
 		"psr-0": {
