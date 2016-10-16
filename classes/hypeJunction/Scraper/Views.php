@@ -33,9 +33,9 @@ class Views {
 	 * @return array
 	 */
 	public static function viewCard($hook, $type, $return, $params) {
-		$url = elgg_extract('url', $params);
+		$href = elgg_extract('src', $params);
 		return elgg_view('output/card', [
-			'href' => $url,
+			'href' => $href,
 		]);
 	}
 
