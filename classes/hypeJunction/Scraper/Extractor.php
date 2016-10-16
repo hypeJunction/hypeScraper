@@ -26,10 +26,10 @@ class Extractor {
 	 */
 	public static function all($text = '') {
 		return array(
-			'urls' => self::urls($text),
-			'hashtags' => self::hashtags($text),
-			'emails' => self::emails($text),
-			'usernames' => self::usernames($text),
+			'urls' => self::urls($text) ? : [],
+			'hashtags' =>  self::hashtags($text) ? : [],
+			'emails' => self::emails($text) ? : [],
+			'usernames' => self::usernames($text) ? : [],
 		);
 	}
 
