@@ -40,7 +40,12 @@ function scraper_upgrade_20161410a() {
 			continue;
 		}
 
-		$url = $data['url'];
+		$url = elgg_normalize_url($data['url']);
+		if (!filter_var($url, FILTER_VALIDATE_URL)) {
+			$file->delete();
+			continue;
+		}
+		
 		$svc->parse($url);
 
 		$file->delete();
