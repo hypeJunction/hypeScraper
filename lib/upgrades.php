@@ -45,8 +45,12 @@ function scraper_upgrade_20161410a() {
 			$file->delete();
 			continue;
 		}
-		
-		$svc->parse($url);
+
+		try {
+			$svc->parse($url);
+		} catch (Exception $e) {
+
+		}
 
 		$file->delete();
 

@@ -134,7 +134,10 @@ class ScraperService {
 					if ($thumbnail == $url) {
 						continue;
 					}
-					$assets[] = $this->parse($thumbnail, $flush);
+					$thumbnail = elgg_normalize_url($thumbnail);
+					if (filter_var($thumbnail, FILTER_VALIDATE_URL)) {
+						$assets[] = $this->parse($thumbnail, $flush);
+					}
 				}
 
 				$data['assets'] = array_values(array_filter($assets));
