@@ -43,7 +43,7 @@ class Extractor {
 		$matches = [];
 		$regex = '/' . self::REGEX_CHAR_BACK  . self::REGEX_HASHTAG . '/i';
 		preg_match_all($regex, $text, $matches);
-		$results = array_filter($matches[1]);
+		$results = array_filter($matches[2]);
 		return array_unique($results);
 	}
 
@@ -57,7 +57,7 @@ class Extractor {
 		$matches = array();
 		$regex = '/' . self::REGEX_CHAR_BACK  . self::REGEX_URL . '/i';
 		preg_match_all($regex, $text, $matches);
-		$results = array_filter($matches[1]);
+		$results = array_filter($matches[2]);
 		return array_unique($results);
 	}
 
@@ -71,7 +71,7 @@ class Extractor {
 		$matches = [];
 		$regex = '/' . self::REGEX_CHAR_BACK  . self::REGEX_USERNAME . '/i';
 		preg_match_all($regex, $text, $matches);
-		$results = array_filter($matches[1]);
+		$results = array_filter($matches[2]);
 		return array_unique($results);
 	}
 
@@ -85,7 +85,7 @@ class Extractor {
 		$matches = array();
 		$regex = '/' . self::REGEX_CHAR_BACK  . self::REGEX_EMAIL . '/i';
 		preg_match_all($regex, $text, $matches);
-		$results = array_filter($matches[1]);
+		$results = array_filter($matches[2]);
 		return array_unique($results);
 	}
 
