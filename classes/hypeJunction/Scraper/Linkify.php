@@ -14,7 +14,7 @@ class Linkify extends Extractor {
 
 	const REGEX_HASHTAG = '(#\w+)';
 
-	const REGEX_URL = '(h?[t|f]??tps*:\/\/[^\s\r\n\t<>"\'\)\(]+)(?:&.*?;)';
+	const REGEX_URL = '(h?[t|f]??tps*:\/\/[^\s\r\n\t<>"\'\)\(]+)';
 
 	const REGEX_EMAIL = '([\w\-\.]+@[^\s\r\n\t<>"\'\)\(]+\.+[0-9a-z]{2,})';
 
@@ -27,6 +27,7 @@ class Linkify extends Extractor {
 	 * @return string
 	 */
 	public static function all($text = '') {
+		$text = html_entity_decode($text);
 		$text = self::emails($text);
 		$text = self::usernames($text);
 		$text = self::hashtags($text);
