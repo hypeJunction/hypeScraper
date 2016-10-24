@@ -102,6 +102,20 @@ class ScraperService {
 			}
 		}
 
+		$response = $this->parser->request($url);
+		if (!$response instanceof \GuzzleHttp\Psr7\Response) {
+			return false;
+		}
+
+		$post_max_size = elgg_get_ini_setting_in_bytes('post_max_size');
+		$upload_max_filesize = elgg_get_ini_setting_in_bytes('upload_max_filesize');
+		$max_upload = $upload_max_filesize > $post_max_size ? $post_max_size : $upload_max_filesize;
+
+		if ((int) $response->getHeader('Content-Length') > $max_upload) {
+			// Large images eat up memory
+			return false;
+		}
+
 		$data = $this->parser->parse($url);
 		if (!$data) {
 			return false;
@@ -128,15 +142,22 @@ class ScraperService {
 				$icons = (array) elgg_extract('icons', $data, []);
 
 				// Try 3 images and choose the one with highest dimensions
-				$thumbnails = array_slice($thumbnails + $icons, 0, 3);
-
+				$thumbnails = $thumbnails + $icons;
+				$thumbs_parse = 0;
 				foreach ($thumbnails as $thumbnail) {
 					if ($thumbnail == $url) {
 						continue;
 					}
 					$thumbnail = elgg_normalize_url($thumbnail);
 					if (filter_var($thumbnail, FILTER_VALIDATE_URL)) {
-						$assets[] = $this->parse($thumbnail, $flush);
+						$asset = $this->parse($thumbnail, $flush);
+						if ($asset) {
+							$thumbs_parsed++;
+							$assets[] = $asset;
+						}
+					}
+					if ($thubms_parsed == 3) {
+						break;
 					}
 				}
 
@@ -157,7 +178,7 @@ class ScraperService {
 
 		$data = elgg_trigger_plugin_hook('parse', 'framework:scraper', array(
 			'url' => $url,
-		), $data);
+				), $data);
 
 		$this->save($url, $data);
 		return $data;
@@ -242,6 +263,7 @@ class ScraperService {
 		}
 
 		$basename = sha1($url);
+		$this->parser;
 		$raw_bytes = $this->parser->read($url);
 		if (empty($raw_bytes)) {
 			return;
