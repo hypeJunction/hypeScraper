@@ -1,9 +1,19 @@
 @import "compass/css3"; // compass css3 helpers
 
 // make preview images have a decent ratio
-$embed-image-width: 200px;
+$embed-image-width: 225px;
 $embed-image-height: $embed-image-width * 3 / 4;
 $lighter-border-color: #f4f4f4 !default;
+
+@mixin scraper-card-stacked {
+	@include flex-wrap(wrap);
+	.elgg-image {
+		position: relative;
+		height: $embed-image-width;
+		min-height: 150px;
+		flex: 1 1 100%;
+	}
+}
 
 .scraper-card-link {
 	display: block;
@@ -49,7 +59,7 @@ $lighter-border-color: #f4f4f4 !default;
 		position: relative;
 		margin: 0;
 		padding: 0;
-		@include flex(1 1 $embed-image-width);
+		@include flex(0 0 $embed-image-width);
 	}
 
 	.elgg-body {
@@ -57,14 +67,16 @@ $lighter-border-color: #f4f4f4 !default;
 		padding: 15px;
 	}
 
+	.elgg-module.elgg-module-scraper-card & {
+		padding: 0;
+	}
+
+	.elgg-module-widget & {
+		@include scraper-card-stacked;
+	}
+
 	@media (max-width: 820px) {
-		@include flex-wrap(wrap);
-		.elgg-image {
-			position: relative;
-			width: 100%;
-			height: $embed-image-width;
-			min-height: 150px;
-		}
+		@include scraper-card-stacked;
 	}
 }
 

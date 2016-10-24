@@ -3,13 +3,16 @@
 .scraper-card-description { margin: 0; }
 .scraper-card-description p { margin: 4px 0; font-size: 90%; overflow: hidden; text-overflow: ellipsis; }
 
-.scraper-card-icon-bg { background-position: 50%; background-size: cover; min-width: 200px; min-height: 150px; display: block; max-width: 100%; max-height: 100%; width: 100%; height: 100%; }
+.scraper-card-icon-bg { background-position: 50%; background-size: cover; min-width: 225px; min-height: 168.75px; display: block; max-width: 100%; max-height: 100%; width: 100%; height: 100%; }
 
-.scraper-card-block { position: relative; min-height: 150px; overflow: hidden; padding: 0; border: 1px solid #f4f4f4; display: -webkit-flex; display: flex; -webkit-flex-wrap: nowrap; flex-wrap: nowrap; -webkit-align-items: center; align-items: center; }
-.scraper-card-block .elgg-image { position: relative; margin: 0; padding: 0; -webkit-flex: 1 1 200px; flex: 1 1 200px; }
+.scraper-card-block { position: relative; min-height: 168.75px; overflow: hidden; padding: 0; border: 1px solid #f4f4f4; display: -webkit-flex; display: flex; -webkit-flex-wrap: nowrap; flex-wrap: nowrap; -webkit-align-items: center; align-items: center; }
+.scraper-card-block .elgg-image { position: relative; margin: 0; padding: 0; -webkit-flex: 0 0 225px; flex: 0 0 225px; }
 .scraper-card-block .elgg-body { -webkit-flex: 1 1 auto; flex: 1 1 auto; padding: 15px; }
+.elgg-module.elgg-module-scraper-card .scraper-card-block { padding: 0; }
+.elgg-module-widget .scraper-card-block { -webkit-flex-wrap: wrap; flex-wrap: wrap; }
+.elgg-module-widget .scraper-card-block .elgg-image { position: relative; height: 225px; min-height: 150px; flex: 1 1 100%; }
 @media (max-width: 820px) { .scraper-card-block { -webkit-flex-wrap: wrap; flex-wrap: wrap; }
-  .scraper-card-block .elgg-image { position: relative; width: 100%; height: 200px; min-height: 150px; } }
+  .scraper-card-block .elgg-image { position: relative; height: 225px; min-height: 150px; flex: 1 1 100%; } }
 
 .scraper-card-flex { position: relative; padding-top: 25px; padding-bottom: 67.5%; height: 0; margin-bottom: 0; overflow: hidden; }
 .scraper-card-flex.widescreen, .scraper-card-flex.scraper-card-youtube { padding-bottom: 56.34%; }
