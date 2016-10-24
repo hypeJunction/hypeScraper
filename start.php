@@ -1,7 +1,6 @@
 <?php
 
 use hypeJunction\Scraper\Router;
-use hypeJunction\Scraper\Tokenizer;
 use hypeJunction\Scraper\Views;
 
 /**
