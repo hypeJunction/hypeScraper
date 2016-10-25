@@ -194,7 +194,7 @@ class ScraperService {
 	 * @param array  $data Data
 	 * @return boolean
 	 */
-	public function save($url, array $data = []) {
+	public function save($url, $data = false) {
 		if (!$url) {
 			return false;
 		}
@@ -330,6 +330,7 @@ class ScraperService {
 			'timeout' => 5,
 			'connect_timeout' => 5,
 			'verify' => false,
+			'cookies' => true,
 		];
 
 		return elgg_trigger_plugin_hook('http:config', 'framework:scraper', null, $config);
