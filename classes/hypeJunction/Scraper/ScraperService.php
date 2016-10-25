@@ -104,6 +104,7 @@ class ScraperService {
 
 		$response = $this->parser->request($url);
 		if (!$response instanceof \GuzzleHttp\Psr7\Response) {
+			$this->save($url, false);
 			return false;
 		}
 
@@ -113,11 +114,13 @@ class ScraperService {
 
 		if ((int) $response->getHeader('Content-Length') > $max_upload) {
 			// Large images eat up memory
+			$this->save($url, false);
 			return false;
 		}
 
 		$data = $this->parser->parse($url);
 		if (!$data) {
+			$this->save($url, false);
 			return false;
 		}
 
