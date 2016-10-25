@@ -97,13 +97,12 @@ class ScraperService {
 			$this->delete($url);
 		} else {
 			$data = $this->get($url);
-			if ($data) {
+			if (isset($data)) {
 				return $data;
 			}
 		}
 
-		$response = $this->parser->request($url);
-		if (!$response instanceof \GuzzleHttp\Psr7\Response) {
+		if (!$this->parser->exists($url)) {
 			$this->save($url, false);
 			return false;
 		}
