@@ -322,7 +322,7 @@ class ScraperService {
 				]),
 			],
 			'allow_redirects' => [
-				'max' => 3,
+				'max' => 10,
 				'strict' => true,
 				'referer' => true,
 				'protocols' => ['http', 'https']
