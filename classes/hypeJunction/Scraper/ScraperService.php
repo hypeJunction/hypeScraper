@@ -56,7 +56,7 @@ class ScraperService {
 	 * Get scraped data
 	 * 
 	 * @param string $url URL
-	 * @return array|false
+	 * @return array|void
 	 * @throws \InvalidArgumentException
 	 */
 	public function get($url) {
@@ -77,7 +77,7 @@ class ScraperService {
 			':url' => $url,
 		]);
 
-		return $row ? unserialize($row->data) : false;
+		return $row ? unserialize($row->data) : null;
 	}
 
 	/**
@@ -101,8 +101,9 @@ class ScraperService {
 				return $data;
 			}
 		}
-
-		if (!$this->parser->exists($url)) {
+		
+		$response = $this->parser->request($url);
+		if (!$response instanceof \GuzzleHttp\Psr7\Response || $response->getStatusCode() != 200) {
 			$this->save($url, false);
 			return false;
 		}
