@@ -82,14 +82,14 @@ $lighter-border-color: #f4f4f4 !default;
 
 .scraper-card-flex {
 	position: relative;
-	padding-top: 25px;
-	padding-bottom: 67.5%;
+	padding-top: 25px !important;
+	padding-bottom: 67.5% !important;
 	height: 0;
 	margin-bottom: 0;
 	overflow: hidden;
 
-	&.widescreen, &.scraper-card-youtube { padding-bottom: 56.34%; }
-	&.scraper-card-vimeo { padding-top: 0; }
+	&.widescreen, &.scraper-card-youtube { padding-bottom: 56.34% !important; }
+	&.scraper-card-vimeo { padding-top: 0 !important; }
 
 	iframe,
 	object,

@@ -14,9 +14,9 @@
 @media (max-width: 820px) { .scraper-card-block { -webkit-flex-wrap: wrap; flex-wrap: wrap; }
   .scraper-card-block .elgg-image { position: relative; height: 225px; min-height: 150px; flex: 1 1 100%; } }
 
-.scraper-card-flex { position: relative; padding-top: 25px; padding-bottom: 67.5%; height: 0; margin-bottom: 0; overflow: hidden; }
-.scraper-card-flex.widescreen, .scraper-card-flex.scraper-card-youtube { padding-bottom: 56.34%; }
-.scraper-card-flex.scraper-card-vimeo { padding-top: 0; }
+.scraper-card-flex { position: relative; padding-top: 25px !important; padding-bottom: 67.5% !important; height: 0; margin-bottom: 0; overflow: hidden; }
+.scraper-card-flex.widescreen, .scraper-card-flex.scraper-card-youtube { padding-bottom: 56.34% !important; }
+.scraper-card-flex.scraper-card-vimeo { padding-top: 0 !important; }
 .scraper-card-flex iframe, .scraper-card-flex object, .scraper-card-flex embed, .scraper-card-flex video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
 .scraper-card-photo { max-width: 500px; height: auto; }
