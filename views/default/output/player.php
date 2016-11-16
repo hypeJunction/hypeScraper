@@ -9,7 +9,7 @@ if (!$data) {
 
 if ($data['html']) {
 	echo $data['html'];
-} else {
+} else if (elgg_extract('fallback', $vars, true)) {
 	echo elgg_view('output/card', [
 		'href' => $href,
 	]);
