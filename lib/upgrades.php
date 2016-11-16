@@ -1,62 +1,28 @@
 <?php
 
-run_function_once('scraper_upgrade_20161410a');
+run_function_once('scraper_upgrade_20161410b');
 
-/**
- * Move scraper data from disk to database
- * @return void
- */
-function scraper_upgrade_20161410a() {
-
-	set_time_limit(0);
-
+function scraper_upgrade_20161410b() {
 	// Setup MySQL databases
 	run_sql_script(dirname(dirname(__FILE__)) . '/install/mysql.sql');
+}
 
-	$svc = \hypeJunction\Scraper\ScraperService::getInstance();
+// Register upgrade scripts
+$path = 'admin/upgrades/scraper/move_to_db';
+$upgrade = new \ElggUpgrade();
+if (!$upgrade->getUpgradeFromPath($path)) {
+	$upgrade->setPath($path);
+	$upgrade->title = elgg_echo('admin:upgrades:scraper:move_to_db');
+	$upgrade->description = elgg_echo('admin:upgrades:scraper:move_to_db:description');
+	$upgrade->save();
 
 	$site = elgg_get_site_entity();
 	$dataroot = elgg_get_config('dataroot');
 	$dir = new \Elgg\EntityDirLocator($site->guid);
 
 	$paths = elgg_get_file_list($dataroot . $dir . 'scraper_cache/resources/');
-	if (empty($paths)) {
-		return;
-	}
-
-	foreach ($paths as $path) {
-		$basename = pathinfo($path, PATHINFO_BASENAME);
-
-		$file = new ElggFile();
-		$file->owner_guid = $site->guid;
-		$file->setFilename("scraper_cache/resources/$basename");
-		$file->open('read');
-		$json = $file->grabFile();
-		$file->close();
-
-		$data = json_decode($json, true);
-		if (!$data || empty($data['url'])) {
-			$file->delete();
-			continue;
-		}
-
-		$url = elgg_normalize_url($data['url']);
-		if (!filter_var($url, FILTER_VALIDATE_URL)) {
-			$file->delete();
-			continue;
-		}
-
-		try {
-			$svc->parse($url);
-		} catch (Exception $e) {
-
-		}
-
-		$file->delete();
-
-		$file = new ElggFile();
-		$file->owner_guid = $site->guid;
-		$file->setFilename("scraper_cache/thumbs/$basename");
-		$file->delete();
+	$count = count($paths);
+	if (!$count) {
+		$upgrade->setCompleted();
 	}
 }

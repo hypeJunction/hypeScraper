@@ -18,6 +18,7 @@ elgg_register_event_handler('init', 'system', function() {
 	elgg_register_plugin_hook_handler('extract:meta', 'all', [Views::class, 'getCard']);
 	elgg_register_plugin_hook_handler('extract:qualifiers', 'all', [Views::class, 'extractTokens']);
 	elgg_register_plugin_hook_handler('link:qualifiers', 'all', [Views::class, 'linkTokens']);
+	elgg_register_plugin_hook_handler('view', 'output/longtext', [Views::class, 'linkifyLongtext']);
 
 	elgg_extend_view('elgg.css', 'framework/scraper/stylesheet.css');
 	elgg_extend_view('elgg.js', 'framework/scraper/player.js');
@@ -28,10 +29,11 @@ elgg_register_event_handler('init', 'system', function() {
 		elgg_register_plugin_hook_handler('view_vars', 'object/elements/full', [Views::class, 'addBookmarkProfilePreview']);
 	}
 
-	elgg_register_plugin_hook_handler('view', 'output/longtext', [Views::class, 'linkifyLongtext']);
-
+	// Basis XSS protecteion
 	elgg_register_plugin_hook_handler('parse', 'framework:scraper', [Views::class, 'cleanEmbedHTML']);
-	
+
+	// Upgrades
+	elgg_register_action('upgrade/scraper/move_to_db', __DIR__ . '/actions/upgrade/scraper/move_to_db.php', 'admin');
 });
 
 elgg_register_event_handler('upgrade', 'system', function() {
