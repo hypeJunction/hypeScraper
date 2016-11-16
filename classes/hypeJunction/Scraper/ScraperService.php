@@ -295,12 +295,16 @@ class ScraperService {
 		$image->natural_width = $imagesize[0];
 		$image->natural_height = $imagesize[1];
 
-		$size = elgg_get_plugin_setting('cache_thumb_size', 'hypeScraper', 500);
-		$thumb = get_resized_image_from_existing_file($tmp->getFilenameOnFilestore(), $size, $size);
-
 		$image->open('write');
-		$image->write($thumb);
 		$image->close();
+
+		$size = elgg_get_plugin_setting('cache_thumb_size', 'hypeScraper', 500);
+		$thumb = elgg_save_resized_image($tmp->getFilenameOnFilestore(), $image->getFilenameOnFilestore(), [
+			'w' => $size,
+			'h' => $size,
+			'upscale' => false,
+			'square' => false,
+		]);
 
 		unset($thumb);
 		$tmp->delete();
