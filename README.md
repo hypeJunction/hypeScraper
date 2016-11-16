@@ -1,6 +1,6 @@
 hypeScraper
 ===========
-![Elgg 2.2](https://img.shields.io/badge/Elgg-2.2-orange.svg?style=flat-square)
+![Elgg 2.3](https://img.shields.io/badge/Elgg-2.3-orange.svg?style=flat-square)
 
 A tool for scraping, caching and embedding remote resources.
 
