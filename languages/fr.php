@@ -2,8 +2,8 @@
 
 $french = array(
 	'scraper:settings:service' => "Service d'extraction",
-	'scraper:settings:service:help' => "Indiquez le service d'extraction à utiliser. Si vous utilisez un autre service que le parseur dOm natif, '
-	. 'indiquez la configuraiton nécessaire ci-dessous",
+	'scraper:settings:service:help' => "Indiquez le service d'extraction à utiliser. Si vous utilisez un autre service que le parseur DOM natif, '
+	. 'indiquez la configuration nécessaire ci-dessous",
 	'scraper:settings:service:dom_parser' => "Parseur DOM natif",
 	'scraper:settings:service:iframely' => "iframe.ly",
 	'scraper:settings:service:embedly' => "embed.ly",
