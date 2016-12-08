@@ -10,6 +10,11 @@ class Linkify extends Extractor {
 	// match entire anchor <a></a> so we can exclude it from matches
 	const REGEX_MATCH_ANCHOR = "<a[^>]*?>.*?<\/a>";
 
+	// non-greedy match of a single tag name and attributes
+	// we need to exclude e.g. hex color codes when matchin hashes
+	const REGEX_MATCH_TAG = '<.*?>';
+
+	// we want at least one non space or punctuation character before the match
 	const REGEX_CHAR_BACK = '(^|\s|\!|\.|\?|>|\G)+';
 
 	const REGEX_HASHTAG = '(#\w+)';
@@ -44,7 +49,7 @@ class Linkify extends Extractor {
 	 */
 	public static function hashtags($text = '', callable $callback = null) {
 		$callback = $callback ? : array(__CLASS__, 'callbackHashtag');
-		$regex = '/' . self::REGEX_MATCH_ANCHOR . '|' . self::REGEX_CHAR_BACK . self::REGEX_HASHTAG . '/i';
+		$regex = '/' . self::REGEX_MATCH_ANCHOR . '|' . self::REGEX_MATCH_TAG . '|' . self::REGEX_CHAR_BACK . self::REGEX_HASHTAG . '/i';
 		return preg_replace_callback($regex, $callback, $text);
 	}
 
@@ -57,7 +62,7 @@ class Linkify extends Extractor {
 	 */
 	public static function urls($text = '', callable $callback = null) {
 		$callback = $callback ?: array(__CLASS__, 'callbackUrl');
-		$regex = '/' . self::REGEX_MATCH_ANCHOR . '|' . self::REGEX_CHAR_BACK . self::REGEX_URL . '/i';
+		$regex = '/' . self::REGEX_MATCH_ANCHOR . '|' . self::REGEX_MATCH_TAG . '|' . self::REGEX_CHAR_BACK . self::REGEX_URL . '/i';
 		return preg_replace_callback($regex, $callback, $text);
 	}
 
@@ -70,7 +75,7 @@ class Linkify extends Extractor {
 	 */
 	public static function usernames($text = '', callable $callback = null) {
 		$callback = $callback ?: array(__CLASS__, 'callbackUsername');
-		$regex = '/' . self::REGEX_MATCH_ANCHOR . '|' . self::REGEX_CHAR_BACK . self::REGEX_USERNAME . '/i';
+		$regex = '/' . self::REGEX_MATCH_ANCHOR . '|' . self::REGEX_MATCH_TAG . '|' . self::REGEX_CHAR_BACK . self::REGEX_USERNAME . '/i';
 		return preg_replace_callback($regex, $callback, $text);
 	}
 
@@ -83,7 +88,7 @@ class Linkify extends Extractor {
 	 */
 	public static function emails($text = '', callable $callback = null) {
 		$callback = $callback ?: array(__CLASS__, 'callbackEmail');
-		$regex = '/' . self::REGEX_MATCH_ANCHOR . '|' . self::REGEX_CHAR_BACK . self::REGEX_EMAIL . '/i';
+		$regex = '/' . self::REGEX_MATCH_ANCHOR . '|' . self::REGEX_MATCH_TAG . '|' . self::REGEX_CHAR_BACK . self::REGEX_EMAIL . '/i';
 		return preg_replace_callback($regex, $callback, $text);
 	}
 

@@ -7,6 +7,10 @@ namespace hypeJunction\Scraper;
  */
 class Extractor {
 
+	// non-greedy match of a single tag name and attributes
+	// we need to exclude e.g. hex color codes when matchin hashes
+	const REGEX_MATCH_TAG = '<.*?>';
+
 	// character allowed before match
 	const REGEX_CHAR_BACK = '(^|\s|\!|\.|\?|>|\G)+';
 	
@@ -41,7 +45,7 @@ class Extractor {
 	 */
 	public static function hashtags($text = '') {
 		$matches = [];
-		$regex = '/' . self::REGEX_CHAR_BACK  . self::REGEX_HASHTAG . '/i';
+		$regex = '/' . self::REGEX_MATCH_TAG . '|' . self::REGEX_CHAR_BACK  . self::REGEX_HASHTAG . '/i';
 		preg_match_all($regex, $text, $matches);
 		$results = array_filter($matches[2]);
 		return array_unique($results);
@@ -55,7 +59,7 @@ class Extractor {
 	 */
 	public static function urls($text = '') {
 		$matches = array();
-		$regex = '/' . self::REGEX_CHAR_BACK  . self::REGEX_URL . '/i';
+		$regex = '/' . self::REGEX_MATCH_TAG . '|' . self::REGEX_CHAR_BACK  . self::REGEX_URL . '/i';
 		preg_match_all($regex, $text, $matches);
 		$results = array_filter($matches[2]);
 		return array_unique($results);
@@ -69,7 +73,7 @@ class Extractor {
 	 */
 	public static function usernames($text = '') {
 		$matches = [];
-		$regex = '/' . self::REGEX_CHAR_BACK  . self::REGEX_USERNAME . '/i';
+		$regex = '/' . self::REGEX_MATCH_TAG . '|' . self::REGEX_CHAR_BACK  . self::REGEX_USERNAME . '/i';
 		preg_match_all($regex, $text, $matches);
 		$results = array_filter($matches[2]);
 		return array_unique($results);
@@ -83,7 +87,7 @@ class Extractor {
 	 */
 	public static function emails($text = '') {
 		$matches = array();
-		$regex = '/' . self::REGEX_CHAR_BACK  . self::REGEX_EMAIL . '/i';
+		$regex = '/' . self::REGEX_MATCH_TAG . '|' . self::REGEX_CHAR_BACK  . self::REGEX_EMAIL . '/i';
 		preg_match_all($regex, $text, $matches);
 		$results = array_filter($matches[2]);
 		return array_unique($results);
