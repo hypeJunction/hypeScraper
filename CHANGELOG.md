@@ -1,3 +1,13 @@
+<a name="5.0.1"></a>
+## [5.0.1](https://github.com/hypeJunction/hypeScraper/compare/5.0.0...v5.0.1) (2016-12-08)
+
+
+### Bug Fixes
+
+* **linkify:** exclude HTML tag attribute names and values from token matches ([56caba3](https://github.com/hypeJunction/hypeScraper/commit/56caba3))
+
+
+
 <a name="5.0.0"></a>
 # [5.0.0](https://github.com/hypeJunction/hypeScraper/compare/4.2.2...v5.0.0) (2016-11-16)
 
