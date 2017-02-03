@@ -21,6 +21,7 @@ elgg_register_event_handler('init', 'system', function() {
 	elgg_register_plugin_hook_handler('view', 'output/longtext', [Views::class, 'linkifyLongtext']);
 
 	elgg_extend_view('elgg.css', 'framework/scraper/stylesheet.css');
+	elgg_extend_view('admin.css', 'framework/scraper/stylesheet.css');
 	elgg_extend_view('elgg.js', 'framework/scraper/player.js');
 	
 	// Bookmark previews
@@ -34,6 +35,17 @@ elgg_register_event_handler('init', 'system', function() {
 
 	// Upgrades
 	elgg_register_action('upgrade/scraper/move_to_db', __DIR__ . '/actions/upgrade/scraper/move_to_db.php', 'admin');
+
+	// Admin
+	elgg_register_menu_item('page', array(
+		'name' => 'scraper',
+		'href' => 'admin/scraper/preview',
+		'text' => elgg_echo('admin:scraper:preview'),
+		'context' => 'admin',
+		'section' => 'develop'
+	));
+
+	elgg_register_ajax_view('output/card');
 });
 
 elgg_register_event_handler('upgrade', 'system', function() {

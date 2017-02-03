@@ -13,4 +13,8 @@ return [
 		This upgrade script will move URL information to the database, recreate preview images using a more sophisticated approach,
 		and clean up left over information from the disk storage.
 	',
+
+	'admin:scraper' => 'Scraper',
+	'admin:scraper:preview' => 'Preview URL Cards',
+	'admin:scraper:preview:url' => 'URL',
 ];
