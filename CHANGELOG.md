@@ -1,3 +1,13 @@
+<a name="5.1.0"></a>
+# [5.1.0](https://github.com/hypeJunction/hypeScraper/compare/5.0.3...v5.1.0) (2017-02-03)
+
+
+### Features
+
+* **admin:** adds an admin interface for previewing cards ([e53f92e](https://github.com/hypeJunction/hypeScraper/commit/e53f92e))
+
+
+
 <a name="5.0.3"></a>
 ## [5.0.3](https://github.com/hypeJunction/hypeScraper/compare/5.0.2...v5.0.3) (2016-12-08)
 
