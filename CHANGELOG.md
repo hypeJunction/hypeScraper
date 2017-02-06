@@ -1,3 +1,13 @@
+<a name="5.1.1"></a>
+## [5.1.1](https://github.com/hypeJunction/hypeScraper/compare/5.1.0...v5.1.1) (2017-02-06)
+
+
+### Bug Fixes
+
+* **scraper:** minimize the risk of fatal impact ([0e7fdf7](https://github.com/hypeJunction/hypeScraper/commit/0e7fdf7))
+
+
+
 <a name="5.1.0"></a>
 # [5.1.0](https://github.com/hypeJunction/hypeScraper/compare/5.0.3...v5.1.0) (2017-02-03)
 
