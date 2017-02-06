@@ -83,12 +83,16 @@ class ScraperService {
 	/**
 	 * Parse and scrape a URL
 	 *
-	 * @param string $url   URL
-	 * @param bool   $flush Flush existing URL data
+	 * @param string $url     URL
+	 * @param bool   $flush   Flush existing URL data
+	 * @param bool   $recurse Recurse into subresources
 	 * @return array|false
 	 * @throws \InvalidArgumentException
 	 */
-	public function parse($url, $flush = false) {
+	public function parse($url, $flush = false, $recurse = true) {
+
+		elgg_log("Attempting to parse URL: $url");
+
 		if (!filter_var($url, FILTER_VALIDATE_URL)) {
 			throw new \InvalidArgumentException(__METHOD__ . ' expects a valid URL');
 		}
@@ -101,8 +105,14 @@ class ScraperService {
 				return $data;
 			}
 		}
-		
-		$response = $this->parser->request($url);
+
+		try {
+			$response = $this->parser->request($url);
+		} catch (\Exception $ex) {
+			elgg_log($ex->getMessage(), 'ERROR');
+			$data = false;
+		}
+
 		if (!$response instanceof \GuzzleHttp\Psr7\Response || $response->getStatusCode() != 200) {
 			$this->save($url, false);
 			return false;
@@ -118,7 +128,15 @@ class ScraperService {
 			return false;
 		}
 
-		$data = $this->parser->parse($url);
+		try {
+			$data = $this->parser->parse($url);
+		} catch (\Exception $ex) {
+			// There is an issue with the DOM markup and we are unable to
+			// scrape the data. Giving up.
+			elgg_log($ex->getMessage(), 'ERROR');
+			$data = false;
+		}
+
 		if (!$data) {
 			$this->save($url, false);
 			return false;
@@ -140,48 +158,17 @@ class ScraperService {
 				break;
 
 			default :
-				$assets = [];
-				$thumbnails = (array) elgg_extract('thumbnails', $data, []);
-				$icons = (array) elgg_extract('icons', $data, []);
-
-				// Try 3 images and choose the one with highest dimensions
-				$thumbnails = $thumbnails + $icons;
-				$thumbs_parse = 0;
-				foreach ($thumbnails as $thumbnail) {
-					if ($thumbnail == $url) {
-						continue;
-					}
-					$thumbnail = elgg_normalize_url($thumbnail);
-					if (filter_var($thumbnail, FILTER_VALIDATE_URL)) {
-						$asset = $this->parse($thumbnail, $flush);
-						if ($asset) {
-							$thumbs_parsed++;
-							$assets[] = $asset;
-						}
-					}
-					if ($thubms_parsed == 3) {
-						break;
-					}
+				if ($recurse) {
+					$data = $this->parseThumbs($data);
 				}
-
-				$data['assets'] = array_values(array_filter($assets));
-				usort($data['assets'], function ($a, $b) {
-					if ($a['width'] == $b['width'] && $a['height'] == $b['height']) {
-						return 0;
-					}
-					return ($a['width'] > $b['width'] || $a['height'] > $b['height']) ? -1 : 1;
-				});
-
-				if (isset($data['assets'][0]['thumbnail_url'])) {
-					$data['thumbnail_url'] = $data['assets'][0]['thumbnail_url'];
-				}
-
 				break;
 		}
 
 		$data = elgg_trigger_plugin_hook('parse', 'framework:scraper', array(
 			'url' => $url,
 				), $data);
+
+		elgg_log("URL data parsed: " . print_r($data, true));
 
 		$this->save($url, $data);
 		return $data;
@@ -310,6 +297,52 @@ class ScraperService {
 		$tmp->delete();
 
 		return $image;
+	}
+
+	/**
+	 * Parse thumbnails from scraped data
+	 * 
+	 * @param array $data Data
+	 * @return array
+	 */
+	public function parseThumbs(array $data = []) {
+		$assets = [];
+		$thumbnails = (array) elgg_extract('thumbnails', $data, []);
+		$icons = (array) elgg_extract('icons', $data, []);
+
+		// Try 3 images and choose the one with highest dimensions
+		$thumbnails = $thumbnails + $icons;
+		$thumbs_parse = 0;
+		foreach ($thumbnails as $thumbnail) {
+			if ($thumbnail == $url) {
+				continue;
+			}
+			$thumbnail = elgg_normalize_url($thumbnail);
+			if (filter_var($thumbnail, FILTER_VALIDATE_URL)) {
+				$asset = $this->parse($thumbnail, $flush, false);
+				if ($asset) {
+					$thumbs_parsed++;
+					$assets[] = $asset;
+				}
+			}
+			if ($thubms_parsed == 3) {
+				break;
+			}
+		}
+
+		$data['assets'] = array_values(array_filter($assets));
+		usort($data['assets'], function ($a, $b) {
+			if ($a['width'] == $b['width'] && $a['height'] == $b['height']) {
+				return 0;
+			}
+			return ($a['width'] > $b['width'] || $a['height'] > $b['height']) ? -1 : 1;
+		});
+
+		if (isset($data['assets'][0]['thumbnail_url'])) {
+			$data['thumbnail_url'] = $data['assets'][0]['thumbnail_url'];
+		}
+
+		return $data;
 	}
 
 	/**
