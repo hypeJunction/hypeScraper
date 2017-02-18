@@ -1,3 +1,13 @@
+<a name="5.1.2"></a>
+## [5.1.2](https://github.com/hypeJunction/hypeScraper/compare/5.1.1...v5.1.2) (2017-02-18)
+
+
+### Bug Fixes
+
+* **memory:** ensure thumbnails are images and resizable ([9e5ce74](https://github.com/hypeJunction/hypeScraper/commit/9e5ce74)), closes [#42](https://github.com/hypeJunction/hypeScraper/issues/42)
+
+
+
 <a name="5.1.1"></a>
 ## [5.1.1](https://github.com/hypeJunction/hypeScraper/compare/5.1.0...v5.1.1) (2017-02-06)
 
