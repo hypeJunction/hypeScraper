@@ -1,3 +1,13 @@
+<a name="5.1.3"></a>
+## [5.1.3](https://github.com/hypeJunction/hypeScraper/compare/5.1.2...v5.1.3) (2017-02-18)
+
+
+### Bug Fixes
+
+* **memory:** set upper threshold for parseable image width ([60ca20d](https://github.com/hypeJunction/hypeScraper/commit/60ca20d))
+
+
+
 <a name="5.1.2"></a>
 ## [5.1.2](https://github.com/hypeJunction/hypeScraper/compare/5.1.1...v5.1.2) (2017-02-18)
 
