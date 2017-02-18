@@ -267,6 +267,13 @@ class ScraperService {
 		$tmp->write($raw_bytes);
 		$tmp->close();
 		unset($raw_bytes);
+		
+		//@Todo - looks like we need some way to check this in core
+		// instead of elgg_save_resized_image() OOMing
+		if (!$this->hasMemoryToResize($tmp->getFilenameOnFilestore())) {
+			$tmp->delete();
+			return false;
+		}
 
 		$threshold = elgg_get_plugin_setting('cache_thumb_size_lower_threshold', 'hypeScraper', 100);
 		$imagesize = getimagesize($tmp->getFilenameOnFilestore());
@@ -311,21 +318,18 @@ class ScraperService {
 		$icons = (array) elgg_extract('icons', $data, []);
 
 		// Try 3 images and choose the one with highest dimensions
-		$thumbnails = $thumbnails + $icons;
-		$thumbs_parse = 0;
+		$thumbnails = array_filter(array_unique($thumbnails + $icons));
+		$thumbs_parsed = 0;
 		foreach ($thumbnails as $thumbnail) {
-			if ($thumbnail == $url) {
-				continue;
-			}
 			$thumbnail = elgg_normalize_url($thumbnail);
-			if (filter_var($thumbnail, FILTER_VALIDATE_URL)) {
-				$asset = $this->parse($thumbnail, $flush, false);
-				if ($asset) {
-					$thumbs_parsed++;
-					$assets[] = $asset;
-				}
+			$asset = $this->parse($thumbnail, false, false);
+			
+			if ($asset) {
+				$thumbs_parsed++;
+				$assets[] = $asset;
 			}
-			if ($thubms_parsed == 3) {
+			
+			if ($thumbs_parsed == 3) {
 				break;
 			}
 		}
@@ -372,5 +376,24 @@ class ScraperService {
 
 		return elgg_trigger_plugin_hook('http:config', 'framework:scraper', null, $config);
 	}
+	
+	/**
+	 * Do we estimate that we have enough memory available to resize an image?
+	 * 
+	 * @param string $source - the source path of the file
+	 * @return bool
+	 */
+	public function hasMemoryToResize($source) {
+		$imginfo = getimagesize($source);
+		$requiredMemory1 = ceil($imginfo[0] * $imginfo[1] * 5.35);
+		$requiredMemory2 = ceil($imginfo[0] * $imginfo[1] * ($imginfo['bits'] / 8) * $imginfo['channels'] * 2.5);
+		$requiredMemory = (int) max($requiredMemory1, $requiredMemory2);
 
+		$mem_avail = elgg_get_ini_setting_in_bytes('memory_limit');
+		$mem_used = memory_get_usage();
+	
+		$mem_avail = $mem_avail - $mem_used - 20971520; // 20 MB buffer, yeah arbitrary but necessary
+
+		return $mem_avail > $requiredMemory;
+	}
 }
