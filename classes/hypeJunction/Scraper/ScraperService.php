@@ -122,7 +122,12 @@ class ScraperService {
 		$upload_max_filesize = elgg_get_ini_setting_in_bytes('upload_max_filesize');
 		$max_upload = $upload_max_filesize > $post_max_size ? $post_max_size : $upload_max_filesize;
 
-		if ((int) $response->getHeader('Content-Length') > $max_upload) {
+		$content_length = $response->getHeader('Content-Length');
+		if (is_array($content_length)) {
+			$content_length = array_shift($content_length);
+		}
+
+		if ((int) $content_length > $max_upload) {
 			// Large images eat up memory
 			$this->save($url, false);
 			return false;
@@ -275,9 +280,10 @@ class ScraperService {
 			return false;
 		}
 
-		$threshold = elgg_get_plugin_setting('cache_thumb_size_lower_threshold', 'hypeScraper', 100);
+		$lower_threashold = elgg_get_plugin_setting('cache_thumb_size_lower_threshold', 'hypeScraper', 100);
+		$upper_threshold = elgg_get_plugin_setting('cache_thumb_size_upper_threshold', 'hypeScraper', 1500);
 		$imagesize = getimagesize($tmp->getFilenameOnFilestore());
-		if (!$imagesize || $imagesize[0] < $threshold) {
+		if (!$imagesize || $imagesize[0] < $lower_threashold || $imagesize[0] > $upper_threshold) {
 			$tmp->delete();
 			return false;
 		}
