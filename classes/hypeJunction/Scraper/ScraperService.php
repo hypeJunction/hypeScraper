@@ -93,8 +93,9 @@ class ScraperService {
 
 		elgg_log("Attempting to parse URL: $url");
 
-		if (!filter_var($url, FILTER_VALIDATE_URL)) {
-			throw new \InvalidArgumentException(__METHOD__ . ' expects a valid URL');
+		if (!$this->parser->isValidUrl($url)) {
+			elgg_log("Invalid URL: $url");
+			return false;
 		}
 
 		if ($flush) {
