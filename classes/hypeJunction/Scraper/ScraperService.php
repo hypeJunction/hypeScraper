@@ -57,11 +57,11 @@ class ScraperService {
 	 * 
 	 * @param string $url URL
 	 * @return array|void
-	 * @throws \InvalidArgumentException
 	 */
 	public function get($url) {
-		if (!filter_var($url, FILTER_VALIDATE_URL)) {
-			throw new \InvalidArgumentException(__METHOD__ . ' expects a valid URL');
+		if (!$this->parser->isValidUrl($url)) {
+			elgg_log(__METHOD__ . ' expects a valid URL: ' . $url);
+			return null;
 		}
 
 		$data = $this->cache->get(sha1($url));
@@ -87,7 +87,6 @@ class ScraperService {
 	 * @param bool   $flush   Flush existing URL data
 	 * @param bool   $recurse Recurse into subresources
 	 * @return array|false
-	 * @throws \InvalidArgumentException
 	 */
 	public function parse($url, $flush = false, $recurse = true) {
 
