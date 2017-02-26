@@ -1,3 +1,14 @@
+<a name="5.1.4"></a>
+## [5.1.4](https://github.com/hypeJunction/hypeScraper/compare/5.1.3...v5.1.4) (2017-02-26)
+
+
+### Bug Fixes
+
+* **cache:** no longer throw exception on invalid url ([50dbaec](https://github.com/hypeJunction/hypeScraper/commit/50dbaec))
+* **parsing:** better url filtering, no longer throw exception on fail ([9968595](https://github.com/hypeJunction/hypeScraper/commit/9968595))
+
+
+
 <a name="5.1.3"></a>
 ## [5.1.3](https://github.com/hypeJunction/hypeScraper/compare/5.1.2...v5.1.3) (2017-02-18)
 
