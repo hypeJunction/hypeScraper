@@ -120,6 +120,10 @@ $lighter-border-color: #f4f4f4 !default;
 	color: red;
 	text-shadow: 0 0 2px #fff;
 	cursor: pointer;
+	.elgg-icon {
+		font-size: inherit;
+		color: inherit;
+	}
 }
 
 .scraper-link {

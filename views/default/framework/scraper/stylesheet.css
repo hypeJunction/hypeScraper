@@ -22,6 +22,7 @@
 .scraper-card-photo { max-width: 500px; height: auto; }
 
 .scraper-play-button { position: absolute; top: 50%; left: 50%; margin-top: -25px; margin-left: -25px; width: 50px; height: 50px; font-size: 50px; color: red; text-shadow: 0 0 2px #fff; cursor: pointer; }
+.scraper-play-button .elgg-icon { font-size: inherit; color: inherit; }
 
 .scraper-link { line-height: 110%; vertical-align: middle; }
 .scraper-link .favicon { background-size: 16px; width: 16px; height: 16px; background-repeat: no-repeat; display: inline-block; margin: 0 5px; }
