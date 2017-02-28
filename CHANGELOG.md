@@ -1,3 +1,13 @@
+<a name="5.1.6"></a>
+## [5.1.6](https://github.com/hypeJunction/hypeScraper/compare/5.1.5...v5.1.6) (2017-02-28)
+
+
+### Bug Fixes
+
+* **css:** fix player button ([7aff092](https://github.com/hypeJunction/hypeScraper/commit/7aff092))
+
+
+
 <a name="5.1.5"></a>
 ## [5.1.5](https://github.com/hypeJunction/hypeScraper/compare/5.1.4...v5.1.5) (2017-02-28)
 
