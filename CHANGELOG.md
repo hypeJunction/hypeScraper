@@ -1,3 +1,9 @@
+<a name="5.1.5"></a>
+## [5.1.5](https://github.com/hypeJunction/hypeScraper/compare/5.1.4...v5.1.5) (2017-02-28)
+
+
+
+
 <a name="5.1.4"></a>
 ## [5.1.4](https://github.com/hypeJunction/hypeScraper/compare/5.1.3...v5.1.4) (2017-02-26)
 
