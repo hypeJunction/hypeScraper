@@ -17,7 +17,9 @@ return [
 	'admin:scraper' => 'Scraper',
 	'admin:scraper:preview' => 'Preview URL Cards',
 	'admin:scraper:preview:url' => 'URL',
-
+	'admin:scraper:edit' => 'Edit Card',
+	'scraper:player:html' => 'Player HTML',
+	
 	'scraper:settings:oembed_domains' => 'oEmbed domain whitelist',
 	'scraper:settings:oembed_domains:help' => '
 		List domains (one per line) whitelisted for oEmbed parsing.

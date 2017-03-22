@@ -1,14 +1,15 @@
 <?php
 
-use hypeJunction\Scraper\Router;
-use hypeJunction\Scraper\Views;
-
 /**
  * A tool for extracting, interpreting, caching and embedding remote resources.
  * 
  * @author Ismayil Khayredinov <info@hypejunction.com>
  */
 require_once __DIR__ . '/autoloader.php';
+
+use hypeJunction\Scraper\Menus;
+use hypeJunction\Scraper\Router;
+use hypeJunction\Scraper\Views;
 
 elgg_register_event_handler('init', 'system', function() {
 
@@ -35,6 +36,10 @@ elgg_register_event_handler('init', 'system', function() {
 
 	// Upgrades
 	elgg_register_action('upgrade/scraper/move_to_db', __DIR__ . '/actions/upgrade/scraper/move_to_db.php', 'admin');
+
+	// Cards
+	elgg_register_plugin_hook_handler('register', 'menu:scraper:card', [Menus::class, 'setupCardMenu']);
+	elgg_register_action('admin/scraper/edit', __DIR__ . '/actions/admin/scraper/edit.php', 'admin');
 
 	// Admin
 	elgg_register_menu_item('page', array(

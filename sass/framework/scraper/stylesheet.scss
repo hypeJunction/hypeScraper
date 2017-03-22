@@ -89,7 +89,7 @@ $lighter-border-color: #f4f4f4 !default;
 	overflow: hidden;
 
 	&.widescreen, &.scraper-card-youtube { padding-bottom: 56.34% !important; }
-	&.scraper-card-vimeo { padding-top: 0 !important; }
+	&.scraper-card-vimeo { padding-top: 0 !important; padding-bottom: 0 !important;}
 
 	iframe,
 	object,
@@ -140,4 +140,11 @@ $lighter-border-color: #f4f4f4 !default;
 	.link {
 		margin: 0 5px;
 	}
+}
+
+.elgg-menu-scraper-card {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 5px;
 }

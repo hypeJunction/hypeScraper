@@ -37,6 +37,11 @@ if (($meta->type == 'image' || $meta->type == 'photo') && $icon_url) {
 		'text' => $img,
 	));
 } else {
+	$body .= elgg_view_menu('scraper:card', [
+		'href' => $href,
+		'class' => 'elgg-menu-hz',
+	]);
+	
 	$title = elgg_view('output/url', [
 		'text' => $meta->title,
 		'href' => $meta->url,
@@ -71,7 +76,7 @@ if (($meta->type == 'image' || $meta->type == 'photo') && $icon_url) {
 				'url' => $href,
 				'm' => elgg_build_hmac($href)->getToken(),
 			)),
-		], elgg_view_icon('youtube-play'));
+		], elgg_view_icon('play'));
 	}
 }
 

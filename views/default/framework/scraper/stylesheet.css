@@ -16,7 +16,7 @@
 
 .scraper-card-flex { position: relative; padding-top: 25px !important; padding-bottom: 67.5% !important; height: 0; margin-bottom: 0; overflow: hidden; }
 .scraper-card-flex.widescreen, .scraper-card-flex.scraper-card-youtube { padding-bottom: 56.34% !important; }
-.scraper-card-flex.scraper-card-vimeo { padding-top: 0 !important; }
+.scraper-card-flex.scraper-card-vimeo { padding-top: 0 !important; padding-bottom: 0 !important; }
 .scraper-card-flex iframe, .scraper-card-flex object, .scraper-card-flex embed, .scraper-card-flex video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
 .scraper-card-photo { max-width: 500px; height: auto; }
@@ -27,3 +27,5 @@
 .scraper-link { line-height: 110%; vertical-align: middle; }
 .scraper-link .favicon { background-size: 16px; width: 16px; height: 16px; background-repeat: no-repeat; display: inline-block; margin: 0 5px; }
 .scraper-link .link { margin: 0 5px; }
+
+.elgg-menu-scraper-card { position: absolute; right: 0; top: 0; margin: 5px; }

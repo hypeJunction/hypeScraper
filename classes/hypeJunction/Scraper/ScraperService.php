@@ -324,7 +324,7 @@ class ScraperService {
 		$icons = (array) elgg_extract('icons', $data, []);
 
 		// Try 3 images and choose the one with highest dimensions
-		$thumbnails = array_filter(array_unique($thumbnails + $icons));
+		$thumbnails = array_filter(array_unique(array_merge($thumbnails, $icons)));
 		$thumbs_parsed = 0;
 		foreach ($thumbnails as $thumbnail) {
 			$thumbnail = elgg_normalize_url($thumbnail);
@@ -335,7 +335,7 @@ class ScraperService {
 				$assets[] = $asset;
 			}
 			
-			if ($thumbs_parsed == 3) {
+			if ($thumbs_parsed == 5) {
 				break;
 			}
 		}
