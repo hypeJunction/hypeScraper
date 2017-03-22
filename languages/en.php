@@ -17,4 +17,12 @@ return [
 	'admin:scraper' => 'Scraper',
 	'admin:scraper:preview' => 'Preview URL Cards',
 	'admin:scraper:preview:url' => 'URL',
+
+	'scraper:settings:oembed_domains' => 'oEmbed domain whitelist',
+	'scraper:settings:oembed_domains:help' => '
+		List domains (one per line) whitelisted for oEmbed parsing.
+		When users share content from domains listed here, the oEmbed content will be displayed in the player view,
+		e.g. when a YouTube video is shared, the card view will contain a link to display an embedded player.
+	',
+
 ];

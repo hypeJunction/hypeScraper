@@ -9,6 +9,8 @@ use ElggRiverItem;
  */
 class Views {
 
+	static $domains;
+
 	/**
 	 * Output metatags for a URL
 	 *
@@ -160,13 +162,62 @@ class Views {
 	 */
 	public static function cleanEmbedHTML($hook, $type, $return, $params) {
 
-		if (!empty($return['html'])) {
-			// only allow iframe, video, and audio tags
-			if (!preg_match('/<iframe|video|audio/i', $return['html'])) {
-				unset($return['html']);
-			}
+		if (empty($return['html'])) {
+			return;
+		}
+
+		$url = parse_url(elgg_extract('url', $return, ''), PHP_URL_HOST);
+		$canonical_url = parse_url(elgg_extract('canonical', $return, ''), PHP_URL_HOST);
+
+		$domains = self::getoEmbedDomains();
+		$domains = array_map(function($elem) {
+			return preg_quote($elem);
+		}, $domains);
+		$domains = implode('|', $domains);
+
+		$domain_pattern = "/(.+?)($domains)/";
+
+		// only allow html from whitelisted domains
+		if (!preg_match($domain_pattern, $url) && !preg_match($domain_pattern, $canonical_url)) {
+			unset($return['html']);
+		}
+
+		// only allow iframe, video, and audio tags
+		if (!preg_match('/<iframe|video|audio/i', $return['html'])) {
+			unset($return['html']);
 		}
 
 		return $return;
 	}
+
+	/**
+	 * Returns an array of normalized whitelisted domains
+	 *
+	 * @return array
+	 */
+	public static function getoEmbedDomains() {
+
+		if (isset(self::$domains)) {
+			return self::$domains;
+		}
+
+		$normalize = function($domain) {
+			$domain = parse_url($domain, PHP_URL_HOST);
+			$domain = str_replace('www.', '', $domain);
+			return $domain;
+		};
+
+		$domains = elgg_get_plugin_setting('oembed_domains', 'hypeScraper', '');
+		$domains = array_filter(explode(PHP_EOL, $domains));
+
+		if (empty($domains)) {
+			$root = elgg_get_plugins_path();
+			$domains = include $root . '/hypeScraper/lib/whitelist.php';
+		}
+
+		self::$domains = array_map($normalize, $domains);
+
+		return $domains;
+	}
+
 }
