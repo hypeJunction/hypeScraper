@@ -1,3 +1,16 @@
+<a name="5.2.0"></a>
+# [5.2.0](https://github.com/hypeJunction/hypeScraper/compare/5.1.7...v5.2.0) (2017-03-22)
+
+
+### Features
+
+* **card:** make card title an anchor link ([d20acff](https://github.com/hypeJunction/hypeScraper/commit/d20acff))
+* **cards:** admins can now edit card title, desc, player and image ([1ee69de](https://github.com/hypeJunction/hypeScraper/commit/1ee69de))
+* **css:** slightly reworks the card styles ([c7d0d94](https://github.com/hypeJunction/hypeScraper/commit/c7d0d94))
+* **security:** implement a whitelist of oembed domains ([0608b91](https://github.com/hypeJunction/hypeScraper/commit/0608b91))
+
+
+
 <a name="5.1.7"></a>
 ## [5.1.7](https://github.com/hypeJunction/hypeScraper/compare/5.1.6...v5.1.7) (2017-03-13)
 
