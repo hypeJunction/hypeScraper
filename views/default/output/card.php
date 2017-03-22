@@ -37,7 +37,13 @@ if (($meta->type == 'image' || $meta->type == 'photo') && $icon_url) {
 		'text' => $img,
 	));
 } else {
-	$body .= '<h3>' . $meta->title . '</h3>';
+	$title = elgg_view('output/url', [
+		'text' => $meta->title,
+		'href' => $meta->url,
+		'target' => '_blank',
+	]);
+	
+	$body .= '<h3>' . $title . '</h3>';
 	$body .= elgg_view('output/url', array(
 		'text' => parse_url($meta->url, PHP_URL_HOST),
 		'href' => $meta->url,
