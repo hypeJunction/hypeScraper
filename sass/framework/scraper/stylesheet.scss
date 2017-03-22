@@ -87,9 +87,10 @@ $lighter-border-color: #f4f4f4 !default;
 	height: 0;
 	margin-bottom: 0;
 	overflow: hidden;
+	max-height: 75vh;
 
 	&.widescreen, &.scraper-card-youtube { padding-bottom: 56.34% !important; }
-	&.scraper-card-vimeo { padding-top: 0 !important; padding-bottom: 0 !important;}
+	&.scraper-card-vimeo { padding-top: 0 !important; padding-bottom: 67.5% !important;}
 
 	iframe,
 	object,
@@ -110,13 +111,10 @@ $lighter-border-color: #f4f4f4 !default;
 
 .scraper-play-button {
 	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin-top: -25px;
-	margin-left: -25px;
-	width: 50px;
-	height: 50px;
-	font-size: 50px;
+	bottom: 0;
+	right: 0;
+	margin: 5px;
+	font-size: 35px;
 	color: red;
 	text-shadow: 0 0 2px #fff;
 	cursor: pointer;
