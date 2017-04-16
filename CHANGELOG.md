@@ -1,3 +1,13 @@
+<a name="5.2.1"></a>
+## [5.2.1](https://github.com/hypeJunction/hypeScraper/compare/5.2.0...v5.2.1) (2017-04-16)
+
+
+### Bug Fixes
+
+* **card:** avoid class name collision ([942b7a4](https://github.com/hypeJunction/hypeScraper/commit/942b7a4))
+
+
+
 <a name="5.2.0"></a>
 # [5.2.0](https://github.com/hypeJunction/hypeScraper/compare/5.1.7...v5.2.0) (2017-03-22)
 
