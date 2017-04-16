@@ -85,7 +85,7 @@ $body = elgg_view_image_block($icon, $body, array(
 ));
 
 if ($module) {
-	$class = ($meta->type) ? " scraper-card-$meta->type" : '';
+	$class = ($meta->type) ? " scraper-card-content-$meta->type" : '';
 	echo elgg_view_module($module, false, $body, array(
 		'class' => $class,
 	));
