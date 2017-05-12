@@ -1,3 +1,13 @@
+<a name="5.3.0"></a>
+# [5.3.0](https://github.com/hypeJunction/hypeScraper/compare/5.2.2...v5.3.0) (2017-05-12)
+
+
+### Features
+
+* **flush:** add an option to flush scraped URL data ([5930a12](https://github.com/hypeJunction/hypeScraper/commit/5930a12)), closes [#49](https://github.com/hypeJunction/hypeScraper/issues/49)
+
+
+
 <a name="5.2.2"></a>
 ## [5.2.2](https://github.com/hypeJunction/hypeScraper/compare/5.2.0...v5.2.2) (2017-04-19)
 
