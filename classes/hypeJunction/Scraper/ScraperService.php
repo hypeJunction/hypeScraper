@@ -220,6 +220,20 @@ class ScraperService {
 	 * @return bool
 	 */
 	public function delete($url) {
+
+		$parse = $this->parse($url);
+
+		if (!empty($parse['assets'])) {
+			foreach ($parse['assets'] as $asset) {
+				if (!empty($asset['filename'])) {
+					$file = new ElggFile();
+					$file->owner_guid = elgg_get_site_entity()->guid;
+					$file->setFilename($asset['filename']);
+					$file->delete();
+				}
+			}
+		}
+		
 		$this->cache->invalidate(sha1($url));
 
 		$dbprefix = elgg_get_config('dbprefix');

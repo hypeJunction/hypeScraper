@@ -11,6 +11,8 @@ if (!$data) {
 	return;
 }
 
+//echo elgg_format_element('pre', [], var_export($data, true));
+
 echo elgg_view_field([
 	'#type' => 'text',
 	'#label' => elgg_echo('title'),

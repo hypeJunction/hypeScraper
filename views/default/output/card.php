@@ -2,7 +2,9 @@
 
 $href = elgg_extract('href', $vars);
 
-$data = hypeapps_scrape($href);
+$flush = elgg_extract('flush', $vars) && elgg_is_admin_logged_in();
+
+$data = hypeapps_scrape($href, false, $flush);
 if (!$data) {
 	return;
 }

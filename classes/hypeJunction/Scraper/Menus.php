@@ -35,6 +35,17 @@ class Menus {
 			'title' => elgg_echo('edit'),
 		]);
 
+		$return[] = ElggMenuItem::factory([
+			'name' => 'refetch',
+			'href' => elgg_http_add_url_query_elements('action/admin/scraper/refetch', [
+				'href' => $href,
+			]),
+			'text' => elgg_view_icon('refresh'),
+			'title' => elgg_echo('scraper:refetch'),
+			'is_action' => true,
+			'confirm' => elgg_echo('scraper:refetch:confirm'),
+		]);
+
 		return $return;
 	}
 }

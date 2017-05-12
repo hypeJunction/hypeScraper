@@ -27,4 +27,8 @@ return [
 		e.g. when a YouTube video is shared, the card view will contain a link to display an embedded player.
 	',
 
+	'scraper:refetch' => 'Refetch new data from the URL (will erase any modifications made locally)',
+	'scraper:refetch:confirm' => 'Refetch will erase existing URL information, preview images and any modifications you have made to it',
+	'scraper:refetch:success' => 'URL has been successfully refetched',
+	'scraper:refetch:error' => 'URL could not be refetched',
 ];
