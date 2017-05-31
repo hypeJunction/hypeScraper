@@ -31,4 +31,11 @@ return [
 	'scraper:refetch:confirm' => 'Refetch will erase existing URL information, preview images and any modifications you have made to it',
 	'scraper:refetch:success' => 'URL has been successfully refetched',
 	'scraper:refetch:error' => 'URL could not be refetched',
+
+	'admin:scraper:cache' => 'Scraper Cache',
+	'admin:scraper:cache:domain' => 'Cached Domain/URL',
+	'admin:scraper:cache:find' => 'Find Cached URLs',
+	'admin:scraper:cache:clear' => 'Clear Cache',
+	'admin:scraper:cache:no_results' => 'No URLs were cached in this domain',
+
 ];

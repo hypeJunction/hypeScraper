@@ -30,7 +30,7 @@ class ScraperService {
 	 * Constructor
 	 *
 	 * @param Parser $parser Parser
-	 * @param Pool     $cache Cache
+	 * @param Pool   $cache  Cache
 	 */
 	public function __construct(Parser $parser, Pool $cache) {
 		$this->parser = $parser;
@@ -49,18 +49,21 @@ class ScraperService {
 			$cache = $routes_cache = is_memcache_available() ? new Memcache() : new FileCache();
 			self::$_instance = new self($parser, $cache);
 		}
+
 		return self::$_instance;
 	}
 
 	/**
 	 * Get scraped data
-	 * 
+	 *
 	 * @param string $url URL
+	 *
 	 * @return array|void
 	 */
 	public function get($url) {
 		if (!$this->parser->isValidUrl($url)) {
 			elgg_log(__METHOD__ . ' expects a valid URL: ' . $url);
+
 			return null;
 		}
 
@@ -81,11 +84,34 @@ class ScraperService {
 	}
 
 	/**
+	 * Find scraped resourced
+	 *
+	 * @param string $query Query to match against
+	 *
+	 * @return string[]
+	 */
+	public function find($query) {
+
+		$query = sanitize_string($query);
+
+		$dbprefix = elgg_get_config('dbprefix');
+		$rows = get_data("
+			SELECT url FROM {$dbprefix}scraper_data
+			WHERE url LIKE '%$query%'
+		");
+
+		return array_map(function ($elem) {
+			return $elem->url;
+		}, $rows);
+	}
+
+	/**
 	 * Parse and scrape a URL
 	 *
 	 * @param string $url     URL
 	 * @param bool   $flush   Flush existing URL data
 	 * @param bool   $recurse Recurse into subresources
+	 *
 	 * @return array|false
 	 */
 	public function parse($url, $flush = false, $recurse = true) {
@@ -94,6 +120,7 @@ class ScraperService {
 
 		if (!$this->parser->isValidUrl($url)) {
 			elgg_log("Invalid URL: $url");
+
 			return false;
 		}
 
@@ -115,6 +142,7 @@ class ScraperService {
 
 		if (!$response instanceof \GuzzleHttp\Psr7\Response || $response->getStatusCode() != 200) {
 			$this->save($url, false);
+
 			return false;
 		}
 
@@ -127,9 +155,10 @@ class ScraperService {
 			$content_length = array_shift($content_length);
 		}
 
-		if ((int) $content_length > $max_upload) {
+		if ((int)$content_length > $max_upload) {
 			// Large images eat up memory
 			$this->save($url, false);
+
 			return false;
 		}
 
@@ -144,6 +173,7 @@ class ScraperService {
 
 		if (!$data) {
 			$this->save($url, false);
+
 			return false;
 		}
 
@@ -169,13 +199,14 @@ class ScraperService {
 				break;
 		}
 
-		$data = elgg_trigger_plugin_hook('parse', 'framework:scraper', array(
+		$data = elgg_trigger_plugin_hook('parse', 'framework:scraper', [
 			'url' => $url,
-				), $data);
+		], $data);
 
 		elgg_log("URL data parsed: " . print_r($data, true));
 
 		$this->save($url, $data);
+
 		return $data;
 	}
 
@@ -184,6 +215,7 @@ class ScraperService {
 	 *
 	 * @param string $url  URL
 	 * @param array  $data Data
+	 *
 	 * @return boolean
 	 */
 	public function save($url, $data = false) {
@@ -200,13 +232,14 @@ class ScraperService {
 			ON DUPLICATE KEY UPDATE
 			    data = :data
 		", [
-			':url' => (string) $url,
+			':url' => (string)$url,
 			':data' => serialize($data),
 			':hash' => sha1($url),
 		]);
 
 		if ($result) {
 			$this->cache->put(sha1($url), $data);
+
 			return true;
 		}
 
@@ -217,6 +250,7 @@ class ScraperService {
 	 * Delete URL data from DB and cache
 	 *
 	 * @param string $url URL
+	 *
 	 * @return bool
 	 */
 	public function delete($url) {
@@ -233,7 +267,7 @@ class ScraperService {
 				}
 			}
 		}
-		
+
 		$this->cache->invalidate(sha1($url));
 
 		$dbprefix = elgg_get_config('dbprefix');
@@ -241,16 +275,17 @@ class ScraperService {
 				DELETE FROM {$dbprefix}scraper_data
 				WHERE url = :url
 		", [
-			':url' => (string) $url,
+			':url' => (string)$url,
 		]);
 
-		return (bool) $result;
+		return (bool)$result;
 	}
 
 	/**
 	 * Saves an image on Elgg's filestore
 	 *
 	 * @param string $url URL of the image
+	 *
 	 * @return \ElggFile|false
 	 */
 	public function saveImageFromUrl($url) {
@@ -286,11 +321,12 @@ class ScraperService {
 		$tmp->write($raw_bytes);
 		$tmp->close();
 		unset($raw_bytes);
-		
+
 		//@Todo - looks like we need some way to check this in core
 		// instead of elgg_save_resized_image() OOMing
 		if (!$this->hasMemoryToResize($tmp->getFilenameOnFilestore())) {
 			$tmp->delete();
+
 			return false;
 		}
 
@@ -299,6 +335,7 @@ class ScraperService {
 		$imagesize = getimagesize($tmp->getFilenameOnFilestore());
 		if (!$imagesize || $imagesize[0] < $lower_threashold || $imagesize[0] > $upper_threshold) {
 			$tmp->delete();
+
 			return false;
 		}
 
@@ -328,14 +365,15 @@ class ScraperService {
 
 	/**
 	 * Parse thumbnails from scraped data
-	 * 
+	 *
 	 * @param array $data Data
+	 *
 	 * @return array
 	 */
 	public function parseThumbs(array $data = []) {
 		$assets = [];
-		$thumbnails = (array) elgg_extract('thumbnails', $data, []);
-		$icons = (array) elgg_extract('icons', $data, []);
+		$thumbnails = (array)elgg_extract('thumbnails', $data, []);
+		$icons = (array)elgg_extract('icons', $data, []);
 
 		// Try 3 images and choose the one with highest dimensions
 		$thumbnails = array_filter(array_unique(array_merge($thumbnails, $icons)));
@@ -343,12 +381,12 @@ class ScraperService {
 		foreach ($thumbnails as $thumbnail) {
 			$thumbnail = elgg_normalize_url($thumbnail);
 			$asset = $this->parse($thumbnail, false, false);
-			
+
 			if ($asset) {
 				$thumbs_parsed++;
 				$assets[] = $asset;
 			}
-			
+
 			if ($thumbs_parsed == 5) {
 				break;
 			}
@@ -359,6 +397,7 @@ class ScraperService {
 			if ($a['width'] == $b['width'] && $a['height'] == $b['height']) {
 				return 0;
 			}
+
 			return ($a['width'] > $b['width'] || $a['height'] > $b['height']) ? -1 : 1;
 		});
 
@@ -396,22 +435,23 @@ class ScraperService {
 
 		return elgg_trigger_plugin_hook('http:config', 'framework:scraper', null, $config);
 	}
-	
+
 	/**
 	 * Do we estimate that we have enough memory available to resize an image?
-	 * 
+	 *
 	 * @param string $source - the source path of the file
+	 *
 	 * @return bool
 	 */
 	public function hasMemoryToResize($source) {
 		$imginfo = getimagesize($source);
 		$requiredMemory1 = ceil($imginfo[0] * $imginfo[1] * 5.35);
 		$requiredMemory2 = ceil($imginfo[0] * $imginfo[1] * ($imginfo['bits'] / 8) * $imginfo['channels'] * 2.5);
-		$requiredMemory = (int) max($requiredMemory1, $requiredMemory2);
+		$requiredMemory = (int)max($requiredMemory1, $requiredMemory2);
 
 		$mem_avail = elgg_get_ini_setting_in_bytes('memory_limit');
 		$mem_used = memory_get_usage();
-	
+
 		$mem_avail = $mem_avail - $mem_used - 20971520; // 20 MB buffer, yeah arbitrary but necessary
 
 		return $mem_avail > $requiredMemory;

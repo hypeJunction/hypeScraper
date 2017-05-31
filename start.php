@@ -41,12 +41,21 @@ elgg_register_event_handler('init', 'system', function() {
 	elgg_register_plugin_hook_handler('register', 'menu:scraper:card', [Menus::class, 'setupCardMenu']);
 	elgg_register_action('admin/scraper/edit', __DIR__ . '/actions/admin/scraper/edit.php', 'admin');
 	elgg_register_action('admin/scraper/refetch', __DIR__ . '/actions/admin/scraper/refetch.php', 'admin');
+	elgg_register_action('admin/scraper/clear', __DIR__ . '/actions/admin/scraper/clear.php', 'admin');
 
 	// Admin
 	elgg_register_menu_item('page', array(
 		'name' => 'scraper',
 		'href' => 'admin/scraper/preview',
 		'text' => elgg_echo('admin:scraper:preview'),
+		'context' => 'admin',
+		'section' => 'develop'
+	));
+
+	elgg_register_menu_item('page', array(
+		'name' => 'scraper:cache',
+		'href' => 'admin/scraper/cache',
+		'text' => elgg_echo('admin:scraper:cache'),
 		'context' => 'admin',
 		'section' => 'develop'
 	));
