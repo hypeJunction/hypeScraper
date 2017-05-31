@@ -1,3 +1,13 @@
+<a name="5.4.0"></a>
+# [5.4.0](https://github.com/hypeJunction/hypeScraper/compare/5.3.0...v5.4.0) (2017-05-31)
+
+
+### Features
+
+* **admin:** add option to clear all cached URLs by domain/w ([2164593](https://github.com/hypeJunction/hypeScraper/commit/2164593))
+
+
+
 <a name="5.3.0"></a>
 # [5.3.0](https://github.com/hypeJunction/hypeScraper/compare/5.2.2...v5.3.0) (2017-05-12)
 
