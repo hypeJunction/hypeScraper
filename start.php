@@ -42,6 +42,7 @@ elgg_register_event_handler('init', 'system', function() {
 	elgg_register_action('admin/scraper/edit', __DIR__ . '/actions/admin/scraper/edit.php', 'admin');
 	elgg_register_action('admin/scraper/refetch', __DIR__ . '/actions/admin/scraper/refetch.php', 'admin');
 	elgg_register_action('admin/scraper/clear', __DIR__ . '/actions/admin/scraper/clear.php', 'admin');
+	elgg_register_action('admin/scraper/timestamp_images', __DIR__ . '/actions/admin/scraper/timestamp_images.php', 'admin');
 
 	// Admin
 	elgg_register_menu_item('page', array(
@@ -59,6 +60,15 @@ elgg_register_event_handler('init', 'system', function() {
 		'context' => 'admin',
 		'section' => 'develop'
 	));
+
+	elgg_register_menu_item('page', array(
+		'name' => 'scraper:hotfixes',
+		'href' => 'admin/scraper/hotfixes',
+		'text' => elgg_echo('admin:scraper:hotfixes'),
+		'context' => 'admin',
+		'section' => 'develop'
+	));
+
 
 	elgg_register_ajax_view('output/card');
 });

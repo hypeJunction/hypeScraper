@@ -38,4 +38,11 @@ return [
 	'admin:scraper:cache:clear' => 'Clear Cache',
 	'admin:scraper:cache:no_results' => 'No URLs were cached in this domain',
 
+	'admin:scraper:hotfixes' => 'Hotfixes',
+	'admin:scraper:hotfix' => 'Fix',
+
+	'admin:scraper:timestamp_images' => 'Image timestamp hotfix',
+	'admin:scraper:timestamp_images:help' => 'Image previews served from data store require a persistent file timestamp. If timestamps of files has changed, e.g. after a migration to a new server, run this script to fix the issues',
+	'admin:scraper:timestamp_images:updated' => 'Timestamp change detected in %s files. URLs have been updated',
+
 ];
