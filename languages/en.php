@@ -45,4 +45,7 @@ return [
 	'admin:scraper:timestamp_images:help' => 'Image previews served from data store require a persistent file timestamp. If timestamps of files has changed, e.g. after a migration to a new server, run this script to fix the issues',
 	'admin:scraper:timestamp_images:updated' => 'Timestamp change detected in %s files. URLs have been updated',
 
+	'scraper:settings:preview_type' => 'Default Preview Type',
+	'scraper:settings:preview_type:card' => 'URL card',
+	'scraper:settings:preview_type:player' => 'Player',
 ];

@@ -37,3 +37,13 @@ echo elgg_view_field([
 	'value' => implode(PHP_EOL, $domains),
 ]);
 
+echo elgg_view_field([
+	'#type' => 'select',
+	'#label' => elgg_echo('scraper:settings:preview_type'),
+	'name' => 'params[preview_type]',
+	'value' => $entity->preview_type ?: 'card',
+	'options_values' => [
+		'card' => elgg_echo('scraper:settings:preview_type:card'),
+		'player' => elgg_echo('scraper:settings:preview_type:player'),
+	],
+]);

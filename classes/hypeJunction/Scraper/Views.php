@@ -36,9 +36,17 @@ class Views {
 	 */
 	public static function viewCard($hook, $type, $return, $params) {
 		$href = elgg_extract('src', $params);
-		return elgg_view('output/card', [
-			'href' => $href,
-		]);
+		$preview_type = elgg_get_plugin_setting('preview_type', 'hypeScraper', 'card');
+		if ($preview_type != 'card') {
+			return elgg_view('output/player', [
+				'href' => $href,
+				'fallback' => true,
+			]);
+		} else {
+			return elgg_view('output/card', [
+				'href' => $href,
+			]);
+		}
 	}
 
 	/**
@@ -101,9 +109,17 @@ class Views {
 			return;
 		}
 
-		$return['attachments'] = elgg_view('output/card', [
-			'href' => $object->address,
-		]);
+		$preview_type = elgg_get_plugin_setting('preview_type', 'hypeScraper', 'card');
+		if ($preview_type != 'card') {
+			$return['attachments'] = elgg_view('output/player', [
+				'href' =>  $object->address,
+				'fallback' => true,
+			]);
+		} else {
+			$return['attachments'] = elgg_view('output/card', [
+				'href' =>  $object->address,
+			]);
+		}
 
 		return $return;
 	}

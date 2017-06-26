@@ -24,6 +24,13 @@ foreach ($urls as $url) {
 		continue;
 	}
 	$params['href'] = $url;
-	echo elgg_view('output/card', $params);
+
+	$preview_type = elgg_get_plugin_setting('preview_type', 'hypeScraper', 'card');
+	if ($preview_type != 'card') {
+		$params['fallback'] = true;
+		echo elgg_view('output/player', $params);
+	} else {
+		echo elgg_view('output/card', $params);
+	}
 	$i++;
 }

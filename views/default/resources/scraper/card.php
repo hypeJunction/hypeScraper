@@ -14,11 +14,17 @@ if ($iframe) {
 		'href' => $href,
 	]);
 } else {
-
-	$content = elgg_view('output/card', [
-		'href' => $href,
-		'full_view' => true,
-	]);
+	$preview_type = elgg_get_plugin_setting('preview_type', 'hypeScraper', 'card');
+	if ($preview_type != 'card') {
+		$content = elgg_view('output/player', [
+			'href' => $href,
+			'fallback' => true,
+		]);
+	} else {
+		$content = elgg_view('output/card', [
+			'href' => $href,
+		]);
+	}
 
 	$layout = elgg_view_layout('content', [
 		'filter' => false,
