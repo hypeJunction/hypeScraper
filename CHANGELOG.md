@@ -1,3 +1,13 @@
+<a name="5.4.1"></a>
+## [5.4.1](https://github.com/hypeJunction/hypeScraper/compare/5.4.0...v5.4.1) (2017-06-26)
+
+
+### Bug Fixes
+
+* **images:** add a hotfix to replace image URLs after datastore migration ([15a1885](https://github.com/hypeJunction/hypeScraper/commit/15a1885))
+
+
+
 <a name="5.4.0"></a>
 # [5.4.0](https://github.com/hypeJunction/hypeScraper/compare/5.3.0...v5.4.0) (2017-05-31)
 
