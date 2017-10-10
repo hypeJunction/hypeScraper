@@ -4,6 +4,8 @@ namespace hypeJunction\Scraper;
 
 use Elgg\Cache\Pool;
 use ElggFile;
+use GuzzleHttp\Cookie\CookieJar;
+use GuzzleHttp\Cookie\SetCookie;
 use hypeJunction\Parser;
 
 /**
@@ -155,7 +157,7 @@ class ScraperService {
 			$content_length = array_shift($content_length);
 		}
 
-		if ((int)$content_length > $max_upload) {
+		if ((int) $content_length > $max_upload) {
 			// Large images eat up memory
 			$this->save($url, false);
 
@@ -232,7 +234,7 @@ class ScraperService {
 			ON DUPLICATE KEY UPDATE
 			    data = :data
 		", [
-			':url' => (string)$url,
+			':url' => (string) $url,
 			':data' => serialize($data),
 			':hash' => sha1($url),
 		]);
@@ -275,10 +277,10 @@ class ScraperService {
 				DELETE FROM {$dbprefix}scraper_data
 				WHERE url = :url
 		", [
-			':url' => (string)$url,
+			':url' => (string) $url,
 		]);
 
-		return (bool)$result;
+		return (bool) $result;
 	}
 
 	/**
@@ -372,8 +374,8 @@ class ScraperService {
 	 */
 	public function parseThumbs(array $data = []) {
 		$assets = [];
-		$thumbnails = (array)elgg_extract('thumbnails', $data, []);
-		$icons = (array)elgg_extract('icons', $data, []);
+		$thumbnails = (array) elgg_extract('thumbnails', $data, []);
+		$icons = (array) elgg_extract('icons', $data, []);
 
 		// Try 3 images and choose the one with highest dimensions
 		$thumbnails = array_filter(array_unique(array_merge($thumbnails, $icons)));
@@ -413,6 +415,13 @@ class ScraperService {
 	 * @return array
 	 */
 	public static function getHttpClientConfig() {
+		$jar = new CookieJar();
+		$jar->setCookie(new SetCookie([
+			'Name' => 'Elgg',
+			'Value' => elgg_get_session()->getId(),
+			'Domain' => parse_url(elgg_get_site_url(), PHP_URL_HOST),
+		]));
+
 		$config = [
 			'headers' => [
 				'User-Agent' => implode(' ', [
@@ -430,7 +439,7 @@ class ScraperService {
 			'timeout' => 5,
 			'connect_timeout' => 5,
 			'verify' => false,
-			'cookies' => true,
+			'cookies' => $jar,
 		];
 
 		return elgg_trigger_plugin_hook('http:config', 'framework:scraper', null, $config);
@@ -447,7 +456,7 @@ class ScraperService {
 		$imginfo = getimagesize($source);
 		$requiredMemory1 = ceil($imginfo[0] * $imginfo[1] * 5.35);
 		$requiredMemory2 = ceil($imginfo[0] * $imginfo[1] * ($imginfo['bits'] / 8) * $imginfo['channels'] * 2.5);
-		$requiredMemory = (int)max($requiredMemory1, $requiredMemory2);
+		$requiredMemory = (int) max($requiredMemory1, $requiredMemory2);
 
 		$mem_avail = elgg_get_ini_setting_in_bytes('memory_limit');
 		$mem_used = memory_get_usage();
