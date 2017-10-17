@@ -218,13 +218,15 @@ class Views {
 		}
 
 		$normalize = function($domain) {
+			$domain = trim($domain);
 			$domain = parse_url($domain, PHP_URL_HOST);
 			$domain = str_replace('www.', '', $domain);
 			return $domain;
 		};
 
 		$domains = elgg_get_plugin_setting('oembed_domains', 'hypeScraper', '');
-		$domains = array_filter(explode(PHP_EOL, $domains));
+		$domains = preg_split('/$\R?^/m', $domains);
+		$domains = array_filter($domains);
 
 		if (empty($domains)) {
 			$root = elgg_get_plugins_path();
