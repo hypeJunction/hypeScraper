@@ -1,3 +1,13 @@
+<a name="5.5.1"></a>
+## [5.5.1](https://github.com/hypeJunction/hypeScraper/compare/5.5.0...v5.5.1) (2017-10-17)
+
+
+### Bug Fixes
+
+* **oembed:** correctly split multiline oembed domain config ([8570b9b](https://github.com/hypeJunction/hypeScraper/commit/8570b9b)), closes [#52](https://github.com/hypeJunction/hypeScraper/issues/52)
+
+
+
 <a name="5.5.0"></a>
 # [5.5.0](https://github.com/hypeJunction/hypeScraper/compare/5.4.1...v5.5.0) (2017-06-26)
 
