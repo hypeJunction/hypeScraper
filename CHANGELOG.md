@@ -1,3 +1,13 @@
+<a name="5.5.2"></a>
+## [5.5.2](https://github.com/hypeJunction/hypeScraper/compare/5.5.1...v5.5.2) (2017-10-17)
+
+
+### Bug Fixes
+
+* **scraper:** set session cookie to allow scraping session-bound local resources ([dafe27c](https://github.com/hypeJunction/hypeScraper/commit/dafe27c))
+
+
+
 <a name="5.5.1"></a>
 ## [5.5.1](https://github.com/hypeJunction/hypeScraper/compare/5.5.0...v5.5.1) (2017-10-17)
 
