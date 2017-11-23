@@ -235,7 +235,7 @@ class Views {
 
 		self::$domains = array_map($normalize, $domains);
 
-		return $domains;
+		return self::$domains;
 	}
 
 }
