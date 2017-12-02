@@ -16,7 +16,7 @@ class Extractor {
 	
 	const REGEX_HASHTAG = '(#\w+)';
 	
-	const REGEX_URL = '(h?[t|f]??tps*:\/\/[^\s\r\n\t<>"\'\)\(]+)';
+	const REGEX_URL = '((h?[t|f]??tps*:\/\/|www)[^\s\r\n\t<>"\'\)\(]+)';
 
 	const REGEX_EMAIL = '([\w\-\.]+@[^\s\r\n\t<>"\'\)\(]+\.+[0-9a-z]{2,})';
 
